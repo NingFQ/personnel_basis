@@ -1,0 +1,12 @@
+/**
+* 首页scss
+*/
+
+.site_index {
+  .scssdemo {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    background: url(~@site/static/images/avatar.png)
+  }
+}

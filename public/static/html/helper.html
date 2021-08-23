@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>一站式静态助手</title>
+	<style>
+		ul {
+			padding: 10px;
+		}
+
+		li {
+			list-style-type: none;
+			color: #0019ff;
+			cursor:pointer
+		}
+	</style>
+</head>
+<body>
+	<ul>
+		<li onclick="clearPostCache()">清除事项发起缓存</li>
+	</ul>
+
+<script>
+	function clearPostCache() {
+		localStorage.removeItem("officeDb");
+		localStorage.removeItem("officeDb_time");
+	}
+</script>
+</body>
+</html>

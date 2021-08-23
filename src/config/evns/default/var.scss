@@ -1,0 +1,36 @@
+@charset "utf-8";
+// 默认变量定义
+
+// 全局颜色
+$mainColor: #013A89; //主体色
+$mainLightColor: rgba(227, 236, 244, 0.6); // 主体浅色
+$backgroundColor: #ededed; // body背景色
+$matterTitleBg: #f7f7f7; // 我的事项tab切换背景色
+$mainBackground: #4285F4;
+$navColor: rgba(1, 58, 137, .6); //首页导航栏颜色
+
+// 登录页颜色
+$loginBgColor: rgba(255, 255, 255, .6); // 登录页输入框背景色
+$loginBgDeep: #1562bb; // 登录页背景渐变颜色深
+$loginBgLight: #4a8cd9; // 登录页背景渐变颜色浅
+$loginBtn: #4688d4; // 登录按钮颜色
+
+// 首页
+$logoWidth: auto; // 公共头部logo宽
+$logoHeight: 44px; // 公共头部logo高
+
+// 文字相关
+$titleFont: #333333; // 标题
+$mainFont: #4c4c4c; // 正文
+$describeFont: #878787; // 辅助描述
+$auxiliaryFont: #bbbbbb; // 输入框
+$fontColorB: #4285f4; // 提示标签颜色
+$fontFamily: "微软雅黑"; // 全局字体
+$fontSize: 14px; // 全局字体大小
+
+// 盒子大小
+$contentWidth: 1100px; // 版心
+$footerHeight:51px; // 底部高度
+
+// 边框颜色
+$borderColor:#e5e5e5;

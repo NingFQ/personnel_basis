@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <title>cookie helper</title>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+    <style>
+    	body {
+    		margin: 0;
+    		padding: 0;
+    	}
+
+    	h3 {
+    		text-align: center;
+    	}
+
+    	.showBtnBox {
+    		width: 100%;
+    		margin-top: 20px;
+    		text-align: center;
+    	}
+
+    	table {
+    		width: 400px;
+    		text-align: center;
+    		margin: 30px auto;
+    		line-height: 35px;
+    		display: none;
+    		font-size: 16px;
+    	}
+
+    	.delBtnBox {
+    		width: 100%;
+    		margin-top: 20px;
+    		text-align: center;
+    		display: none;
+    	}
+    </style>
+</head>
+<body>
+	<h3>cookie 帮助页面</h3>
+	<p class="showBtnBox">
+		<span class="btn btn-info showAllCookie">显示全部cookie</span>
+	</p>
+	
+	<table class="table-bordered">
+		<thead>
+			<td style="width: 20px;"><input type="checkbox" class="checkAll">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			<td>名称</td>
+			<td>值</td>
+		</thead>
+		<tbody>
+			<td><input type="checkbox"></td>
+			<td>名称</td>
+			<td>值</td>
+		</tbody>
+	</table>
+
+	<p class="delBtnBox">
+		<span class="btn btn-danger delcookie">删除选中的cookie</span>
+	</p>
+
+<script src="/v2/static/js/jquery/jquery.min.js"></script>
+<script src="/v2/static/js/common/jquery.cookie.js"></script>
+<script>
+
+var showType = "";
+
+/**
+ * 获取cookie列表
+ * @return {[type]} [description]
+ */
+function getCookies(prefix) {
+	var cookies = document.cookie.split("; "),
+		res = [];
+
+	for(var k = 0; k < cookies.length; k++) {
+		var nowC = cookies[k].split("=");
+
+		if(prefix) {
+			if(nowC[0].indexOf(prefix) !== -1) res.push(nowC);
+		} else {
+			res.push(nowC);
+		}
+	}
+
+	return res;
+}
+
+function getNowTime (expiresdays) {
+        expiresdays = expiresdays !== undefined ? expiresdays : 0;
+        var nowDate = new Date();
+        if(expiresdays) nowDate.setTime(nowDate.getTime() + expiresdays * 86400 * 1000);
+        
+        return nowDate;
+}
+
+//选中所有cookie
+$(".checkAll").click(function() {
+	$('[type="checkbox"]').prop("checked", $(this).is(":checked"));
+});
+
+//显示悦动专属cookie
+$(".showQrCookie, .showAllCookie").click(function() {
+	showType = "showAllCookie";
+
+	var cookies = getCookies(),
+		html = '';
+
+	for(var k = 0; k < cookies.length; k++) {
+		html += '<tr><td><input type="checkbox" value="'+cookies[k][0]+'"></td>'
+				+'<td>'+cookies[k][0]+'</td>'
+				+'<td>'+decodeURIComponent(cookies[k][1])+'</td></tr>';
+	}
+
+	$("tbody").html(html);
+	$("table, .delBtnBox").show();
+});
+
+//删除cookie
+$(".delcookie").click(function() {
+	$('[type="checkbox"]:checked').each(function() {
+		$.cookie($(this).val(), '', { expires: -1 }); 
+	});
+
+
+	$("."+showType).trigger("click");
+})
+</script>
+</body>
+</html>

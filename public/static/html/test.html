@@ -1,0 +1,495 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8">
+
+
+
+
+
+
+
+<base href="http://wf.vm.fudan.edu.cn/">
+
+<link href="/default/common/theme/style-sys.css" type="text/css" rel="stylesheet">
+<script type="text/javascript">
+	var contextPath = "/default"; // you should define the contextPath of web application
+	var EOSDEBUG = false;
+</script>
+<script type="text/javascript" src="/default/common/javascripts/zh_CN/message.js"></script>
+<link href="/default/common/skins/capskin0/theme/style-component.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="/default/common/skins/capskin0/scripts/resource.js"></script>
+<script type="text/javascript" src="/default/common/fckeditor/fckeditor.js"></script>
+<script type="text/javascript" src="/default/common/scripts/eos-web.js.gzip"></script>
+<script type="text/javascript" src="/default/common/lib/mootools.js"></script>
+
+<link href="/default/gocom/cap/workflow/client/login/css/style-custom-component.css" type="text/css" rel="stylesheet">
+
+<script type="text/javascript" src="/default/workflow/wfcomponent/web/js/workflow.js"></script>
+<script type="text/javascript" src="/default/workflow/wfcomponent/web/js/workflow-tag.js"></script>
+<script type="text/javascript" src="/default/workflow/wfcomponent/web/js/Graphic.js"></script>
+
+<script type="text/javascript" src="/default/workflow/wfcomponent/web/js/check.js"></script>
+<script type="text/javascript" src="/default/workflow/wfcomponent/web/js/calendar.js"></script>
+<script type="text/javascript" src="/default/workflow/wfcomponent/web/js/i18n/zh_CN/message.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <title>干部请假报批</title>
+    <script type="text/javascript" src="/default/common/nui/nui.js"></script><script src="http://wf.vm.fudan.edu.cn/default/common/nui/jquery/jquery-1.6.2.min.js" type="text/javascript"></script><script src="http://wf.vm.fudan.edu.cn/default/common/nui/nui-min.js" type="text/javascript"></script><link href="http://wf.vm.fudan.edu.cn/default/common/nui/themes/default/miniui.css" rel="stylesheet" type="text/css"><link href="http://wf.vm.fudan.edu.cn/default/common/nui/themes/icons.css" rel="stylesheet" type="text/css">
+    <link type="text/css" href="/default/workflowWidget/form/components/css/style.css" rel="stylesheet">
+    <script type="text/javascript" src="/default/js/nui_common.js"></script>
+    <script type="text/javascript" src="/default/org/gocom/cap/sce/nui/extension/form/js/nui_form_common.js"></script>
+    <script type="text/javascript" src="/default/workflowWidget/form/js/flow_form_common.js"></script>
+    <script>
+    	NUI.context='/default';
+    	var userObject = {
+	    	userId : '67',
+			userName : '朱亚晓',
+			userMail : 'null',
+			userOrgId : 'null',
+			userOrgName : 'null',
+			userRealName : '朱亚晓',
+			userRemoteIP : '10.230.2.173',
+			uniqueId : '259C004B439E12183F26696F28E2D34D',
+			sessionId : '259C004B439E12183F26696F28E2D34D',
+			attributes : '{EXTEND_USER_ID=04269}'
+    	};
+		
+    </script>
+     <style type="text/css">
+	    body{
+	        margin:0;padding:0;border:0;width:100%;height:100%;overflow:hidden;
+	    }    
+    </style>
+</head>
+<body>
+	<div class="mini-fit" style="height: 667px;">
+		<div class="mini-tabs mini-tabs-position-top mini-tabs-plain" id="formtabs" style="border: 0px; width: 100%; height: 100%; padding: 0px;"><table class="mini-tabs-table" cellspacing="0" cellpadding="0"><tbody><tr style="width:100%;"><td></td><td style="text-align:left;vertical-align:top;width:100%;"><div class="mini-tabs-scrollCt"><a class="mini-tabs-leftButton mini-disabled" href="javascript:void(0)" hidefocus="" onclick="return false"></a><a class="mini-tabs-rightButton" href="javascript:void(0)" hidefocus="" onclick="return false"></a><div class="mini-tabs-headers" style="width: 373px;"><table class="mini-tabs-header" cellspacing="0" cellpadding="0"><tbody><tr><td class="mini-tabs-space mini-tabs-firstSpace"><div></div></td><td id="mini-2$1" index="0" class="mini-tab mini-tab-active" style=""><span class="mini-tab-text">干部请假报批</span></td><td class="mini-tabs-space2"><div></div></td><td class="mini-tabs-space mini-tabs-lastSpace" style="width: 100%;"><div></div></td></tr></tbody></table></div></div><div class="mini-tabs-bodys" style="width: 361px; height: 631px;"><div id="mini-2$body$1" class="mini-tabs-body" style="height: 631px;">
+			
+			
+			
+					<input type="hidden" class="mini-hidden" value="org.gocom.cap.workflow.client.task.worklist4self.flow?_eosFlowAction=action0" name="gotoUrl">
+			
+				
+		    <form id="editForm" method="post">
+		    	
+
+				<div style="display:none;" class="nui-form-hidden" id="hidden_form">
+										<input type="hidden" class="mini-hidden" value="entity" id="formXpath">
+					
+					<!--系统正常运行的Hidden区域-->
+				  	<input type="hidden" class="mini-hidden" value="xb_ldgblhbg" id="formId" name="formId">
+				  	<input type="hidden" class="mini-hidden" value="ehall2" id="moduleId" name="moduleId">
+				  	
+				    <input type="hidden" class="mini-hidden" value="sdo:ehall2.xb_ldgblhbg.xbLdgblhbg" id="entity.__type" name="entity.__type">
+				    <input type="hidden" class="mini-hidden" id="entity.processInstId" name="entity.processInstId" value="68141">
+				    <input type="hidden" class="mini-hidden" value="196681" id="workitemID" name="workitemID">
+				    <input type="hidden" class="mini-hidden" id="flowId" name="flowId" value="">
+				</div>
+
+						    						
+									
+									
+								
+
+
+
+										
+				
+
+
+				<div style="display:none;" class="nui-form-hidden">
+		    										
+	
+<input type="hidden" class="mini-hidden" id="state" name="entity.state" value="ok0">
+
+<script>
+	$(function(){
+		window['state']=nui.get('state');
+	});
+</script>
+
+									
+	
+<input type="hidden" class="mini-hidden" id="id" name="entity.id" value="108930">
+
+<script>
+	$(function(){
+		window['id']=nui.get('id');
+	});
+</script>
+
+						    			    	</div>
+		    	
+		    	<div class="nui-form-page
+																 nui-form-widget-border
+									">
+				
+			    	
+			    	
+	<div class="nui-form-widget-page">
+	<div class="nui-form-widget-children">
+		
+
+	
+			
+	
+
+
+		
+		
+	
+	<table id="" class="nui-form-widget-table" border="0" align="default" style="
+	width:100%; 
+	border-spacing:0px;
+" cellpadding="0px">
+		
+	<tbody><tr class="nui-form-widget-tr">
+		
+	<td id="" class="nui-form-widget-td" valign="top">
+	
+		
+		<div class="nui-form-widget-children" style="width: 100%;">
+			
+
+	<div id="html0_cap_container">
+ 
+ 
+			<meta id="viewport" name="viewport" content="width=375,initial-scale=1,height=375">
+<iframe id="birtForm" scrolling="no" frameborder="0" style="width: 100%; overflow: hidden; height: 1091px;" border="0"></iframe>
+<!--[if IE]>
+    <script type="text/javascript" src="/default/js/ehall/lib/ie8.polyfils.js"></script>
+<![endif]-->
+<script type="text/javascript" src="/default/js/ehall/lib/iframeResizer.js"></script>
+<script type="text/javascript" src="/default/js/ehall/form.js"></script>
+<script>  
+      ehall.showBirtForm({
+  ybtName: 'xb_ldgblhbg',
+  initFormData: function(e){
+      $('tr.nui-form-widget-tr:not(:has([id*=container]))').hide();
+      if(ehall.formEntity)
+      return {
+        htyts:nui.get('subform0').findRows(function(){return true;})
+      };
+  }
+});
+</script>
+<style>
+  #subform0_cap_container,#subform0_splite_line{display:none;}
+</style>
+	 
+</div>
+
+
+
+
+<script type="text/javascript">
+	//声明名称对象
+	$(function(){
+		var obj=nui.get('html0');
+		if(obj){
+			window['html0']=obj;
+		}
+	});
+</script>
+
+	
+			
+			</div>
+		
+</td>
+
+
+
+
+	</tr>
+
+
+
+		
+	<tr class="nui-form-widget-tr">
+		
+	<td id="" class="nui-form-widget-td" valign="top">
+	
+		
+		<div class="nui-form-widget-children">
+			
+
+<div class="nui-form-widget" id="subform0_cap_container">
+	<table class="nui-form-widget-cc">
+		<tbody><tr><th class="nui-form-widget-label">
+						<label for="subform0">子表单0：</label>
+					</th>
+		<td>
+			<div class="nui-form-widget-body">
+			
+<div>
+
+<div>
+	<a class="mini-button mini-button-plain" href="javascript:void(0)"><span class="mini-button-text  mini-button-icon icon-add">增加</span></a>
+    <a class="mini-button mini-button-plain" href="javascript:void(0)"><span class="mini-button-text  mini-button-icon icon-remove">删除</span></a>   
+</div>
+	
+
+<div class="nui-subform" subformid="subform0">
+<div class="mini-panel mini-grid mini-datagrid" id="subform0" style="border-width: 0px; width: 100%; display: block; height: 280px; padding: 0px;"><div class="mini-panel-border"><div class="mini-panel-header" style="display: none;"><div class="mini-panel-header-inner"><span class="mini-panel-icon " style="display: none;"></span><div class="mini-panel-title"></div><div class="mini-tools"><span id="1" class="mini-tools-collapse " style=";display:none;"></span><span id="0" class="mini-tools-close " style=";display:none;"></span></div></div></div><div class="mini-panel-viewport mini-grid-viewport" style="height: 278px;"><div class="mini-panel-toolbar" style="display: none;"></div><div class="mini-grid-columns" style="display: block;"><div class="mini-grid-columns-lock" style="left: -10px; width: 0px;"><table class="mini-grid-table" cellspacing="0" cellpadding="0" border="0" style="width: 0px;"><tbody><tr><td style="width:0px;"></td></tr></tbody></table><div class="mini-grid-topRightCell"></div></div><div class="mini-grid-columns-view" style="width: auto; padding-right: 0px; margin-left: 0px;"><table class="mini-grid-table" cellspacing="0" cellpadding="0" border="0" style="width: 0px;"><tbody><tr><td id="1" style="padding:0;border:0;margin:0;height:0px;width:30px"></td><td id="2" style="padding:0;border:0;margin:0;height:0px;width:100px"></td><td style="width:0px;"></td></tr><tr><td id="mini-23$headerCell2$1" class="mini-grid-headerCell  mini-checkcolumn  mini-grid-bottomCell " style=""><div class="mini-grid-headerCell-inner"><input type="checkbox" id="mini-23checkall"><div id="1" class="mini-grid-column-splitter"></div></div></td><td id="mini-23$headerCell2$2" class="mini-grid-headerCell    mini-grid-bottomCell  mini-grid-rightCell " style="text-align:left;"><div class="mini-grid-headerCell-inner">fj
+	<div id="2" class="mini-grid-column-splitter"></div></div></td></tr></tbody></table><div class="mini-grid-topRightCell"></div></div><div class="mini-grid-scrollHeaderCell"></div></div><div class="mini-grid-filterRow" style="display: none;"><div class="mini-grid-filterRow-lock" style="left: -10px; width: 0px; margin-left: 0px;"><table class="mini-grid-table" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td style="width:0px;"></td></tr><tr></tr></tbody></table><div class="mini-grid-scrollHeaderCell"></div></div><div class="mini-grid-filterRow-view" style="width: auto; padding-right: 0px;"><table class="mini-grid-table" cellspacing="0" cellpadding="0" border="0" style="width: 0px;"><tbody><tr><td id="1" style="padding:0;border:0;margin:0;height:0px;width:30px"></td><td id="2" style="padding:0;border:0;margin:0;height:0px;width:100px"></td><td style="width:0px;"></td></tr><tr><td id="mini-23$filter$1" class="mini-grid-filterCell" style="">&nbsp;</td><td id="mini-23$filter$2" class="mini-grid-filterCell" style="">&nbsp;</td></tr></tbody></table><div class="mini-grid-scrollHeaderCell"></div></div><div class="mini-grid-scrollHeaderCell"></div></div><div class="mini-panel-body mini-grid-rows" style="height: 278px;"><div class="mini-grid-rows-lock" style="left: -10px; width: 0px; height: 100%;"><div class="mini-grid-rows-content"><table class="mini-grid-table" cellspacing="0" cellpadding="0" border="0" style="width: 0px;"><tbody><tr><td style="width:0px;"></td></tr><tr id="mini-23$emptytext1" style="display:none;"><td class="mini-grid-emptyText" colspan="0">No data returned.</td></tr></tbody></table></div></div><div class="mini-grid-rows-view" style="margin-left: 0px; width: auto;"><div class="mini-grid-rows-content"><table class="mini-grid-table" cellspacing="0" cellpadding="0" border="0" style="width: 0px;"><tbody><tr><td id="1" style="padding:0;border:0;margin:0;height:0px;width:30px"></td><td id="2" style="padding:0;border:0;margin:0;height:0px;width:100px"></td><td style="width:0px;"></td></tr><tr id="mini-23$emptytext2" style="display:none;"><td class="mini-grid-emptyText" colspan="2">No data returned.</td></tr></tbody></table></div></div><div class="mini-grid-vscroll" style="display: none;"><div class="mini-grid-vscroll-content"></div></div></div><div class="mini-grid-summaryRow" style="display: none;"><div class="mini-grid-summaryRow-lock" style="left: -10px; width: 0px; margin-left: 0px;"><table class="mini-grid-table" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td style="width:0px;"></td></tr><tr></tr></tbody></table><div class="mini-grid-scrollHeaderCell"></div></div><div class="mini-grid-summaryRow-view" style="width: auto; padding-right: 0px;"><table class="mini-grid-table" cellspacing="0" cellpadding="0" border="0" style="width: 0px;"><tbody><tr><td id="1" style="padding:0;border:0;margin:0;height:0px;width:30px"></td><td id="2" style="padding:0;border:0;margin:0;height:0px;width:100px"></td><td style="width:0px;"></td></tr><tr><td id="mini-23$summary$1" class="mini-grid-summaryCell mini-checkcolumn" style=";">&nbsp;</td><td id="mini-23$summary$2" class="mini-grid-summaryCell " style=";">&nbsp;</td></tr></tbody></table><div class="mini-grid-scrollHeaderCell"></div></div><div class="mini-grid-scrollHeaderCell"></div></div><div class="mini-grid-pager" style="display: none;"><div class="mini-pager" id="mini-25"><div class="mini-pager-left"><span class="mini-pager-size"><span class="mini-buttonedit mini-combobox mini-popupedit" id="mini-26" style="border-width: 0px; width: 48px;"><span class="mini-buttonedit-border"><input type="input" class="mini-buttonedit-input" autocomplete="off" placeholder="" readonly=""><span class="mini-buttonedit-buttons"><span class="mini-buttonedit-close"></span><span class="mini-buttonedit-button" onmouseover="mini.addClass(this, 'mini-buttonedit-button-hover');" onmouseout="mini.removeClass(this, 'mini-buttonedit-button-hover');"><span class="mini-buttonedit-icon"></span></span></span></span><input name="pagesize" type="hidden" value="10"></span><span class="separator"></span></span><a class="mini-button mini-button-plain mini-button-disabled" href="javascript:void(0)" id="mini-29" title="首页"><span class="mini-button-text  mini-button-iconOnly mini-pager-first">&nbsp;</span></a><a class="mini-button mini-button-plain mini-button-disabled" href="javascript:void(0)" id="mini-30" title="上一页"><span class="mini-button-text  mini-button-iconOnly mini-pager-prev">&nbsp;</span></a><span class="mini-pager-index"><input id="" type="text" class="mini-pager-num"><span class="mini-pager-pages">/ 0</span></span><a class="mini-button mini-button-plain mini-button-disabled" href="javascript:void(0)" id="mini-31" title="下一页"><span class="mini-button-text  mini-button-iconOnly mini-pager-next">&nbsp;</span></a><a class="mini-button mini-button-plain mini-button-disabled" href="javascript:void(0)" id="mini-32" title="尾页"><span class="mini-button-text  mini-button-iconOnly mini-pager-last">&nbsp;</span></a><span class="separator"></span><a class="mini-button mini-button-plain" href="javascript:void(0)" id="mini-33"><span class="mini-button-text  mini-button-iconOnly mini-pager-reload">&nbsp;</span></a></div><div class="mini-pager-right">每页 10 条, 共 0 条</div></div></div><div class="mini-panel-footer" style="display: none;"></div><div class="mini-resizer-trigger"></div></div></div></div>
+</div>
+<input type="hidden" id="subform0_xpath" value="entity.xbldgblhbgfjs">
+<input type="hidden" name="entity.xbldgblhbgfjs.__type" value="sdo:ehall2.xb_ldgblhbg.XbLdgblhbgFj[]">
+</div>
+			</div>
+		</td>
+	</tr></tbody></table>
+</div>
+
+
+
+<script type="text/javascript">
+	//声明名称对象
+	$(function(){
+		var obj=nui.get('subform0');
+		if(obj){
+			window['subform0']=obj;
+		}
+	});
+</script>
+
+	
+			
+			</div>
+		
+</td>
+
+
+
+
+	</tr>
+
+
+
+		
+	<tr class="nui-form-widget-tr">
+		
+	<td id="" class="nui-form-widget-td" valign="top" colspan="1">
+	
+		
+		<div class="nui-form-widget-children">
+			
+
+<div class="nui-form-widget" id="yj_cap_container">
+	<table class="nui-form-widget-cc">
+		<tbody><tr><th class="nui-form-widget-label">
+						<label for="yj">审批意见一：</label>
+					</th>
+		<td>
+			<div class="nui-form-widget-body">
+			
+
+
+
+
+
+
+
+<span class="mini-textbox mini-textarea" id="yj" style="border-width: 0px; width: 100%; height: 100px;"><span class="mini-textbox-border"><textarea class="mini-textbox-input" autocomplete="off" placeholder="请输入" id="yj$value" name="entity.yj" style="height: 98px;"></textarea></span><input type="hidden"></span>
+
+
+			</div>
+		</td>
+	</tr></tbody></table>
+</div>
+
+
+
+<script type="text/javascript">
+	//声明名称对象
+	$(function(){
+		var obj=nui.get('yj');
+		if(obj){
+			window['yj']=obj;
+		}
+	});
+</script>
+
+	
+			
+			</div>
+		
+</td>
+
+
+
+
+	</tr>
+
+
+
+		
+	<tr class="nui-form-widget-tr" style="display: none;">
+		
+	<td id="" class="nui-form-widget-td" valign="top">
+	
+		
+		<div class="nui-form-widget-children">
+			
+<script type="text/javascript">
+	//声明名称对象
+	$(function(){
+		var obj=nui.get('yj2');
+		if(obj){
+			window['yj2']=obj;
+		}
+	});
+</script>
+
+	
+			
+			</div>
+		
+</td>
+
+
+
+
+	</tr>
+
+
+
+	</tbody></table>
+
+
+
+
+
+	
+			<div class="nui-splite-space" id="_splite_space"></div>
+		
+	
+	
+		
+				
+	
+	</div>
+</div><div class="nui-form-action" style="margin-top: 0px;">
+				    	<div id="toolbar" class="" style="text-align: center; padding: 5px 0px; border: 1px solid rgb(144, 154, 166); background: url(&quot;/default/common/nui/themes/default/images/toolbar/toolbar.png&quot;) 0px 0px repeat-x rgb(231, 234, 238); position: relative;">
+					        								
+															
+																			
+
+
+	
+
+
+
+	
+
+
+<span class="nui-form-widget" style="display:inline-block;" id="submitOk_cap_container">
+<a class="mini-button" href="javascript:void(0)" id="submitOk"><span class="mini-button-text ">审批通过</span></a>
+</span>
+
+
+
+
+
+
+																			
+
+
+	
+
+
+
+	
+<span class="nui-form-widget" style="display:inline-block;" id="submitFail_cap_container">
+<a class="mini-button" href="javascript:void(0)" id="submitFail"><span class="mini-button-text ">审批不通过</span></a>
+</span>
+
+
+
+
+																			
+
+
+	
+
+
+
+	
+<span class="nui-form-widget" style="display:inline-block;" id="btnReset2_cap_container">
+<a class="mini-button" href="javascript:void(0)" id="btnReset2"><span class="mini-button-text ">取消</span></a>
+</span>
+
+
+
+
+																			
+
+
+		
+
+
+
+
+
+
+																	
+															
+														
+							
+					    </div>
+				    </div>
+
+
+
+			    </div>
+			</form>
+		  	</div><div id="mini-2$body$2" class="mini-tabs-body " style=";display:none;">
+		    </div><div id="mini-2$body$3" class="mini-tabs-body " style=";display:none;">
+		    </div></div></td><td></td></tr></tbody></table></div>
+	</div>
+    	<script>
+    		var oppion = [{id:"true",text:"同意"},{id:"false",text:"不同意"}];
+    		nui.parse();
+    		var processInstId = nui.get("entity.processInstId").getValue();
+    		var workitemID = nui.get("workitemID").getValue();
+    		var processDefId = nui.get("flowId").getValue();
+    		
+    		var tabs = nui.get("formtabs");
+    		var tab1 = tabs.getTab(1);
+    		tab1.url = "/default/workflowWidget/form/components/category/workflow_history.jsp?workItemId=" + workitemID;
+    		var tab2 = tabs.getTab(2);
+    		tab2.url = "/default/workflowWidget/form/components/category/show_process.jsp?workItemId=" + workitemID;
+    		
+    		$(function(){
+    			
+    			var dataParams={};
+    			
+					dataParams['moduleId']='ehall2';
+    			
+					dataParams['formId']='xb_ldgblhbg';
+    			
+					dataParams['state']='status1';
+    			
+					dataParams['workItemID']='196681';
+    			
+					dataParams['workitemID']='196681';
+    			
+    			
+    			NUI.loadFormEntity(dataParams,function(){
+    				NUI.onLoad();
+    			});
+    		});
+    	</script>
+
+
+<div id="nui_tips_overlay" style="position: fixed; background-color: rgb(204, 204, 204); opacity: 0.5; z-index: 66665; top: 0px; left: 0px; width: 100%; height: 100%; display: none;"></div><div id="nui_tips_dom" style="position: fixed; background-color: rgb(255, 255, 255); z-index: 66666; top: 45%; left: 48%; border: 2px solid rgb(58, 33, 168); padding: 10px; display: none;">数据加载中...</div><div id="eos_pageMask_div" class="eos-page-mask" style="display: none;"></div></body></html>
