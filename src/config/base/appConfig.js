@@ -4,9 +4,7 @@
 
 module.exports = {
   //端口
-  // port: '8080',
-  // port: '',
-
+  port: '8080',
   //接口协议类型
   apiProtocol: "https",
 
