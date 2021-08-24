@@ -195,10 +195,16 @@
           </el-col>
           <el-col :span="10">
             <el-form-item class="top_btns">
-              <el-button class="search_btn" @click="submitForm('ruleForm')"
+              <el-button
+                type="primary"
+                class="top_btn_item"
+                @click="submitForm('ruleForm')"
                 >搜索</el-button
               >
-              <el-button class="reset_btn" @click="resetForm('ruleForm')"
+              <el-button
+                type="primary"
+                class="top_btn_item"
+                @click="resetForm('ruleForm')"
                 >重置</el-button
               >
             </el-form-item>
@@ -318,24 +324,9 @@ export default {
     }
     .top_btns {
       float: right;
-      .search_btn {
+      .top_btn_item {
         width: 160px;
         height: 44px;
-        background: #34428a;
-        opacity: 1;
-        font-size: 16px;
-        border-radius: 2px;
-        color: #fff;
-      }
-
-      .reset_btn {
-        width: 160px;
-        height: 44px;
-        background: #e5e7f3;
-        opacity: 1;
-        font-size: 16px;
-        border-radius: 2px;
-        color: #34428a;
       }
     }
   }

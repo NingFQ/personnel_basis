@@ -53,7 +53,7 @@
         <img class="hint_icon" src="../static/images/login_error.png" alt="" />
         <span class="hint_text">{{ hintStr }}</span>
       </div>
-      <el-button class="login_btn reset_element_btn" @click="handleLogin"
+      <el-button type="primary" class="login_btn" @click="handleLogin"
         >登录</el-button
       >
     </el-form>
@@ -152,12 +152,9 @@ export default {
         width: 100%
         height: 100%
         font-size: 18px
-        // border: none
-        color: #101C51
-        border: 1px solid #CCCCCC
         opacity: 1
-        border-radius: 6px
         padding: 0 72px
+
       .pre_icon
         position: absolute
         left: 40px
@@ -165,6 +162,7 @@ export default {
         z-index: 99
         height: 22px
         width: 22px
+
     .login_code
       width: 100%
       height: 68px
@@ -204,15 +202,4 @@ export default {
   .login_btn
     width: 460px
     height: 58px
-    background: #34428a
-    color: white
-    font-size: 18px
-  // .el-button--default:hover
-  //   background-color: #101C51
-  //   border-color: #101C51
-  //   color: white
-  // .el-button--default:focus
-  //   background-color: #101C51
-  //   border-color: #101C51
-  //   color: white
 </style>

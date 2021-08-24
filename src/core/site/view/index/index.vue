@@ -33,7 +33,6 @@
                 >导出</el-button
               >
               <el-button
-                class="delete_btn"
                 icon="el-icon-delete"
                 @click="dialogDeleteFormVisible = true"
                 >删除</el-button
@@ -41,12 +40,12 @@
             </el-col>
             <el-col :span="11" class="center_right">
               <el-button
-                class="right_btn"
+                type="primary"
                 icon="el-icon-folder-add"
                 @click="dialogAddFormVisible = true"
                 >添加</el-button
               >
-              <el-button class="right_btn" icon="el-icon-folder-add"
+              <el-button type="primary" icon="el-icon-folder-add"
                 >导入</el-button
               >
             </el-col>
@@ -481,13 +480,6 @@ export default {
         flex-direction: row;
         justify-content: flex-end;
         align-items: center;
-        .right_btn {
-          background: #34428a;
-          opacity: 1;
-          border-radius: 2px;
-          color: #fff;
-          font-size: 16px;
-        }
       }
     }
   }
@@ -495,11 +487,6 @@ export default {
     padding-left: 50px;
     padding-right: 50px;
     .el-table {
-      .el-checkbox__input.is-checked .el-checkbox__inner,
-      .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-        background-color: #34428a;
-        border-color: #34428a;
-      }
       .double {
         background: #f9faff;
       }
@@ -511,8 +498,6 @@ export default {
 }
 
 .el-pagination {
-  // width: 100%;
-  // padding: 0 50px !important;
   margin: 60px 50px;
   float: right;
 }

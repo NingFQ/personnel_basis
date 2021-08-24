@@ -9,25 +9,20 @@
             placeholder="请输入部门名称"
             suffix-icon="el-icon-search"
           ></el-input>
-          <el-button class="search_btn" @click="handleSearch">搜索</el-button>
-          <el-button class="reset_btn" @click="handleResetInput"
-            >重置</el-button
-          >
+          <el-button type="primary" @click="handleSearch">搜索</el-button>
+          <el-button type="primary" @click="handleResetInput">重置</el-button>
         </el-col>
         <el-col :span="9">
           <el-row type="flex" justify="end">
             <el-button
-              class="right_btn"
+              type="primary"
+              width="100"
               icon="el-icon-folder-add"
               @click="handleAddNewGroup"
               >新建</el-button
             >
-            <el-button class="expand_btn" icon="el-icon-arrow-down"
-              >全部展开</el-button
-            >
-            <el-button class="expand_btn" icon="el-icon-arrow-up"
-              >全部折叠</el-button
-            >
+            <el-button icon="el-icon-arrow-down">全部展开</el-button>
+            <el-button icon="el-icon-arrow-up">全部折叠</el-button>
           </el-row>
         </el-col>
       </el-row>
@@ -230,11 +225,12 @@ export default {
     editCompltet(_type, _data) {
       if (_type == "edit") {
         alert("编辑完成的数据======>" + JSON.stringify(_data));
+        this.dialogEditFormVisible = false;
       }
       if (_type == "add") {
         alert("新增的数据======>" + JSON.stringify(_data));
+        this.dialogAddFormVisible = false;
       }
-      this.dialogEditFormVisible = false;
       this.isLoading = true;
       setTimeout(() => {
         this.isLoading = false;
@@ -251,8 +247,8 @@ export default {
       this.isLoading = true;
       setTimeout(() => {
         this.isLoading = false;
-        this.dialogDeleteFailed = true; //删除失败
-        // this.dialogDeleteSuccess = true;// 删除成功
+        // this.dialogDeleteFailed = true; //删除失败
+        this.dialogDeleteSuccess = true; // 删除成功
       }, 1000);
     },
   },
@@ -282,7 +278,6 @@ export default {
         border-radius: 2px;
         color: #fff;
       }
-
       .reset_btn {
         width: 160px;
         height: 44px;
@@ -310,11 +305,6 @@ export default {
     }
     .el-table {
       font-size: 18px !important;
-      .el-checkbox__input.is-checked .el-checkbox__inner,
-      .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-        background-color: #34428a;
-        border-color: #34428a;
-      }
       .status_style {
         display: flex;
         flex-direction: row;

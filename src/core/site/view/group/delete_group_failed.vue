@@ -156,25 +156,6 @@ export default {
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      .confrim_btn {
-        width: 160px;
-        height: 44px;
-        background: #34428a;
-        opacity: 1;
-        font-size: 16px;
-        border-radius: 2px;
-        color: #fff;
-      }
-
-      .cancel_btn {
-        width: 160px;
-        height: 44px;
-        background: #e5e7f3;
-        opacity: 1;
-        font-size: 16px;
-        border-radius: 2px;
-        color: #34428a;
-      }
     }
   }
 }

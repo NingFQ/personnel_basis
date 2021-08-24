@@ -13,11 +13,9 @@
           <img src="../../static/images/success.png" alt="" />
           <span>数据删除成功</span>
         </div>
-        <el-form>
-          <el-form-item class="top_btns">
-            <el-button @click="closeDeleteDialog()">关闭</el-button>
-          </el-form-item>
-        </el-form>
+        <div class="top_btns">
+          <el-button @click="closeDeleteDialog()">关闭</el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -101,56 +99,12 @@ export default {
       margin-left: 10px;
     }
   }
-  .el-form {
+  .top_btns {
     width: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
-    .el-form-item {
-      width: 400px;
-      .el-form-item__label {
-        width: 100px !important;
-        font-size: 16px;
-        font-weight: 400;
-        color: #333333;
-      }
-      .el-input {
-        width: 300px;
-        height: 44px;
-        border-color: rgba(204, 204, 204, 1);
-      }
-      .el-select {
-        width: 300px;
-        height: 44px;
-        border-color: rgba(204, 204, 204, 1);
-      }
-    }
-    .top_btns {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      .confrim_btn {
-        width: 160px;
-        height: 44px;
-        background: #34428a;
-        opacity: 1;
-        font-size: 16px;
-        border-radius: 2px;
-        color: #fff;
-      }
-
-      .cancel_btn {
-        width: 160px;
-        height: 44px;
-        background: #e5e7f3;
-        opacity: 1;
-        font-size: 16px;
-        border-radius: 2px;
-        color: #34428a;
-      }
-    }
   }
 }
 </style>

@@ -15,10 +15,10 @@
         </div>
         <el-form :model="ruleForm" ref="ruleForm" :rules="rules">
           <el-form-item class="top_btns">
-            <el-button class="cancel_btn" @click="closeDeleteDialog()"
+            <el-button class="btn_item" @click="closeDeleteDialog()"
               >取消</el-button
             >
-            <el-button class="confrim_btn" @click="deleteOperate()"
+            <el-button type="primary" class="btn_item" @click="deleteOperate()"
               >删除</el-button
             >
           </el-form-item>
@@ -126,12 +126,10 @@ export default {
       .el-input {
         width: 300px;
         height: 44px;
-        border-color: rgba(204, 204, 204, 1);
       }
       .el-select {
         width: 300px;
         height: 44px;
-        border-color: rgba(204, 204, 204, 1);
       }
     }
     .top_btns {
@@ -139,24 +137,9 @@ export default {
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      .confrim_btn {
+      .btn_item {
         width: 160px;
         height: 44px;
-        background: #34428a;
-        opacity: 1;
-        font-size: 16px;
-        border-radius: 2px;
-        color: #fff;
-      }
-
-      .cancel_btn {
-        width: 160px;
-        height: 44px;
-        background: #e5e7f3;
-        opacity: 1;
-        font-size: 16px;
-        border-radius: 2px;
-        color: #34428a;
       }
     }
   }

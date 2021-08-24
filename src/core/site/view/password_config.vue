@@ -52,7 +52,7 @@
           <img class="hint_icon" src="../static/images/waring.png" alt="" />
           <span class="hint_text">{{ hintStr }}</span>
         </div>
-        <el-button class="login_btn reset_element_btn" @click="handleConfirm"
+        <el-button type="primary" class="login_btn" @click="handleConfirm"
           >确认</el-button
         >
       </el-form>
@@ -157,11 +157,7 @@ export default {
         width: 100%;
         height: 100%;
         font-size: 18px;
-        // border: none
-        color: #101c51;
-        border: 1px solid #cccccc;
         opacity: 1;
-        border-radius: 6px;
         padding: 0 72px;
       }
       .pre_icon {
@@ -199,9 +195,6 @@ export default {
     .login_btn {
       width: 460px;
       height: 58px;
-      background: #34428a;
-      color: white;
-      font-size: 18px;
     }
   }
 }

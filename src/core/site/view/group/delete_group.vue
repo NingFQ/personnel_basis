@@ -15,10 +15,10 @@
         </div>
         <el-form>
           <el-form-item class="top_btns">
-            <el-button class="cancel_btn" @click="closeDeleteDialog()"
+            <el-button class="btn_item" @click="closeDeleteDialog()"
               >取消</el-button
             >
-            <el-button class="confrim_btn" @click="deleteOperate()"
+            <el-button type="primary" class="btn_item" @click="deleteOperate()"
               >删除</el-button
             >
           </el-form-item>
@@ -159,24 +159,9 @@ export default {
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      .confrim_btn {
+      .btn_item {
         width: 160px;
         height: 44px;
-        background: #34428a;
-        opacity: 1;
-        font-size: 16px;
-        border-radius: 2px;
-        color: #fff;
-      }
-
-      .cancel_btn {
-        width: 160px;
-        height: 44px;
-        background: #e5e7f3;
-        opacity: 1;
-        font-size: 16px;
-        border-radius: 2px;
-        color: #34428a;
       }
     }
   }

@@ -42,10 +42,10 @@
             ></el-input>
           </el-form-item>
           <el-form-item class="top_btns">
-            <el-button class="cancel_btn" @click="closeAddDialog()"
+            <el-button class="btn_item" @click="closeAddDialog()"
               >取消</el-button
             >
-            <el-button class="confrim_btn" @click="editComplete()"
+            <el-button type="primary" class="btn_item" @click="editComplete()"
               >完成</el-button
             >
           </el-form-item>
@@ -160,7 +160,6 @@ export default {
 }
 .dialog_body_content {
   width: 100%;
-  // height: 420px;
   overflow-y: scroll;
   padding: 40px 0;
   background: #fff;
@@ -182,12 +181,10 @@ export default {
       .el-input {
         width: 300px;
         height: 44px;
-        border-color: rgba(204, 204, 204, 1);
       }
       .el-select {
         width: 300px;
         height: 44px;
-        border-color: rgba(204, 204, 204, 1);
       }
       .el-textarea {
         width: 300px;
@@ -198,24 +195,9 @@ export default {
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      .confrim_btn {
+      .btn_item {
         width: 160px;
         height: 44px;
-        background: #34428a;
-        opacity: 1;
-        font-size: 16px;
-        border-radius: 2px;
-        color: #fff;
-      }
-
-      .cancel_btn {
-        width: 160px;
-        height: 44px;
-        background: #e5e7f3;
-        opacity: 1;
-        font-size: 16px;
-        border-radius: 2px;
-        color: #34428a;
       }
     }
   }
