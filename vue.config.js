@@ -31,8 +31,7 @@ module.exports = {
 		publicPath: process.env.VUE_APP_PATH,
 		proxy: {
 			'/api': {
-				// target: appConfig.apiProtocol + "://" + appConfig.devApi,
-				target: 'http://personal.dripm.cn',
+				target: appConfig.apiProtocol + "://" + appConfig.devApi,
 				pathRewrite: { "^/api": "" },
 				secure: false
 			}

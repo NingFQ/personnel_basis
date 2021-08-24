@@ -81,7 +81,7 @@ export default {
 		  },
       limit: {
 		    comLoad: function (resolve) {
-		    	require(['../merge/site/view/limit_config'], resolve);
+		    	require(['../merge/site/view/limit/limit_config'], resolve);
 		    },
 		    metaInfo: {
 					title: '权限管理',

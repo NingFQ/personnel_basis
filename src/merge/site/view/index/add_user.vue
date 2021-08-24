@@ -143,7 +143,7 @@
             <el-button class="cancel_btn" @click="closeAddDialog()"
               >取消</el-button
             >
-            <el-button class="confrim_btn" @click="submitForm()"
+            <el-button class="confrim_btn" @click="submitForm('ruleForm')"
               >导入</el-button
             >
           </el-form-item>
@@ -175,8 +175,8 @@ export default {
         levelReason: "", // 离职原因
       },
       isWorkData: [
-        { key: true, value: "是" },
-        { key: false, value: "否" },
+        { key: 1, value: "是" },
+        { key: 0, value: "否" },
       ],
       personnelData: ["现役军官", "文职人员", "现役士兵", "社聘人员"],
       identityTypeData: [],
@@ -287,10 +287,6 @@ export default {
     closeAddDialog() {
       this.$parent.handleClose();
     },
-    // 选择是否在职时
-    changeIsWorkValue(value) {
-      console.log(value);
-    },
     // 人员类型 切换 身份类型联动
     changePersonValue(value) {
       this.identityTypeData = [];
@@ -305,9 +301,16 @@ export default {
     changeLevelReason(value) {
       console.log(value);
     },
-    submitForm() {
+    submitForm(formName) {
       // console.log(this.ruleForm);
-      this.$parent.$parent.handleAddUser();
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$parent.$parent.handleAddUser();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
   },
 };

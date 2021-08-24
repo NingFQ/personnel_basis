@@ -2,24 +2,29 @@
   <div>
     <div slot="footer" class="dialog_header">
       <div class="dialog_header_title">
-        <p class="title">{{ title }}</p>
+        <p class="title">添加管理员</p>
         <div
           class="header_close_icon el-icon-close"
           @click="closeDeleteDialog"
         ></div>
       </div>
       <div class="dialog_body_content">
-        <div class="content_text">
-          <img src="../../static/images/waring.png" alt="" />
-          <span>是否确认删除，删除后无法恢复！</span>
-        </div>
         <el-form :model="ruleForm" ref="ruleForm" :rules="rules">
+          <el-form-item :label-position="right" label="管理员" prop="code">
+            <el-input
+              v-model="ruleForm.code"
+              placeholder="请输入姓名或工号"
+            ></el-input>
+          </el-form-item>
           <el-form-item class="top_btns">
             <el-button class="btn_item" @click="closeDeleteDialog()"
               >取消</el-button
             >
-            <el-button type="primary" class="btn_item" @click="deleteOperate()"
-              >删除</el-button
+            <el-button
+              type="primary"
+              class="btn_item"
+              @click="addOperate('ruleForm')"
+              >确认</el-button
             >
           </el-form-item>
         </el-form>
@@ -32,14 +37,23 @@
 export default {
   name: "ZhilinFrontAdd",
   data() {
-    return {};
+    return {
+      ruleForm: {
+        code: "",
+      },
+      rules: {
+        code: [
+          {
+            required: true,
+            type: "string",
+            message: "请输入姓名或工号",
+            trigger: "blur",
+          },
+        ],
+      },
+    };
   },
-  props: {
-    title: {
-      type: String,
-      default: "标题",
-    },
-  },
+  props: {},
   components: {},
   mounted() {},
   methods: {
@@ -47,9 +61,16 @@ export default {
     closeDeleteDialog() {
       this.$parent.handleClose();
     },
-    // 删除操作
-    deleteOperate() {
-      this.$parent.$parent.handleDeleteTableItem();
+    // 新增操作
+    addOperate(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$parent.$parent.addConfrimCallBack();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
   },
 };

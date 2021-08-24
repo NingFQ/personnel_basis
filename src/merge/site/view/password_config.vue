@@ -1,5 +1,5 @@
 <template>
-  <div class="site_password">
+  <div class="site_password" v-loading="isLoading">
     <common-header />
     <div class="site_password_main">
       <el-form
@@ -69,6 +69,7 @@ export default {
 
   data() {
     return {
+      isLoading: false,
       ruleForm: {
         nowPassword: "",
         newPassword: "",
@@ -106,7 +107,9 @@ export default {
         fromData.newConfirmPassword = "";
       } else {
         var that = this;
+        this.isLoading = true;
         setTimeout(function () {
+          that.isLoading = false;
           that.$notify({
             title: "成功",
             message: "密码修改成功",
@@ -115,7 +118,7 @@ export default {
           fromData.nowPassword = "";
           fromData.newPassword = "";
           fromData.newConfirmPassword = "";
-        }, 2000);
+        }, 1000);
       }
       console.log();
     },

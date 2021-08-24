@@ -66,7 +66,7 @@ module.exports = {
 			loadedApiParams: { appkey: 'loaded' },
 		},
 		limit: {
-			viewPath: "view/limit_config",
+			viewPath: "view/limit/limit_config",
 			metaInfo: {
 				title: '权限管理',
 			},

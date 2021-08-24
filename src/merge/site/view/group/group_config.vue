@@ -103,7 +103,7 @@
       center="true"
       :show-close="false"
       :visible.sync="dialogDeleteFormVisible"
-      ><delete-group title="操作确认"> </delete-group>
+      ><delete-confirm> </delete-confirm>
     </el-dialog>
     <!--  删除成功弹窗-->
     <el-dialog
@@ -128,7 +128,7 @@
 import CommonHeader from "../components/common_header.vue";
 import EditGroup from "./edit_group.vue";
 import AddGroup from "./add_group.vue";
-import DeleteGroup from "./delete_group.vue";
+import DeleteConfirm from "../components/delete_confirm.vue";
 import DeleteSuccess from "../components/delete_success.vue";
 import DeleteFailed from "./delete_group_failed.vue";
 
@@ -139,7 +139,7 @@ export default {
     CommonHeader,
     AddGroup,
     EditGroup,
-    DeleteGroup,
+    DeleteConfirm,
     DeleteSuccess,
     DeleteFailed,
   },
@@ -242,7 +242,7 @@ export default {
       this.dialogDeleteFormVisible = true;
     },
     // 执行了删除操作
-    handleDeleteData() {
+    deleteConfrimCallBack() {
       this.dialogDeleteFormVisible = false;
       this.isLoading = true;
       setTimeout(() => {

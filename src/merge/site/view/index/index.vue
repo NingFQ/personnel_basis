@@ -21,7 +21,7 @@
       </el-aside>
       <el-main>
         <!-- 搜索字段配置表单 -->
-        <search-config-from />
+        <search-config-from @handleSearch="handleSearch" />
         <!-- 中间操作区域 -->
         <div class="main_center_wrap">
           <el-row class="main_center">
@@ -171,7 +171,13 @@
             </el-table-column>
           </el-table>
         </div>
-        <el-pagination layout="total, prev, pager, next, jumper" :total="1000">
+        <el-pagination
+          background
+          layout="total, prev, pager, next, jumper"
+          :total="totalNumber"
+          :page-size="pageSize"
+          @current-change="currentPageChange"
+        >
         </el-pagination>
       </el-main>
     </el-container>
@@ -189,7 +195,7 @@
       center="true"
       :show-close="false"
       :visible.sync="dialogDeleteFormVisible"
-      ><delete-user title="操作确认"> </delete-user>
+      ><delete-confirm> </delete-confirm>
     </el-dialog>
     <!-- 删除成功弹窗 -->
     <el-dialog
@@ -207,7 +213,7 @@ import siteCon from "@site/controller/indexCon";
 import CommonHeader from "../components/common_header.vue";
 import SearchConfigFrom from "./search_from.vue";
 import AddUser from "./add_user.vue";
-import DeleteUser from "./delete_user.vue";
+import DeleteConfirm from "../components/delete_confirm.vue";
 import DeleteSuccess from "../components/delete_success.vue";
 
 export default {
@@ -216,16 +222,13 @@ export default {
     CommonHeader,
     SearchConfigFrom,
     AddUser,
-    DeleteUser,
+    DeleteConfirm,
     DeleteSuccess,
   },
   data() {
     return {
-      isLoading: false,
-      restaurants: [
-        { value: "三全鲜食（北新泾店）", address: "长宁区新渔路144号" },
-      ], // 搜索框内容
-      searchText: "", // 搜索内容
+      isLoading: false, // 页面loading
+      searchText: "", // 搜索框内容
       // 部门级别树
       treeData: [
         {
@@ -306,45 +309,66 @@ export default {
           orginate: "山东省",
         },
       ],
+      totalNumber: 100, // 表格数据总长度
+      pageNum: 1, // 当前第几页数据
+      pageSize: 10, // 每页展示多少条
       multipleSelection: [], // 选中的表格数据
     };
   },
   methods: {
     querySearch(queryString, cb) {
-      var restaurants = this.restaurants;
-      var results = queryString
-        ? restaurants.filter(this.createFilter(queryString))
-        : restaurants;
       console.log("this.searchText=====>" + this.searchText);
       // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    createFilter(queryString) {
-      return (restaurant) => {
-        return (
-          restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
-          0
-        );
-      };
+      // cb(results);
     },
     handleSelect(item) {
-      console.log(item);
+      console.log("搜索结果选中某一项=====>" + item);
     },
     handleNodeClick(data) {
-      console.log(data);
+      console.log("部门树选中某一节点======>" + data);
     },
-    // toggleSelection(rows) {
-    //   if (rows) {
-    //     rows.forEach((row) => {
-    //       this.$refs.multipleTable.toggleRowSelection(row);
-    //     });
-    //   } else {
-    //     this.$refs.multipleTable.clearSelection();
-    //   }
-    // },
+    currentPageChange(val) {
+      this.pageNum = val;
+      console.log(`当前页: ${val}`);
+    },
     handleSelectionChange(val) {
-      console.log("选中的表格数据=====" + val);
+      console.log("选中的表格数据=====" + JSON.stringify(val));
       this.multipleSelection = val;
+    },
+    // 新增用回调
+    handleAddUser() {
+      alert("新增了用户");
+      this.dialogAddFormVisible = false;
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 1000);
+    },
+    // 删除表格项回调
+    deleteConfrimCallBack() {
+      alert(
+        "删除表格项===长度===" + this.multipleSelection,
+        length + ">" + JSON.stringify(this.multipleSelection)
+      );
+      this.dialogDeleteFormVisible = false;
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+        this.dialogDeteteSuccess = true;
+      }, 1000);
+    },
+    // 搜索表格回调
+    handleSearch(searchParm) {
+      alert("执行搜索====>" + JSON.stringify(searchParm));
+    },
+    init() {
+      this.$appFetch({
+        url: "departmentList",
+        method: "POST",
+        success: () => {
+          console.log("请求成功");
+        },
+      });
     },
     // 表格赋值className
     tableRowClassName({ row, rowIndex }) {
@@ -361,37 +385,6 @@ export default {
       } else {
         return "";
       }
-    },
-    // 新增用回调
-    handleAddUser() {
-      alert("新增了用户");
-      this.dialogAddFormVisible = false;
-      this.isLoading = true;
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 1000);
-    },
-    // 删除表格项回调
-    handleDeleteTableItem() {
-      // alert(
-      //   "删除表格项===长度===" + this.multipleSelection,
-      //   length + ">" + JSON.stringify(this.multipleSelection)
-      // );
-      this.dialogDeleteFormVisible = false;
-      this.isLoading = true;
-      setTimeout(() => {
-        this.isLoading = false;
-        this.dialogDeteteSuccess = true;
-      }, 1000);
-    },
-    init() {
-      this.$appFetch({
-        url: "departmentList",
-        method: "POST",
-        success: () => {
-          console.log("请求成功");
-        },
-      });
     },
   },
   mounted() {

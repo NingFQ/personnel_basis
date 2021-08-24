@@ -11,15 +11,18 @@
       <div class="dialog_body_content">
         <div class="content_text">
           <img src="../../static/images/waring.png" alt="" />
-          <span>是否确认删除，删除后无法恢复！</span>
+          <span>{{ hintTitle }}</span>
         </div>
-        <el-form>
+        <el-form :model="ruleForm" ref="ruleForm" :rules="rules">
           <el-form-item class="top_btns">
             <el-button class="btn_item" @click="closeDeleteDialog()"
               >取消</el-button
             >
-            <el-button type="primary" class="btn_item" @click="deleteOperate()"
-              >删除</el-button
+            <el-button
+              type="primary"
+              class="btn_item"
+              @click="deleteOperate()"
+              >{{ btnText }}</el-button
             >
           </el-form-item>
         </el-form>
@@ -30,13 +33,22 @@
 
 <script>
 export default {
-  name: "ZhilinFrontDelete",
-
-  data() {},
+  name: "ZhilinFrontAdd",
+  data() {
+    return {};
+  },
   props: {
     title: {
       type: String,
-      default: "标题",
+      default: "操作确认",
+    },
+    hintTitle: {
+      type: String,
+      default: "是否确认删除，删除后无法恢复！",
+    },
+    btnText: {
+      type: String,
+      default: "删除",
     },
   },
   components: {},
@@ -48,7 +60,7 @@ export default {
     },
     // 删除操作
     deleteOperate() {
-      this.$parent.$parent.handleDeleteData();
+      this.$parent.$parent.deleteConfrimCallBack();
     },
   },
 };
@@ -107,28 +119,7 @@ export default {
       color: #333333;
       margin-left: 10px;
     }
-    .error_hint {
-      font-size: 14px;
-      font-weight: 400;
-      color: #999999;
-    }
   }
-  .content_text_error {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    margin: 50px 0 80px;
-    .content_text {
-      margin-bottom: 10px;
-    }
-    .error_hint {
-      font-size: 14px;
-      font-weight: 400;
-      color: #999999;
-    }
-  }
-
   .el-form {
     width: 100%;
     display: flex;
@@ -146,12 +137,10 @@ export default {
       .el-input {
         width: 300px;
         height: 44px;
-        border-color: rgba(204, 204, 204, 1);
       }
       .el-select {
         width: 300px;
         height: 44px;
-        border-color: rgba(204, 204, 204, 1);
       }
     }
     .top_btns {

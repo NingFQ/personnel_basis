@@ -10,12 +10,13 @@
               prop="isWork"
             >
               <el-select
+                multiple
                 v-model="ruleForm.isWork"
                 placeholder="请选择"
                 @change="changeIsWorkValue($event)"
               >
                 <el-option
-                  v-for="(item, key) in isWorkData"
+                  v-for="(item, key) in isWorkDictionary"
                   :key="key"
                   :label="item.value"
                   :value="item.key"
@@ -27,18 +28,19 @@
             <el-form-item
               :label-position="right"
               label="人员类型"
-              prop="personnelType"
+              prop="personnelTypeList"
             >
               <el-select
-                v-model="ruleForm.personnelType"
+                multiple
+                v-model="ruleForm.personnelTypeList"
                 placeholder="请选择"
                 @change="changePersonValue($event)"
               >
                 <el-option
-                  v-for="(item, index) in personnelData"
+                  v-for="(item, index) in personnelTypeDictionary"
                   :key="index"
-                  :label="item"
-                  :value="index"
+                  :label="item.name"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -47,18 +49,19 @@
             <el-form-item
               :label-position="right"
               label="身份类型"
-              prop="identityType"
+              prop="identityTypeList"
             >
               <el-select
-                v-model="ruleForm.identityType"
+                multiple
+                v-model="ruleForm.identityTypeList"
                 placeholder="请选择"
                 @change="changeIdentityValue($event)"
               >
                 <el-option
-                  v-for="(item, key) in identityTypeData"
+                  v-for="(item, key) in identityTypeDictionary"
                   :key="key"
-                  :label="item"
-                  :value="item"
+                  :label="item.name"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -123,7 +126,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row type="flex">
           <el-col :span="8">
             <el-form-item
               :label-position="right"
@@ -180,15 +183,16 @@
               prop="levelReason"
             >
               <el-select
+                multiple
                 v-model="ruleForm.levelReason"
                 placeholder="请选择"
                 @change="changeLevelReason($event)"
               >
                 <el-option
-                  v-for="(item, key) in levelReasonData"
+                  v-for="(item, key) in levelReasonDictionary"
                   :key="key"
-                  :label="item"
-                  :value="item"
+                  :label="item.name"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -222,33 +226,50 @@ export default {
   data() {
     return {
       ruleForm: {
-        isWork: "", // 是否在职
-        personnelType: "", // 人员类型
-        identityType: "", // 身份类型
+        isWork: [], // 是否在职
+        personnelTypeList: [], // 人员类型
+        identityTypeList: [], // 身份类型
         userName: "", // 姓名
         idCode: "", // 身份证号
         idNumber: "", // 证件号
         sex: "", // 性别
         nation: "", // 民族
         originate: "", // 籍贯
-        birthday: "", // 生日
-        entrantTime: "", // 入职时间
-        leaveTime: "", // 离职时间
-        levelReason: "", // 离职原因
+        birthday: [], // 生日
+        entrantTime: [], // 入职时间
+        leaveTime: [], // 离职时间
+        levelReason: [], // 离职原因
       },
-      isWorkData: [
-        { key: true, value: "是" },
-        { key: false, value: "否" },
+      // 是否在职字典
+      isWorkDictionary: [
+        { key: 1, value: "是" },
+        { key: 0, value: "否" },
       ],
-      personnelData: ["现役军官", "文职人员", "现役士兵", "社聘人员"],
-      identityTypeData: [],
-      identityTypeOriginData: [
-        ["行管干部", "专业技术"],
-        ["行管干部", "专业技术"],
-        [],
-        ["社聘", "公勤", "职工"],
+      // 人员类型字典
+      personnelTypeDictionary: [
+        { name: "现役军官", id: 1 },
+        { name: "文职人员", id: 2 },
+        { name: "现役士兵", id: 3 },
+        { name: "社聘人员", id: 4 },
       ],
-      levelReasonData: ["退休", "转业", "调动", "复员", "解聘", "其他"],
+      // 身份类型字典
+      identityTypeDictionary: [
+        { name: "行管干部", id: 1 },
+        { name: "行管干部", id: 2 },
+        { name: "专业技术", id: 3 },
+        { name: "专业技术", id: 4 },
+        { name: "社聘", id: 5 },
+        { name: "职工", id: 6 },
+      ],
+      // 离职原因字典
+      levelReasonDictionary: [
+        { name: "退休", id: 1 },
+        { name: "转业", id: 2 },
+        { name: "调动", id: 3 },
+        { name: "复员", id: 4 },
+        { name: "解聘", id: 5 },
+        { name: "其他", id: 6 },
+      ],
     };
   },
   computed: {},
@@ -257,33 +278,26 @@ export default {
   methods: {
     // 选择是否在职时
     changeIsWorkValue(value) {
-      console.log(value);
+      console.log("选中的是否在职=====>" + value);
     },
     // 人员类型 切换 身份类型联动
     changePersonValue(value) {
-      this.identityTypeData = [];
-      this.ruleForm.identityType = "";
-      this.identityTypeData = this.identityTypeOriginData[value];
+      console.log("选中的人员类型=====>" + value);
     },
     // 身份类型选择时
     changeIdentityValue(value) {
-      console.log(value);
+      console.log("选中的身份类型=====>" + value);
     },
     // 离职原因
     changeLevelReason(value) {
-      console.log(value);
+      console.log("选中的离职原因=====>" + value);
     },
+    // 搜索
     submitForm(formName) {
       console.log(this.ruleForm);
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
-      //     alert("submit!");
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
+      this.$emit("handleSearch", this.ruleForm);
     },
+    // 重置
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
@@ -307,17 +321,17 @@ export default {
         color: #333333;
       }
       .el-input {
-        width: 300px;
+        width: 400px;
         height: 44px;
         border-color: rgba(204, 204, 204, 1);
       }
       .el-select {
-        width: 300px;
+        width: 400px;
         height: 44px;
         border-color: rgba(204, 204, 204, 1);
       }
       .el-date-editor {
-        width: 300px;
+        width: 400px;
         height: 44px;
         border-color: rgba(204, 204, 204, 1);
       }
