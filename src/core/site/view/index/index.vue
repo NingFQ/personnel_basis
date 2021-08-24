@@ -1,5 +1,5 @@
 <template>
-  <div class="site_index">
+  <div class="site_index" v-loading="isLoading">
     <common-header />
     <el-container style="width: 100%">
       <el-aside style="width: 360px">
@@ -63,7 +63,11 @@
             :row-class-name="tableRowClassName"
             :header-cell-style="getRowClass"
           >
-            <el-table-column type="selection" width="68"></el-table-column>
+            <el-table-column
+              type="selection"
+              width="68"
+              align="center"
+            ></el-table-column>
             <el-table-column
               prop="loginCode"
               label="登录号"
@@ -184,10 +188,17 @@
     <el-dialog
       :width="600"
       center="true"
-      destroy-on-close="true"
       :show-close="false"
       :visible.sync="dialogDeleteFormVisible"
       ><delete-user title="操作确认"> </delete-user>
+    </el-dialog>
+    <!-- 删除成功弹窗 -->
+    <el-dialog
+      :width="600"
+      center="true"
+      :show-close="false"
+      :visible.sync="dialogDeteteSuccess"
+      ><delete-success title="操作确认"> </delete-success>
     </el-dialog>
   </div>
 </template>
@@ -198,6 +209,7 @@ import CommonHeader from "../components/common_header.vue";
 import SearchConfigFrom from "./search_from.vue";
 import AddUser from "./add_user.vue";
 import DeleteUser from "./delete_user.vue";
+import DeleteSuccess from "../components/delete_success.vue";
 
 export default {
   ...siteCon,
@@ -206,9 +218,11 @@ export default {
     SearchConfigFrom,
     AddUser,
     DeleteUser,
+    DeleteSuccess,
   },
   data() {
     return {
+      isLoading: false,
       restaurants: [
         { value: "三全鲜食（北新泾店）", address: "长宁区新渔路144号" },
       ], // 搜索框内容
@@ -278,6 +292,7 @@ export default {
       },
       dialogAddFormVisible: false, // 是否弹出新增用户dialog
       dialogDeleteFormVisible: false, // 是否弹出删除dialog
+      dialogDeteteSuccess: false, // 是否弹出删除成功的弹窗
       // 表格数据
       tableData: [
         {
@@ -319,15 +334,15 @@ export default {
     handleNodeClick(data) {
       console.log(data);
     },
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach((row) => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
-      }
-    },
+    // toggleSelection(rows) {
+    //   if (rows) {
+    //     rows.forEach((row) => {
+    //       this.$refs.multipleTable.toggleRowSelection(row);
+    //     });
+    //   } else {
+    //     this.$refs.multipleTable.clearSelection();
+    //   }
+    // },
     handleSelectionChange(val) {
       console.log("选中的表格数据=====" + val);
       this.multipleSelection = val;
@@ -348,25 +363,27 @@ export default {
         return "";
       }
     },
-    // 关闭弹窗 key
-    handleCloseDialog(type) {
-      console.log("type======" + type);
-      switch (type) {
-        case "add":
-          this.dialogAddFormVisible = false;
-          break;
-        case "delete":
-          this.dialogDeleteFormVisible = false;
-          break;
-      }
-    },
-    // 新增用户
+    // 新增用回调
     handleAddUser() {
-      console.log("新增了用户");
+      alert("新增了用户");
+      this.dialogAddFormVisible = false;
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 1000);
     },
-    // 删除表格项
+    // 删除表格项回调
     handleDeleteTableItem() {
-      console.log("删除表格项");
+      // alert(
+      //   "删除表格项===长度===" + this.multipleSelection,
+      //   length + ">" + JSON.stringify(this.multipleSelection)
+      // );
+      this.dialogDeleteFormVisible = false;
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+        this.dialogDeteteSuccess = true;
+      }, 1000);
     },
     init() {
       this.$appFetch({
@@ -494,8 +511,9 @@ export default {
 }
 
 .el-pagination {
-  padding: 0 50px;
-  margin: 60px 0;
+  // width: 100%;
+  // padding: 0 50px !important;
+  margin: 60px 50px;
   float: right;
 }
 

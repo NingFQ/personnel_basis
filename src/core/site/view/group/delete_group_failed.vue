@@ -9,18 +9,17 @@
         ></div>
       </div>
       <div class="dialog_body_content">
-        <div class="content_text">
-          <img src="../../static/images/waring.png" alt="" />
-          <span>是否确认删除，删除后无法恢复！</span>
+        <div class="content_text_error">
+          <div class="content_text">
+            <img src="../../static/images/login_error.png" alt="" />
+            <span>数据删除失败</span>
+          </div>
+          <p class="error_hint">（该部门下有数据，请清空数据后再删除）</p>
         </div>
+
         <el-form>
           <el-form-item class="top_btns">
-            <el-button class="cancel_btn" @click="closeDeleteDialog()"
-              >取消</el-button
-            >
-            <el-button class="confrim_btn" @click="deleteOperate()"
-              >删除</el-button
-            >
+            <el-button @click="closeDeleteDialog()">关闭</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -32,7 +31,9 @@
 export default {
   name: "ZhilinFrontDelete",
 
-  data() {},
+  data() {
+    return {};
+  },
   props: {
     title: {
       type: String,
@@ -45,10 +46,6 @@ export default {
     // 关闭dialog
     closeDeleteDialog() {
       this.$parent.handleClose();
-    },
-    // 删除操作
-    deleteOperate() {
-      this.$parent.$parent.handleDeleteData();
     },
   },
 };

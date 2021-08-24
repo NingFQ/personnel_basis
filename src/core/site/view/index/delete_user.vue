@@ -9,30 +9,17 @@
         ></div>
       </div>
       <div class="dialog_body_content">
-        <div v-show="!success" class="content_text">
+        <div class="content_text">
           <img src="../../static/images/waring.png" alt="" />
           <span>是否确认删除，删除后无法恢复！</span>
         </div>
-        <div v-show="success" class="content_text">
-          <img src="../../static/images/success.png" alt="" />
-          <span>数据删除成功</span>
-        </div>
         <el-form :model="ruleForm" ref="ruleForm" :rules="rules">
           <el-form-item class="top_btns">
-            <el-button
-              v-show="!success"
-              class="cancel_btn"
-              @click="closeDeleteDialog()"
+            <el-button class="cancel_btn" @click="closeDeleteDialog()"
               >取消</el-button
             >
-            <el-button
-              v-show="!success"
-              class="confrim_btn"
-              @click="deleteOperate()"
+            <el-button class="confrim_btn" @click="deleteOperate()"
               >删除</el-button
-            >
-            <el-button v-show="success" @click="closeDeleteDialog()"
-              >关闭</el-button
             >
           </el-form-item>
         </el-form>
@@ -44,11 +31,8 @@
 <script>
 export default {
   name: "ZhilinFrontAdd",
-
   data() {
-    return {
-      success: false,
-    };
+    return {};
   },
   props: {
     title: {
@@ -57,18 +41,15 @@ export default {
     },
   },
   components: {},
-  mounted() {
-    console.log(this.$props);
-  },
+  mounted() {},
   methods: {
     // 关闭dialog
     closeDeleteDialog() {
-      this.$parent.$parent.handleCloseDialog("delete");
+      this.$parent.handleClose();
     },
     // 删除操作
     deleteOperate() {
       this.$parent.$parent.handleDeleteTableItem();
-      this.success = true;
     },
   },
 };

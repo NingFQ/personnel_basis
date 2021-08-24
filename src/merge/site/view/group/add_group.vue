@@ -61,6 +61,7 @@ export default {
 
   data() {
     return {
+      editingData: {},
       rules: {
         name: [
           {
@@ -92,17 +93,13 @@ export default {
       type: String,
       default: "标题",
     },
-    editingData: {
-      type: Object,
-      default: () => {},
-    },
   },
   computed: {
     statusText() {
       if (this.editingData.status == null) {
         return null;
       }
-      return this.editingData.status == "1" ? "启用" : "禁用";
+      return this.editingData.status == "0" ? "启用" : "禁用";
     },
   },
   components: {},
@@ -121,7 +118,7 @@ export default {
       this.editingData.status = value;
     },
     editComplete() {
-      this.$parent.$parent.editCompltet("edit", this.editingData);
+      this.$parent.$parent.editCompltet("add", this.editingData);
     },
   },
 };

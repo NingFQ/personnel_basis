@@ -285,7 +285,7 @@ export default {
   methods: {
     // 关闭dialog
     closeAddDialog() {
-      this.$parent.$parent.handleCloseDialog("add");
+      this.$parent.handleClose();
     },
     // 选择是否在职时
     changeIsWorkValue(value) {
@@ -306,17 +306,8 @@ export default {
       console.log(value);
     },
     submitForm() {
-      console.log(this.ruleForm);
+      // console.log(this.ruleForm);
       this.$parent.$parent.handleAddUser();
-      this.closeAddDialog();
-      // this.$refs[formName].validate((valid) => {
-      //   if (valid) {
-      //     alert("submit!");
-      //   } else {
-      //     console.log("error submit!!");
-      //     return false;
-      //   }
-      // });
     },
   },
 };

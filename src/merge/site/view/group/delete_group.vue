@@ -9,38 +9,17 @@
         ></div>
       </div>
       <div class="dialog_body_content">
-        <div v-show="!success && !error" class="content_text">
+        <div class="content_text">
           <img src="../../static/images/waring.png" alt="" />
           <span>是否确认删除，删除后无法恢复！</span>
         </div>
-        <div v-show="success" class="content_text">
-          <img src="../../static/images/success.png" alt="" />
-          <span>数据删除成功</span>
-        </div>
-        <div class="content_text_error" v-show="error">
-          <div class="content_text">
-            <img src="../../static/images/login_error.png" alt="" />
-            <span>数据删除失败</span>
-          </div>
-          <p class="error_hint">（该部门下有数据，请清空数据后再删除）</p>
-        </div>
-
         <el-form>
           <el-form-item class="top_btns">
-            <el-button
-              v-show="!success && !error"
-              class="cancel_btn"
-              @click="closeDeleteDialog()"
+            <el-button class="cancel_btn" @click="closeDeleteDialog()"
               >取消</el-button
             >
-            <el-button
-              v-show="!success && !error"
-              class="confrim_btn"
-              @click="deleteOperate()"
+            <el-button class="confrim_btn" @click="deleteOperate()"
               >删除</el-button
-            >
-            <el-button v-show="success || error" @click="closeDeleteDialog()"
-              >关闭</el-button
             >
           </el-form-item>
         </el-form>
@@ -53,12 +32,7 @@
 export default {
   name: "ZhilinFrontDelete",
 
-  data() {
-    return {
-      success: false,
-      error: false,
-    };
-  },
+  data() {},
   props: {
     title: {
       type: String,
@@ -70,15 +44,11 @@ export default {
   methods: {
     // 关闭dialog
     closeDeleteDialog() {
-      this.$parent.$parent.handleCloseDialog("delete");
+      this.$parent.handleClose();
     },
     // 删除操作
     deleteOperate() {
-      // this.success = true;
-      this.error = true;
-      // if (this.success || this.error) {
-      //   // this.$parent.$parent.handleDeleteData();
-      // }
+      this.$parent.$parent.handleDeleteData();
     },
   },
 };

@@ -45,7 +45,7 @@
             <el-button class="cancel_btn" @click="closeAddDialog()"
               >取消</el-button
             >
-            <el-button class="confrim_btn" @click="closeAddDialog()"
+            <el-button class="confrim_btn" @click="editComplete()"
               >完成</el-button
             >
           </el-form-item>
@@ -96,29 +96,32 @@ export default {
       type: Object,
       default: () => {},
     },
-    editType: {
-      type: String,
-      default: "",
-    },
   },
   computed: {
     statusText() {
       if (this.editingData.status == null) {
         return null;
       }
-      return this.editingData.status == "0" ? "启用" : "禁用";
+      return this.editingData.status == "1" ? "启用" : "禁用";
     },
   },
   components: {},
+  created() {
+    // if (this.$props.editType == 'edit') {
+    // }
+  },
   methods: {
     // 关闭dialog
     closeAddDialog() {
-      this.$parent.$parent.handleCloseDialog("edit");
+      this.$parent.handleClose();
     },
     // 修改状态
     changeStatusValue(value) {
       console.log(value);
       this.editingData.status = value;
+    },
+    editComplete() {
+      this.$parent.$parent.editCompltet("edit", this.editingData);
     },
   },
 };

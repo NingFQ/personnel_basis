@@ -3,7 +3,7 @@
  */
 
 module.exports = {
-	'@static': '/Users/ningfangqiang/work/vue-projects/zhilin-front/public/static',
-	'@common': '/Users/ningfangqiang/work/vue-projects/zhilin-front/src/merge/common',
-	'@site': '/Users/ningfangqiang/work/vue-projects/zhilin-front/src/merge/site',
+	'@static': '/Users/ningfangqiang/work/personnel_basis/public/static',
+	'@common': '/Users/ningfangqiang/work/personnel_basis/src/merge/common',
+	'@site': '/Users/ningfangqiang/work/personnel_basis/src/merge/site',
 }

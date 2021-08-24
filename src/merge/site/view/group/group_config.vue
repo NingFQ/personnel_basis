@@ -1,5 +1,5 @@
 <template>
-  <div class="site_group">
+  <div class="site_group" v-loading="isLoading">
     <common-header />
     <div class="main_container">
       <el-row type="flex" class="container_top">
@@ -31,7 +31,6 @@
           </el-row>
         </el-col>
       </el-row>
-
       <el-table
         :data="tableData"
         style="width: 100%; margin-bottom: 20px"
@@ -49,13 +48,13 @@
             <div class="status_style">
               <span
                 :class="[
-                  scope.row.status == 0
+                  scope.row.status == 1
                     ? 'status_cricle status_green'
                     : 'status_cricle status_red',
                 ]"
               ></span>
               <span class="status_text">{{
-                scope.row.status == 0 ? "启用" : "禁用"
+                scope.row.status == 1 ? "启用" : "禁用"
               }}</span>
             </div>
           </template>
@@ -87,14 +86,21 @@
         >
       </el-table>
     </div>
+    <!-- 新增弹窗 -->
+    <el-dialog
+      :width="600"
+      center="true"
+      :show-close="false"
+      :visible.sync="dialogAddFormVisible"
+      ><add-group title="新增部门"> </add-group>
+    </el-dialog>
     <!-- 编辑弹窗 -->
     <el-dialog
       :width="600"
       center="true"
       :show-close="false"
       :visible.sync="dialogEditFormVisible"
-      ><edit-group title="编辑" :editingData="editData" :editType="editType">
-      </edit-group>
+      ><edit-group title="编辑部门" :editingData="editData"> </edit-group>
     </el-dialog>
     <!-- 删除弹窗 -->
     <el-dialog
@@ -102,8 +108,23 @@
       center="true"
       :show-close="false"
       :visible.sync="dialogDeleteFormVisible"
-      destroy-on-close="true"
       ><delete-group title="操作确认"> </delete-group>
+    </el-dialog>
+    <!--  删除成功弹窗-->
+    <el-dialog
+      :width="600"
+      center="true"
+      :show-close="false"
+      :visible.sync="dialogDeleteSuccess"
+      ><delete-success title="操作确认"> </delete-success>
+    </el-dialog>
+    <!--删除失败弹窗 -->
+    <el-dialog
+      :width="600"
+      center="true"
+      :show-close="false"
+      :visible.sync="dialogDeleteFailed"
+      ><delete-failed title="操作确认"> </delete-failed>
     </el-dialog>
   </div>
 </template>
@@ -111,15 +132,26 @@
 <script>
 import CommonHeader from "../components/common_header.vue";
 import EditGroup from "./edit_group.vue";
+import AddGroup from "./add_group.vue";
 import DeleteGroup from "./delete_group.vue";
+import DeleteSuccess from "../components/delete_success.vue";
+import DeleteFailed from "./delete_group_failed.vue";
 
 export default {
   name: "ZhilinFrontGroupConfig",
 
-  components: { CommonHeader, EditGroup, DeleteGroup },
+  components: {
+    CommonHeader,
+    AddGroup,
+    EditGroup,
+    DeleteGroup,
+    DeleteSuccess,
+    DeleteFailed,
+  },
 
   data() {
     return {
+      isLoading: false,
       searchData: "",
       tableData: [
         {
@@ -160,11 +192,13 @@ export default {
           desc: "我是部门描述我是部门描述",
         },
       ],
+      dialogAddFormVisible: false,
       dialogEditFormVisible: false, // 编辑控制
       dialogDeleteFormVisible: false, // 删除控制
+      dialogDeleteSuccess: false, // 删除成功
+      dialogDeleteFailed: false, // 删除失败
       editData: {}, // 被编辑的数据
       deleteData: {}, // 要删除的数据
-      editType: "",
     };
   },
   computed: {},
@@ -183,11 +217,28 @@ export default {
         return "";
       }
     },
+    // 新增一个部门
+    handleAddNewGroup() {
+      this.dialogAddFormVisible = true;
+    },
     // 点击编辑
     handleClickEdit(data) {
-      this.editData = data;
-      this.editType = "edit";
+      this.editData = Object.assign({}, data);
       this.dialogEditFormVisible = true;
+    },
+    // 编辑完成
+    editCompltet(_type, _data) {
+      if (_type == "edit") {
+        alert("编辑完成的数据======>" + JSON.stringify(_data));
+      }
+      if (_type == "add") {
+        alert("新增的数据======>" + JSON.stringify(_data));
+      }
+      this.dialogEditFormVisible = false;
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 1000);
     },
     // 点击删除
     handleClickDelete(data) {
@@ -197,23 +248,12 @@ export default {
     // 执行了删除操作
     handleDeleteData() {
       this.dialogDeleteFormVisible = false;
-    },
-    // 关闭弹窗 key
-    handleCloseDialog(type) {
-      switch (type) {
-        case "edit":
-          this.dialogEditFormVisible = false;
-          break;
-        case "delete":
-          this.dialogDeleteFormVisible = false;
-          break;
-      }
-    },
-    // 新增一个部门
-    handleAddNewGroup() {
-      this.editType = "add";
-      this.editType = {};
-      this.dialogEditFormVisible = true;
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+        this.dialogDeleteFailed = true; //删除失败
+        // this.dialogDeleteSuccess = true;// 删除成功
+      }, 1000);
     },
   },
 };

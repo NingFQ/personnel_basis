@@ -10,17 +10,12 @@
       </div>
       <div class="dialog_body_content">
         <div class="content_text">
-          <img src="../../static/images/waring.png" alt="" />
-          <span>是否确认删除，删除后无法恢复！</span>
+          <img src="../../static/images/success.png" alt="" />
+          <span>数据删除成功</span>
         </div>
         <el-form>
           <el-form-item class="top_btns">
-            <el-button class="cancel_btn" @click="closeDeleteDialog()"
-              >取消</el-button
-            >
-            <el-button class="confrim_btn" @click="deleteOperate()"
-              >删除</el-button
-            >
+            <el-button @click="closeDeleteDialog()">关闭</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -30,9 +25,11 @@
 
 <script>
 export default {
-  name: "ZhilinFrontDelete",
+  name: "ZhilinFrontAdd",
 
-  data() {},
+  data() {
+    return {};
+  },
   props: {
     title: {
       type: String,
@@ -45,10 +42,6 @@ export default {
     // 关闭dialog
     closeDeleteDialog() {
       this.$parent.handleClose();
-    },
-    // 删除操作
-    deleteOperate() {
-      this.$parent.$parent.handleDeleteData();
     },
   },
 };
@@ -107,28 +100,7 @@ export default {
       color: #333333;
       margin-left: 10px;
     }
-    .error_hint {
-      font-size: 14px;
-      font-weight: 400;
-      color: #999999;
-    }
   }
-  .content_text_error {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    margin: 50px 0 80px;
-    .content_text {
-      margin-bottom: 10px;
-    }
-    .error_hint {
-      font-size: 14px;
-      font-weight: 400;
-      color: #999999;
-    }
-  }
-
   .el-form {
     width: 100%;
     display: flex;
