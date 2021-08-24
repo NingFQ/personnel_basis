@@ -17,9 +17,8 @@ module.exports = {
 
 	//开发环境设置
 	devServer: {
-		// host: "local." + appConfig.devApi,
-		host: appConfig.devApi,
-		// port: appConfig.port,
+		host: "local." + appConfig.devApi,
+		port: appConfig.port,
 		open: true,
 		hot: true,
 		compress: true,
@@ -32,7 +31,8 @@ module.exports = {
 		publicPath: process.env.VUE_APP_PATH,
 		proxy: {
 			'/api': {
-				target: appConfig.apiProtocol + "://" + appConfig.devApi,
+				// target: appConfig.apiProtocol + "://" + appConfig.devApi,
+				target: 'http://personal.dripm.cn',
 				pathRewrite: { "^/api": "" },
 				secure: false
 			}
@@ -81,7 +81,7 @@ module.exports = {
 			'vue-router': 'VueRouter',
 			'vuex': 'Vuex',
 			'axios': 'axios',
-			'element-ui': 'ELEMENT',
+			// 'element-ui': 'ELEMENT',
 			'js-md5': 'md5',
 			'i18n': 'vue-i18n'
 		};
