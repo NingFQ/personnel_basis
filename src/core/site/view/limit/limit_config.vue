@@ -14,7 +14,7 @@
             ]"
             @click="handleCurrentDepartment(item.id)"
           >
-            {{ item.name }}
+            {{ item.type_name }}
           </div>
         </div>
       </el-aside>
@@ -115,12 +115,7 @@ export default {
 
   data() {
     return {
-      limtNameList: [
-        { name: "超管", id: 1 },
-        { name: "现役军官库管理员", id: 2 },
-        { name: "组织架构管理", id: 3 },
-        { name: "超管", id: 4 },
-      ],
+      limtNameList: [],
       currentDepartmentId: 2,
       // 表格数据
       tableData: [
@@ -164,8 +159,25 @@ export default {
       alert(33);
     },
     // 新增
-    addConfrimCallBack() {
-      alert(44);
+    addConfrimCallBack(addIpuStr) {
+      console.log("addIpuStr=====" + addIpuStr + typeof addIpuStr);
+      console.log("this.currentDepartmentId====" + this.currentDepartmentId);
+      this.$appFetch(
+        {
+          url: "addAdmin",
+          method: "POST",
+          data: {
+            keyword: addIpuStr.toString(),
+            type_id: this.currentDepartmentId,
+          },
+        },
+        (res) => {
+          console.log(res);
+          if (res.code == 200 && res.result != null) {
+            // this.limtNameList = res.result;
+          }
+        }
+      );
       this.dialogAddVisible = false;
     },
     // 表格赋值className
@@ -184,6 +196,24 @@ export default {
         return "";
       }
     },
+    initData() {
+      this.$appFetch(
+        {
+          url: "adminList",
+          method: "POST",
+        },
+        (res) => {
+          console.log(res);
+          if (res.code == 200 && res.result != null) {
+            this.limtNameList = res.result;
+            this.currentDepartmentId = res.result[0].id;
+          }
+        }
+      );
+    },
+  },
+  mounted() {
+    this.initData();
   },
 };
 </script>

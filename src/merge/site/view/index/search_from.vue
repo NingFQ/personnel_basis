@@ -111,10 +111,22 @@
           </el-col>
           <el-col :span="8">
             <el-form-item :label-position="right" label="民族" prop="nation">
-              <el-select v-model="ruleForm.nation" placeholder="请选择">
-                <el-option label="男" value="1"></el-option>
-                <el-option label="女" value="0"></el-option>
-              </el-select>
+              <el-autocomplete
+                value-key="name"
+                class="inline-input"
+                v-model="ruleForm.nation"
+                :fetch-suggestions="querySearchNation"
+                placeholder="请选择或搜索"
+                @select="handleSelectNation"
+              ></el-autocomplete>
+              <!-- <el-select v-model="ruleForm.nation" placeholder="请选择">
+                <el-option
+                  v-for="(item, key) in nationListDictionary"
+                  :key="key"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
+              </el-select> -->
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -270,12 +282,32 @@ export default {
         { name: "解聘", id: 5 },
         { name: "其他", id: 6 },
       ],
+      // 民族列表字典
+      nationListDictionary: [],
     };
   },
   computed: {},
   mounted() {},
 
   methods: {
+    // 选择民族搜索
+    querySearchNation(queryString, cb) {
+      var restaurants = this.nationListDictionary;
+      var results = queryString
+        ? restaurants.filter(this.createFilter(queryString))
+        : restaurants;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return restaurant.name.indexOf(queryString) === 0;
+      };
+    },
+    // 选择民族后
+    handleSelectNation(item) {
+      console.log(item);
+    },
     // 选择是否在职时
     changeIsWorkValue(value) {
       console.log("选中的是否在职=====>" + value);
@@ -301,6 +333,23 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
+    initData() {
+      // 获取民族字典
+      this.$appFetch(
+        {
+          url: "nationList",
+          method: "POST",
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.nationListDictionary = res.result;
+          }
+        }
+      );
+    },
+  },
+  mounted() {
+    this.initData();
   },
 };
 </script>

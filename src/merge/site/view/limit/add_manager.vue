@@ -65,7 +65,7 @@ export default {
     addOperate(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$parent.$parent.addConfrimCallBack();
+          this.$parent.$parent.addConfrimCallBack(this.ruleForm.code);
         } else {
           console.log("error submit!!");
           return false;

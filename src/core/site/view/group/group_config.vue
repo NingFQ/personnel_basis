@@ -32,11 +32,11 @@
         row-key="id"
         border
         :header-cell-style="getRowClass"
-        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+        :tree-props="{ children: '_child', hasChildren: 'hasChildren' }"
       >
         <el-table-column align="center" prop="name" label="部门名称">
         </el-table-column>
-        <el-table-column align="center" prop="id" label="部门编号">
+        <el-table-column align="center" prop="depart_key" label="部门编号">
         </el-table-column>
         <el-table-column align="center" prop="status" label="状态">
           <template slot-scope="scope">
@@ -54,9 +54,9 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="center" prop="number" label="成员数量">
+        <el-table-column align="center" prop="user_num" label="成员数量">
         </el-table-column>
-        <el-table-column align="center" prop="desc" label="部门描述">
+        <el-table-column align="center" prop="depart_desc" label="部门描述">
         </el-table-column>
         <el-table-column
           align="center"
@@ -148,45 +148,7 @@ export default {
     return {
       isLoading: false,
       searchData: "",
-      tableData: [
-        {
-          name: "炊事班",
-          id: "001",
-          status: 0,
-          number: 100,
-          desc: "我是部门描述我是部门描述",
-        },
-        {
-          name: "后勤部",
-          id: "002",
-          status: 1,
-          number: 100,
-          desc: "我是部门描述我是部门描述",
-          children: [
-            {
-              name: "洗袜子",
-              id: "003",
-              status: 0,
-              number: 100,
-              desc: "我是部门描述我是部门描述",
-            },
-            {
-              name: "刷鞋子",
-              id: "004",
-              status: 1,
-              number: 100,
-              desc: "我是部门描述我是部门描述",
-            },
-          ],
-        },
-        {
-          name: "炊事班",
-          id: "005",
-          status: 0,
-          number: 100,
-          desc: "我是部门描述我是部门描述",
-        },
-      ],
+      tableData: [],
       dialogAddFormVisible: false,
       dialogEditFormVisible: false, // 编辑控制
       dialogDeleteFormVisible: false, // 删除控制
@@ -251,6 +213,24 @@ export default {
         this.dialogDeleteSuccess = true; // 删除成功
       }, 1000);
     },
+    initData() {
+      // 获取部门列表
+      this.$appFetch(
+        {
+          url: "departmentList",
+          method: "POST",
+        },
+        (res) => {
+          console.log(res);
+          if (res.code == 200 && res.result != null) {
+            this.tableData = res.result;
+          }
+        }
+      );
+    },
+  },
+  mounted() {
+    this.initData();
   },
 };
 </script>

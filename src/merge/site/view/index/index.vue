@@ -2,7 +2,7 @@
   <div class="site_index" v-loading="isLoading">
     <common-header />
     <el-container style="width: 100%">
-      <el-aside style="width: 360px">
+      <el-aside>
         <div class="search_content">
           <el-autocomplete
             class="inline-input"
@@ -14,8 +14,8 @@
           ></el-autocomplete>
         </div>
         <el-tree
-          :data="treeData"
-          :props="defaultProps"
+          :data="departmentListData"
+          :props="{ children: '_child', hasChildren: 'hasChildren' }"
           @node-click="handleNodeClick"
         ></el-tree>
       </el-aside>
@@ -230,68 +230,7 @@ export default {
       isLoading: false, // 页面loading
       searchText: "", // 搜索框内容
       // 部门级别树
-      treeData: [
-        {
-          label: "一级 1",
-          children: [
-            {
-              label: "二级 1-1",
-              children: [
-                {
-                  label: "三级 1-1-1",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          label: "一级 2",
-          children: [
-            {
-              label: "二级 2-1",
-              children: [
-                {
-                  label: "三级 2-1-1",
-                },
-              ],
-            },
-            {
-              label: "二级 2-2",
-              children: [
-                {
-                  label: "三级 2-2-1",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          label: "一级 3",
-          children: [
-            {
-              label: "二级 3-1",
-              children: [
-                {
-                  label: "三级 3-1-1",
-                },
-              ],
-            },
-            {
-              label: "二级 3-2",
-              children: [
-                {
-                  label: "三级 3-2-1",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      // 树的级别key值
-      defaultProps: {
-        children: "children",
-        label: "label",
-      },
+      departmentListData: [],
       dialogAddFormVisible: false, // 是否弹出新增用户dialog
       dialogDeleteFormVisible: false, // 是否弹出删除dialog
       dialogDeteteSuccess: false, // 是否弹出删除成功的弹窗
@@ -362,13 +301,19 @@ export default {
       alert("执行搜索====>" + JSON.stringify(searchParm));
     },
     init() {
-      this.$appFetch({
-        url: "departmentList",
-        method: "POST",
-        success: () => {
-          console.log("请求成功");
+      // 获取部门列表
+      this.$appFetch(
+        {
+          url: "departmentList",
+          method: "POST",
         },
-      });
+        (res) => {
+          console.log(res);
+          if (res.code == 200 && res.result != null) {
+            this.departmentListData = res.result;
+          }
+        }
+      );
     },
     // 表格赋值className
     tableRowClassName({ row, rowIndex }) {
@@ -404,6 +349,7 @@ export default {
 }
 
 .el-aside {
+  min-width: 360px;
   background: rgba(143, 159, 238, 0.05);
   border-radius: 0px;
   color: #333333;
@@ -423,12 +369,12 @@ export default {
   }
   .el-tree {
     font-size: 20px;
-    font-weight: 400;
+    // font-weight: 400;
     color: #333333;
     background: transparent;
-    .el-tree-node {
-      padding: 0 40px;
-    }
+    // .el-tree-node {
+    //   padding: 0 40px;
+    // }
     .el-tree-node__content {
       height: 68px;
     }

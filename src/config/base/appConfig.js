@@ -4,9 +4,10 @@
 
 module.exports = {
   //端口
-  port: '8080',
+  port: '8883',
+
   //接口协议类型
-  apiProtocol: "https",
+  apiProtocol: "http",
 
   //移动端最大支持的页面宽度
   mobileMaxWidth: 640,
@@ -44,8 +45,16 @@ module.exports = {
 
   //公共接口配置接口列表
   apis: {
-    getSiteConfig: "/api/home/site-options", // 获取网站信息
-    departmentList: '/department/lists',// 部门列表
+    // 登录图形验证码
+    loginImgCode: "/api/auth/captcha",
+    // 民族字典
+    nationList: "/api/nation/lists",
+    // 获取部门列表
+    departmentList: "/api/department/lists",
+    // 权限组列表
+    adminList: "/api/common/lists",
+    // 添加管理员
+    addAdmin: "/api/manager/add",
   },
 
   //路径转换列表

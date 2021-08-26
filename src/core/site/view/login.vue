@@ -43,7 +43,9 @@
             placeholder="请输入验证码"
           ></el-input>
         </div>
-        <div class="code_show"></div>
+        <div class="code_show" @click="getCaptchaCode">
+          <img :src="verifyCodeSrc" alt="" />
+        </div>
       </div>
       <div v-show="isShowLoginHint" class="login_hint">
         <img class="hint_icon" src="../static/images/waring.png" alt="" />
@@ -69,6 +71,7 @@ export default {
   data() {
     return {
       siteLogo,
+      verifyCodeSrc: "",
       isShowLoginHint: false,
       isShowRequestHint: false,
       hintStr: "",
@@ -103,6 +106,22 @@ export default {
         }, 2000);
       }
     },
+    getCaptchaCode() {
+      this.$appFetch(
+        {
+          url: "loginImgCode",
+          method: "POST",
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.verifyCodeSrc = res.result.verifyCode;
+          }
+        }
+      );
+    },
+  },
+  mounted() {
+    this.getCaptchaCode();
   },
 };
 </script>
@@ -170,16 +189,19 @@ export default {
       flex-direction: row
       justify-content: space-between
       margin-bottom: 26px
-      .code_input
-
       .code_show
-        display: inline-block
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
         width: 160px
         height: 68px
         margin-left: 10px
-        background: #34428A
-        opacity: 0.1
+        border: 1px solid #ccc
         border-radius: 6px
+        cursor: pointer
+        img
+          width: 100%
   .login_hint
     width: 460px
     height: 44px
