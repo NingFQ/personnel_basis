@@ -184,34 +184,69 @@ export default {
       this.dialogEditFormVisible = true;
     },
     // 编辑完成
-    editCompltet(_type, _data) {
+    operateCompltet(_type, _data) {
+      this.isLoading = true;
       if (_type == "edit") {
-        alert("编辑完成的数据======>" + JSON.stringify(_data));
+        this.$appFetch(
+          {
+            url: "departmentEdit",
+            method: "POST",
+            data: {
+              dep_id: _data.id,
+              name: _data.name,
+              pid: _data.pid,
+              depart_key: _data.depart_key,
+              depart_desc: _data.depart_desc,
+              status: _data.status,
+            },
+          },
+          (res) => {
+            if (res.code == 200 && res.result != null) {
+              this.initData();
+              setTimeout(() => {
+                this.isLoading = false;
+              }, 1000);
+            }
+          }
+        );
         this.dialogEditFormVisible = false;
       }
       if (_type == "add") {
         alert("新增的数据======>" + JSON.stringify(_data));
         this.dialogAddFormVisible = false;
       }
-      this.isLoading = true;
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 1000);
     },
     // 点击删除
     handleClickDelete(data) {
-      this.deleteData = data;
+      this.deleteData = Object.assign({}, data);
       this.dialogDeleteFormVisible = true;
     },
     // 执行了删除操作
     deleteConfrimCallBack() {
       this.dialogDeleteFormVisible = false;
-      this.isLoading = true;
-      setTimeout(() => {
-        this.isLoading = false;
-        // this.dialogDeleteFailed = true; //删除失败
-        this.dialogDeleteSuccess = true; // 删除成功
-      }, 1000);
+      this.$appFetch(
+        {
+          url: "departmentDelete",
+          method: "POST",
+          data: {
+            dep_id: this.deleteData.id,
+          },
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            setTimeout(() => {
+              this.isLoading = false;
+              this.dialogDeleteSuccess = true; // 删除成功
+            }, 1000);
+          } else {
+            setTimeout(() => {
+              this.isLoading = false;
+              this.dialogDeleteFailed = true; //删除失败
+            }, 1000);
+          }
+          this.initData();
+        }
+      );
     },
     initData() {
       // 获取部门列表
@@ -221,7 +256,6 @@ export default {
           method: "POST",
         },
         (res) => {
-          console.log(res);
           if (res.code == 200 && res.result != null) {
             this.tableData = res.result;
           }

@@ -5,7 +5,27 @@
 module.exports = {
 	//接口配置列表
 	apis: {
-		login: '/site/login/login', //登录页面
+		// 民族字典
+		nationList: "/api/nation/lists",
+		// 登录图形验证码
+		loginImgCode: "/auth/captcha",
+		// 登录
+		loginIn: "/auth/login",
+		// 获取部门列表
+		departmentList: "/api/department/lists",
+		// 部门编辑
+		departmentEdit: "/api/department/save",
+		//  部门删除
+		departmentDelete: "/api/department/remove",
+		// 权限组列表
+		adminList: "/api/common/lists",
+		// 添加管理员
+		addAdmin: "/api/manager/add",
+		// 网站配置获取
+		webConfigInfo: "/sysconfig/info",
+		// 网站配置修改
+		saveWebConfig: "/api/sysconfig/save",
+		// 
 	},
 
 	//页面配置列表

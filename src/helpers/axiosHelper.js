@@ -31,6 +31,10 @@ const appFetch = function (params, success, error) {
 	if (window.location.href.indexOf("local.") === -1) {
 		defaultHeaders['X-Requested-With'] = 'XMLHttpRequest';
 	}
+	// 非auth服务的都加token验证
+	if (params.url.indexOf("/api/") != -1) {
+		defaultHeaders['token'] = window.sessionStorage.getItem('token');
+	}
 
 	if (params.headers) {
 		params.headers = {

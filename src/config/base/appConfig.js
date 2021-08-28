@@ -44,18 +44,7 @@ module.exports = {
   sourceV: '0',
 
   //公共接口配置接口列表
-  apis: {
-    // 登录图形验证码
-    loginImgCode: "/api/auth/captcha",
-    // 民族字典
-    nationList: "/api/nation/lists",
-    // 获取部门列表
-    departmentList: "/api/department/lists",
-    // 权限组列表
-    adminList: "/api/common/lists",
-    // 添加管理员
-    addAdmin: "/api/manager/add",
-  },
+  apis: {},
 
   //路径转换列表
   pcMobileChange: [

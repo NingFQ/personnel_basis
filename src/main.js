@@ -7,7 +7,6 @@ import ElementUI from 'element-ui'
 import "./extends/elementUiInit";	//引入element ui 初始化代码
 import '../public/static/fonticon/iconfont.css';	//引入字体图标
 import './scss/base.common.scss';	//引入全局css
-
 import '../frame/registerHelper.js';	//引入框架注册helper
 import appConfigInit from "./config/base/appConfigInit";	//引入全局配置
 import i18n from "./createConfig/lang.config"; //引入语言包
@@ -27,15 +26,16 @@ new Vue({
 	render: h => h(App)
 }).$mount('#app');
 
-// function setRemFontSize() {
-// 	var remSize = window.innerWidth / 19.2;
-// 	document.querySelector("html").style.fontSize = remSize + "px";
-// }
-
-// setRemFontSize();
-
-// window.addEventListener("resize", function () {
-// 	setTimeout(function () {
-// 		setRemFontSize();
-// 	}, 200)
-// });
+appRouter.beforeEach((to, from, next) => {
+	if (to.path.indexOf('login') != -1) {
+		next()
+	} else {
+		if (window.sessionStorage.getItem('token') == null) {
+			next({
+				path: '/site/login',
+			})
+		} else {
+			next()
+		}
+	}
+})

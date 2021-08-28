@@ -118,7 +118,7 @@ export default {
       this.editingData.status = value;
     },
     editComplete() {
-      this.$parent.$parent.editCompltet("add", this.editingData);
+      this.$parent.$parent.operateCompltet("add", this.editingData);
     },
   },
 };

@@ -1,10 +1,10 @@
 <template>
   <el-header style="height: 88px">
     <div class="header_left">
-      <div class="site_logo">
+      <div class="site_logo" v-show="siteLogo != null">
         <img class="logo_img" :src="siteLogo" alt="" />
       </div>
-      <span class="site_name">人员基础数据库</span>
+      <span class="site_name">{{ siteName }}</span>
     </div>
     <div class="header_right">
       <div class="navigator_item" @click="jumpPage('/site/index')">
@@ -42,26 +42,30 @@
       <div class="user_avatar">
         <img class="avatar_img" :src="siteLogo" alt="" />
       </div>
-      <span class="user_name">郭老师</span>
+      <span class="user_name">{{ userName }}</span>
       <div class="logout_btn" @click="handleLogout">退出</div>
     </div>
   </el-header>
 </template>
 
 <script>
-import siteLogo from "../../static/images/avatar.png";
-
 export default {
   name: "CommonHeader",
 
   data() {
     return {
-      siteLogo,
+      siteLogo: "",
+      siteName: "",
+      userName: "",
     };
   },
 
-  mounted() {},
-
+  mounted() {
+    this.userName = window.sessionStorage.getItem("userName");
+    this.siteName = this.$store.state.website_name;
+    this.siteLogo = this.$store.state.website_logo;
+    console.log(this.$store.state);
+  },
   methods: {
     handleLogout() {
       window.sessionStorage.removeItem("userName");

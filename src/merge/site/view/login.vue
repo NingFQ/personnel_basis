@@ -1,5 +1,8 @@
 <template>
-  <div class="site_login">
+  <div
+    class="site_login"
+    :style="{ backgroundImage: 'url(' + loginBgUrl + ')' }"
+  >
     <el-form
       class="login_dialog_wrap"
       :model="ruleForm"
@@ -7,9 +10,9 @@
       ref="ruleForm"
     >
       <div class="site_logo">
-        <img class="logo_img" :src="siteLogo" alt="" />
+        <img class="logo_img" :src="loginIcon" alt="" />
       </div>
-      <p class="site_name">海军航空大学</p>
+      <p class="site_name">{{ loginTitle }}</p>
       <div class="login_input">
         <img class="pre_icon" src="../static/images/login_user.png" alt="" />
         <el-input
@@ -32,7 +35,6 @@
           placeholder="请输入登录密码"
         ></el-input>
       </div>
-
       <div class="login_code">
         <div class="login_input">
           <img class="pre_icon" src="../static/images/login_code.png" alt="" />
@@ -64,46 +66,70 @@
 <script>
 import "@site/static/scss/index.scss";
 import siteCon from "@site/controller/indexCon";
-import siteLogo from "../static/images/avatar.png";
 
 export default {
   ...siteCon,
   data() {
     return {
-      siteLogo,
-      verifyCodeSrc: "",
-      isShowLoginHint: false,
-      isShowRequestHint: false,
-      hintStr: "",
+      loginBgUrl:
+        "https://pic.rmb.bdstatic.com/d66705123c09d2c5c3a6b88b54577e2d.jpeg",
+      loginIcon: "", // 登录logo
+      loginTitle: "", // 登录title
       ruleForm: {
         name: "",
         password: "",
         code: "",
       },
+      verifyCodeSrc: "", // 验证码图片地址
+      isShowLoginHint: false, // 登录输入提示
+      isShowRequestHint: false, // 登录接口错误提示
+      hintStr: "", // 提示文案
+      verifyCodeHash: "", // 验证码哈希值
+      verifyCodeTime: "", // 验证码过期时间
     };
   },
   methods: {
     handleLogin() {
       var fromData = this.ruleForm;
       if (fromData.name == "" || fromData.name.length == 0) {
+        this.isShowRequestHint = false;
         this.isShowLoginHint = true;
         this.hintStr = "请填写用户名";
       } else if (fromData.password == "" || fromData.password.length == 0) {
         this.isShowLoginHint = true;
+        this.isShowRequestHint = false;
         this.hintStr = "请填写登录密码";
       } else if (fromData.code == "" || fromData.code.length == 0) {
         this.isShowLoginHint = true;
         this.hintStr = "请填写验证吗";
+        this.isShowRequestHint = false;
       } else {
-        this.isShowLoginHint = false;
-        this.isShowRequestHint = true;
-        this.hintStr = "账号密码不正确";
-        var that = this;
-        setTimeout(function () {
-          window.sessionStorage.setItem("userName", "aaaa");
-          window.sessionStorage.setItem("token", "dhou353jqb5k35");
-          that.$router.push({ path: "/site/index" });
-        }, 2000);
+        this.$appFetch(
+          {
+            url: "loginIn",
+            method: "POST",
+            data: {
+              username: this.ruleForm.name,
+              password: this.ruleForm.password,
+              code: this.ruleForm.code,
+              verifyCodeTime: this.verifyCodeTime,
+              verifyCodeHash: this.verifyCodeHash,
+            },
+          },
+          (res) => {
+            if (res.code == 200) {
+              window.sessionStorage.setItem("userName", res.result.name);
+              window.sessionStorage.setItem("token", res.result.token);
+              setTimeout(() => {
+                this.$router.push({ path: "/site/index" });
+              }, 10);
+            } else {
+              this.isShowLoginHint = false;
+              this.isShowRequestHint = true;
+              this.hintStr = res.msg;
+            }
+          }
+        );
       }
     },
     getCaptchaCode() {
@@ -115,6 +141,28 @@ export default {
         (res) => {
           if (res.code == 200 && res.result != null) {
             this.verifyCodeSrc = res.result.verifyCode;
+            this.verifyCodeHash = res.result.verifyCodeHash;
+            this.verifyCodeTime = res.result.verifyCodeTime;
+          }
+        }
+      );
+    },
+    getSiteConfig() {
+      this.$appFetch(
+        {
+          url: "webConfigInfo",
+          method: "POST",
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.loginIcon = res.result.login_logo;
+            this.loginTitle = res.result.title;
+            // this.loginBgUrl = res.result.logo_background;
+            this.$store.commit("UPDATA_SITE_CONFIG", res.result);
+            window.sessionStorage.setItem(
+              "site_config_info",
+              JSON.stringify(res.result)
+            );
           }
         }
       );
@@ -122,6 +170,7 @@ export default {
   },
   mounted() {
     this.getCaptchaCode();
+    this.getSiteConfig();
   },
 };
 </script>

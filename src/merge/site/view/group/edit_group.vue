@@ -16,8 +16,8 @@
               placeholder="请输入部门名称"
             ></el-input>
           </el-form-item>
-          <el-form-item :label-position="right" label="编号" prop="id">
-            <el-input disabled v-model="editingData.id"></el-input>
+          <el-form-item :label-position="right" label="编号" prop="depart_key">
+            <el-input disabled v-model="editingData.depart_key"></el-input>
           </el-form-item>
           <el-form-item :label-position="right" label="状态" prop="status">
             <el-select
@@ -25,19 +25,23 @@
               placeholder="请选择"
               @change="changeStatusValue($event)"
             >
-              <el-option label="启用" value="0"></el-option>
-              <el-option label="禁用" value="1"></el-option>
+              <el-option label="启用" value="1"></el-option>
+              <el-option label="禁用" value="0"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label-position="right" label="成员数量" prop="number">
-            <el-input disabled v-model="editingData.number"></el-input>
+          <el-form-item
+            :label-position="right"
+            label="成员数量"
+            prop="user_num"
+          >
+            <el-input disabled v-model="editingData.user_num"></el-input>
           </el-form-item>
 
-          <el-form-item :label-position="right" label="描述" prop="desc">
+          <el-form-item :label-position="right" label="描述" prop="depart_desc">
             <el-input
               type="textarea"
               rows="3"
-              v-model="editingData.desc"
+              v-model="editingData.depart_desc"
               placeholder="请输入部门描述"
             ></el-input>
           </el-form-item>
@@ -106,10 +110,6 @@ export default {
     },
   },
   components: {},
-  created() {
-    // if (this.$props.editType == 'edit') {
-    // }
-  },
   methods: {
     // 关闭dialog
     closeAddDialog() {
@@ -117,11 +117,10 @@ export default {
     },
     // 修改状态
     changeStatusValue(value) {
-      console.log(value);
       this.editingData.status = value;
     },
     editComplete() {
-      this.$parent.$parent.editCompltet("edit", this.editingData);
+      this.$parent.$parent.operateCompltet("edit", this.editingData);
     },
   },
 };

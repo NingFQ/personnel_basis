@@ -15,7 +15,7 @@
         </div>
         <el-tree
           :data="departmentListData"
-          :props="{ children: '_child', hasChildren: 'hasChildren' }"
+          :props="{ children: '_child', label: 'name' }"
           @node-click="handleNodeClick"
         ></el-tree>
       </el-aside>
