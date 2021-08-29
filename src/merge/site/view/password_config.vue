@@ -108,17 +108,30 @@ export default {
       } else {
         var that = this;
         this.isLoading = true;
-        setTimeout(function () {
-          that.isLoading = false;
-          that.$notify({
-            title: "成功",
-            message: "密码修改成功",
-            type: "success",
-          });
-          fromData.nowPassword = "";
-          fromData.newPassword = "";
-          fromData.newConfirmPassword = "";
-        }, 1000);
+        this.$appFetch(
+          {
+            url: "changePassword",
+            method: "POST",
+            data: {
+              password_old: this.fromData.nowPassword,
+              password: this.fromData.newPassword,
+              password_confirm: this.fromData.newConfirmPassword,
+            },
+          },
+          (res) => {
+            if (res.code == 200 && res.result != null) {
+              that.isLoading = false;
+              that.$notify({
+                title: "成功",
+                message: "密码修改成功",
+                type: "success",
+              });
+              fromData.nowPassword = "";
+              fromData.newPassword = "";
+              fromData.newConfirmPassword = "";
+            }
+          }
+        );
       }
       console.log();
     },

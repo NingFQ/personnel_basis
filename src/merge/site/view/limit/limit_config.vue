@@ -116,26 +116,9 @@ export default {
   data() {
     return {
       limtNameList: [],
-      currentDepartmentId: 2,
+      currentDepartmentId: null,
       // 表格数据
-      tableData: [
-        {
-          name: "张笑死",
-          idCode: "532581538",
-        },
-        {
-          name: "张笑死",
-          idCode: "532581538",
-        },
-        {
-          name: "张笑死",
-          idCode: "532581538",
-        },
-        {
-          name: "张笑死",
-          idCode: "532581538",
-        },
-      ],
+      tableData: [],
       deleteData: {},
       dialogRemoveFormVisible: false, // 移除弹窗
       dialogDeleteSuccess: false, // 移除成功
@@ -148,6 +131,7 @@ export default {
   methods: {
     handleCurrentDepartment(id) {
       this.currentDepartmentId = id;
+      this.getUserList();
     },
     handleClickRemove(data) {
       this.deleteData = data;
@@ -156,12 +140,23 @@ export default {
     // 移除
     deleteConfrimCallBack() {
       this.dialogRemoveFormVisible = false;
-      alert(33);
+      this.$appFetch(
+        {
+          url: "removeAdmin",
+          method: "POST",
+          data: {
+            id: this.deleteData.id,
+          },
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.dialogDeleteSuccess = true;
+          }
+        }
+      );
     },
     // 新增
     addConfrimCallBack(addIpuStr) {
-      console.log("addIpuStr=====" + addIpuStr + typeof addIpuStr);
-      console.log("this.currentDepartmentId====" + this.currentDepartmentId);
       this.$appFetch(
         {
           url: "addAdmin",
@@ -174,7 +169,17 @@ export default {
         (res) => {
           console.log(res);
           if (res.code == 200 && res.result != null) {
-            // this.limtNameList = res.result;
+            this.initData();
+            this.$notify({
+              type: "success",
+              title: "添加成功",
+              message: res.msg,
+            });
+          } else {
+            this.$notify.error({
+              title: "添加失败",
+              message: res.msg,
+            });
           }
         }
       );
@@ -207,6 +212,23 @@ export default {
           if (res.code == 200 && res.result != null) {
             this.limtNameList = res.result;
             this.currentDepartmentId = res.result[0].id;
+            this.getUserList();
+          }
+        }
+      );
+    },
+    getUserList() {
+      this.$appFetch(
+        {
+          url: "adminUserList",
+          method: "POST",
+          data: {
+            type_id: this.currentDepartmentId,
+          },
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.tableData = res.result;
           }
         }
       );

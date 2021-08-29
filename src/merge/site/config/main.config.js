@@ -11,6 +11,10 @@ module.exports = {
 		loginImgCode: "/auth/captcha",
 		// 登录
 		loginIn: "/auth/login",
+		// 退出登录
+		loginOut: "/api/manager/logout",
+		// 修改密码
+		changePassword: "/api/manager/modify/password",
 		// 获取部门列表
 		departmentList: "/api/department/lists",
 		// 部门编辑
@@ -19,8 +23,12 @@ module.exports = {
 		departmentDelete: "/api/department/remove",
 		// 权限组列表
 		adminList: "/api/common/lists",
+		// 管理员列表
+		adminUserList: "/api/manager/lists",
 		// 添加管理员
 		addAdmin: "/api/manager/add",
+		// 移除管理员
+		removeAdmin: "/api/manager/remove",
 		// 网站配置获取
 		webConfigInfo: "/sysconfig/info",
 		// 网站配置修改

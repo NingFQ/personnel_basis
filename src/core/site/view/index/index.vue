@@ -27,7 +27,10 @@
           <el-row class="main_center">
             <el-col :span="11" class="center_left">
               <span class="item_num"
-                >已选择<b class="item_num_hint">3</b>条，共300条</span
+                >已选择<b class="item_num_hint">{{
+                  multipleSelection.length
+                }}</b
+                >条，共300条</span
               >
               <el-button class="out_btn" icon="el-icon-folder-remove"
                 >导出</el-button

@@ -223,6 +223,7 @@ export default {
     },
     // 执行了删除操作
     deleteConfrimCallBack() {
+      this.isLoading = true;
       this.dialogDeleteFormVisible = false;
       this.$appFetch(
         {
@@ -234,20 +235,17 @@ export default {
         },
         (res) => {
           if (res.code == 200 && res.result != null) {
-            setTimeout(() => {
-              this.isLoading = false;
-              this.dialogDeleteSuccess = true; // 删除成功
-            }, 1000);
+            this.isLoading = false;
+            this.dialogDeleteSuccess = true; // 删除成功
           } else {
-            setTimeout(() => {
-              this.isLoading = false;
-              this.dialogDeleteFailed = true; //删除失败
-            }, 1000);
+            this.isLoading = false;
+            this.dialogDeleteFailed = true; //删除失败
           }
           this.initData();
         }
       );
     },
+    // 获取部门列表
     initData() {
       // 获取部门列表
       this.$appFetch(

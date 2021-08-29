@@ -14,10 +14,14 @@
             <el-input
               v-model="editingData.name"
               placeholder="请输入部门名称"
+              maxlength="60"
             ></el-input>
           </el-form-item>
           <el-form-item :label-position="right" label="编号" prop="depart_key">
-            <el-input disabled v-model="editingData.depart_key"></el-input>
+            <el-input
+              v-model="editingData.depart_key"
+              maxlength="60"
+            ></el-input>
           </el-form-item>
           <el-form-item :label-position="right" label="状态" prop="status">
             <el-select
@@ -29,20 +33,13 @@
               <el-option label="禁用" value="0"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item
-            :label-position="right"
-            label="成员数量"
-            prop="user_num"
-          >
-            <el-input disabled v-model="editingData.user_num"></el-input>
-          </el-form-item>
-
           <el-form-item :label-position="right" label="描述" prop="depart_desc">
             <el-input
               type="textarea"
               rows="3"
               v-model="editingData.depart_desc"
               placeholder="请输入部门描述"
+              maxlength="200"
             ></el-input>
           </el-form-item>
           <el-form-item class="top_btns">
@@ -99,6 +96,10 @@ export default {
     editingData: {
       type: Object,
       default: () => {},
+    },
+    isRootNode: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

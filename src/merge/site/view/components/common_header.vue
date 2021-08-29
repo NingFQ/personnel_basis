@@ -40,7 +40,7 @@
         <span class="navigator_name">修改密码</span>
       </div>
       <div class="user_avatar">
-        <img class="avatar_img" :src="siteLogo" alt="" />
+        <img class="avatar_img" :src="userAvator" alt="" />
       </div>
       <span class="user_name">{{ userName }}</span>
       <div class="logout_btn" @click="handleLogout">退出</div>
@@ -49,11 +49,13 @@
 </template>
 
 <script>
+import userAvator from "../../static/images/avatar.png";
 export default {
   name: "CommonHeader",
 
   data() {
     return {
+      userAvator,
       siteLogo: "",
       siteName: "",
       userName: "",
@@ -64,13 +66,20 @@ export default {
     this.userName = window.sessionStorage.getItem("userName");
     this.siteName = this.$store.state.website_name;
     this.siteLogo = this.$store.state.website_logo;
-    console.log(this.$store.state);
   },
   methods: {
     handleLogout() {
-      window.sessionStorage.removeItem("userName");
-      window.sessionStorage.removeItem("token");
-      this.$router.push({ path: "/site/login" });
+      this.$appFetch(
+        {
+          url: "loginOut",
+          method: "POST",
+        },
+        (res) => {
+          window.sessionStorage.removeItem("userName");
+          window.sessionStorage.removeItem("token");
+          this.$router.push({ path: "/site/login" });
+        }
+      );
     },
     jumpPage(name) {
       this.$router.push({ path: name });
@@ -140,11 +149,12 @@ export default {
       .avatar_img
         width: 38px
         height: 38px
-      .user_name
-        font-size: 17px
-        font-weight: 400
-        color: #FFFFFF
-        opacity: 1
+    .user_name
+      font-size: 17px
+      font-weight: 400
+      color: #FFFFFF
+      opacity: 1
+      margin-left: 10px
     .logout_btn
       width: 80px
       height: 38px

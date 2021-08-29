@@ -14,10 +14,11 @@
             <el-input
               v-model="editingData.name"
               placeholder="请输入部门名称"
+              maxlength="60"
             ></el-input>
           </el-form-item>
           <el-form-item :label-position="right" label="编号" prop="id">
-            <el-input disabled v-model="editingData.id"></el-input>
+            <el-input v-model="editingData.id" maxlength="60"></el-input>
           </el-form-item>
           <el-form-item :label-position="right" label="状态" prop="status">
             <el-select
@@ -29,16 +30,13 @@
               <el-option label="禁用" value="1"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label-position="right" label="成员数量" prop="number">
-            <el-input disabled v-model="editingData.number"></el-input>
-          </el-form-item>
-
           <el-form-item :label-position="right" label="描述" prop="desc">
             <el-input
               type="textarea"
               rows="3"
               v-model="editingData.desc"
               placeholder="请输入部门描述"
+              maxlength="200"
             ></el-input>
           </el-form-item>
           <el-form-item class="top_btns">
@@ -61,7 +59,12 @@ export default {
 
   data() {
     return {
-      editingData: {},
+      editingData: {
+        name: "",
+        depart_key: "",
+        status: "",
+        depart_desc: "",
+      },
       rules: {
         name: [
           {
@@ -103,10 +106,6 @@ export default {
     },
   },
   components: {},
-  created() {
-    // if (this.$props.editType == 'edit') {
-    // }
-  },
   methods: {
     // 关闭dialog
     closeAddDialog() {
