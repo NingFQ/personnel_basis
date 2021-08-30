@@ -49,6 +49,7 @@
 'site/static/images/网站配置.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/网站配置.png';
 'site/static/images/首页.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/首页.png';
 'site/static/scss/index.scss' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/scss/index.scss';
+'site/store/index.js' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/store/index.js';
 'site/view/components/common_header.vue' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/view/components/common_header.vue';
 'site/view/components/delete_confirm.vue' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/view/components/delete_confirm.vue';
 'site/view/components/delete_success.vue' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/view/components/delete_success.vue';

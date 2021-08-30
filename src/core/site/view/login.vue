@@ -71,8 +71,7 @@ export default {
   ...siteCon,
   data() {
     return {
-      loginBgUrl:
-        "https://pic.rmb.bdstatic.com/d66705123c09d2c5c3a6b88b54577e2d.jpeg",
+      loginBgUrl: "",
       loginIcon: "", // 登录logo
       loginTitle: "", // 登录title
       ruleForm: {
@@ -157,12 +156,12 @@ export default {
           if (res.code == 200 && res.result != null) {
             this.loginIcon = res.result.login_logo;
             this.loginTitle = res.result.title;
-            // this.loginBgUrl = res.result.logo_background;
-            this.$store.commit("UPDATA_SITE_CONFIG", res.result);
-            window.sessionStorage.setItem(
-              "site_config_info",
-              JSON.stringify(res.result)
-            );
+            this.loginBgUrl = res.result.logo_background;
+            this.$store.commit("UPDATA_CONFIG", res.result);
+            // window.sessionStorage.setItem(
+            //   "site_config_info",
+            //   JSON.stringify(res.result)
+            // );
           }
         }
       );

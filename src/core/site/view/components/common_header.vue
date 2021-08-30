@@ -56,17 +56,21 @@ export default {
   data() {
     return {
       userAvator,
-      siteLogo: "",
-      siteName: "",
-      userName: "",
     };
   },
-
-  mounted() {
-    this.userName = window.sessionStorage.getItem("userName");
-    this.siteName = this.$store.state.website_name;
-    this.siteLogo = this.$store.state.website_logo;
+  computed: {
+    userName() {
+      return window.sessionStorage.getItem("userName");
+    },
+    siteName() {
+      return this.$store.state.site.siteConfig.website_name;
+    },
+    siteLogo() {
+      return this.$store.state.site.siteConfig.website_logo;
+    },
   },
+
+  mounted() {},
   methods: {
     handleLogout() {
       this.$appFetch(
@@ -98,7 +102,6 @@ export default {
   color: white
   .header_left
     float: left
-    width: 200px
     height: 100%
     display: flex
     flex-direction: row

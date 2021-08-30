@@ -311,7 +311,6 @@ export default {
           method: "POST",
         },
         (res) => {
-          console.log(res);
           if (res.code == 200 && res.result != null) {
             this.departmentListData = res.result;
           }

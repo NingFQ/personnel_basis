@@ -22,7 +22,23 @@
               align="middle"
             >
               <span class="item_title">登录页logo</span>
-              <el-button icon="el-icon-upload">上传图片</el-button>
+              <el-upload
+                action=""
+                :on-change="handleChange"
+                :show-file-list="false"
+                :http-request="selectPicUpload"
+              >
+                <img
+                  v-if="tempUrl"
+                  width="200px"
+                  height="200px"
+                  :src="tempUrl"
+                  class="avatar"
+                />
+                <i v-else>
+                  <el-button icon="el-icon-upload">上传图片</el-button>
+                </i>
+              </el-upload>
             </el-row>
             <el-row
               class="main_left_item"
@@ -95,6 +111,8 @@ export default {
   data() {
     return {
       isLoading: false,
+      imgFile: "",
+      tempUrl: "",
       roleFrom: {
         title: "",
         login_logo: "",
@@ -125,9 +143,33 @@ export default {
             this.roleFrom.website_name = res.result.website_name;
             this.roleFrom.website_logo = res.result.website_logo;
             this.roleFrom.logo_background = res.result.logo_background;
+            this.$store.commit("UPDATA_CONFIG", res.result);
             if (this.isLoading) {
               this.isLoading = false;
             }
+          }
+        }
+      );
+    },
+    handleChange(file, fileList) {
+      this.imgFile = file.raw;
+      // this.imgFile = URL.createObjectURL(file.raw);
+      console.log(file);
+    },
+    selectPicUpload() {
+      alert("this.imgFile====" + this.imgFile);
+      this.$appFetch(
+        {
+          url: "uploadImg",
+          method: "POST",
+          data: {
+            file: this.imgFile,
+          },
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            alert(1);
+            this.roleFrom.login_logo = res.result.file_url;
           }
         }
       );
@@ -143,6 +185,7 @@ export default {
         (res) => {
           if (res.code == 200 && res.result != null) {
             this.initData();
+          } else {
           }
         }
       );

@@ -33,7 +33,8 @@ module.exports = {
 		webConfigInfo: "/sysconfig/info",
 		// 网站配置修改
 		saveWebConfig: "/api/sysconfig/save",
-		// 
+		// 上传图片
+		uploadImg: "/api/upload/image",
 	},
 
 	//页面配置列表

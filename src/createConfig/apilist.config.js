@@ -17,4 +17,5 @@ module.exports = {
 	'removeAdmin': '/api/manager/remove',
 	'webConfigInfo': '/sysconfig/info',
 	'saveWebConfig': '/api/sysconfig/save',
+	'uploadImg': '/api/upload/image',
 }
