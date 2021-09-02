@@ -22,11 +22,13 @@
               align="middle"
             >
               <span class="item_title">登录页logo</span>
+
               <el-upload
                 action=""
-                :on-change="handleChange"
+                :multiple="false"
                 :show-file-list="false"
                 :http-request="selectPicUpload"
+                :on-success="successUpload"
               >
                 <img
                   v-if="tempUrl"
@@ -103,6 +105,8 @@
 
 <script>
 import CommonHeader from "./components/common_header.vue";
+import upFile from "../../../helpers/upFileHelper.js";
+
 export default {
   name: "ZhilinFrontSiteConfig",
 
@@ -111,7 +115,6 @@ export default {
   data() {
     return {
       isLoading: false,
-      imgFile: "",
       tempUrl: "",
       roleFrom: {
         title: "",
@@ -127,7 +130,7 @@ export default {
   mounted() {
     this.initData();
   },
-
+  computed: {},
   methods: {
     initData() {
       this.$appFetch(
@@ -151,28 +154,16 @@ export default {
         }
       );
     },
-    handleChange(file, fileList) {
-      this.imgFile = file.raw;
-      // this.imgFile = URL.createObjectURL(file.raw);
-      console.log(file);
-    },
-    selectPicUpload() {
-      alert("this.imgFile====" + this.imgFile);
-      this.$appFetch(
-        {
-          url: "uploadImg",
-          method: "POST",
-          data: {
-            file: this.imgFile,
-          },
+    selectPicUpload({ file }) {
+      upFile(file, "image").then(
+        (args) => {
+          alert(1);
         },
-        (res) => {
-          if (res.code == 200 && res.result != null) {
-            alert(1);
-            this.roleFrom.login_logo = res.result.file_url;
-          }
-        }
+        (req) => {}
       );
+    },
+    successUpload() {
+      alert(2);
     },
     saveData() {
       this.isLoading = true;

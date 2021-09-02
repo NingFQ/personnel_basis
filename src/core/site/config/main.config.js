@@ -7,6 +7,8 @@ module.exports = {
 	apis: {
 		// 民族字典
 		nationList: "/api/nation/lists",
+		// 离职原因列表
+		levelReasonList: "/api/common/quit_lists",
 		// 登录图形验证码
 		loginImgCode: "/auth/captcha",
 		// 登录
@@ -21,6 +23,8 @@ module.exports = {
 		departmentEdit: "/api/department/save",
 		//  部门删除
 		departmentDelete: "/api/department/remove",
+		// 获取用户列表
+		userList: "/api/user/lists",
 		// 权限组列表
 		adminList: "/api/common/lists",
 		// 管理员列表
@@ -34,7 +38,7 @@ module.exports = {
 		// 网站配置修改
 		saveWebConfig: "/api/sysconfig/save",
 		// 上传图片
-		uploadImg: "/api/upload/image",
+		upFile: "/upload/image",
 	},
 
 	//页面配置列表

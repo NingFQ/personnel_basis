@@ -15,18 +15,34 @@
         <el-col :span="9">
           <el-row type="flex" justify="end">
             <el-button
+              icon="el-icon-sort"
+              type="primary"
+              width="100"
+              @click="handleSortDepartment"
+              >排序</el-button
+            >
+            <el-button
               type="primary"
               width="100"
               icon="el-icon-folder-add"
               @click="handleAddNewGroup"
               >新建</el-button
             >
-            <el-button icon="el-icon-arrow-down">全部展开</el-button>
-            <el-button icon="el-icon-arrow-up">全部折叠</el-button>
+            <el-button
+              icon="el-icon-arrow-down"
+              @click="toggleRowExpansion(true)"
+              >全部展开</el-button
+            >
+            <el-button
+              icon="el-icon-arrow-up"
+              @click="toggleRowExpansion(false)"
+              >全部折叠</el-button
+            >
           </el-row>
         </el-col>
       </el-row>
       <el-table
+        ref="dataTreeList"
         :data="tableData"
         style="width: 100%; margin-bottom: 20px"
         row-key="id"
@@ -174,6 +190,19 @@ export default {
         return "";
       }
     },
+    toggleRowExpansion(isExpansion) {
+      this.toggleRowExpansion_forAll(this.tableData, isExpansion);
+    },
+    toggleRowExpansion_forAll(data, isExpansion) {
+      data.forEach((item) => {
+        this.$refs.dataTreeList.toggleRowExpansion(item, isExpansion);
+        if (item._child != undefined && item._child != null) {
+          this.toggleRowExpansion_forAll(item._child, isExpansion);
+        }
+      });
+    },
+    // 点击排序
+    handleSortDepartment() {},
     // 新增一个部门
     handleAddNewGroup() {
       this.dialogAddFormVisible = true;
@@ -191,21 +220,11 @@ export default {
           {
             url: "departmentEdit",
             method: "POST",
-            data: {
-              dep_id: _data.id,
-              name: _data.name,
-              pid: _data.pid,
-              depart_key: _data.depart_key,
-              depart_desc: _data.depart_desc,
-              status: _data.status,
-            },
+            data: _data,
           },
           (res) => {
             if (res.code == 200 && res.result != null) {
               this.initData();
-              setTimeout(() => {
-                this.isLoading = false;
-              }, 1000);
             }
           }
         );
@@ -256,6 +275,9 @@ export default {
         (res) => {
           if (res.code == 200 && res.result != null) {
             this.tableData = res.result;
+            if (this.isLoading) {
+              this.isLoading = false;
+            }
           }
         }
       );

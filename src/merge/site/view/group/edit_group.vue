@@ -23,6 +23,33 @@
               maxlength="60"
             ></el-input>
           </el-form-item>
+          <el-form-item :label-position="right" label="上级部门">
+            <el-select
+              v-model="parentDepartmentName"
+              placeholder="请选择部门"
+              ref="selectDepartment"
+            >
+              <el-option
+                hidden
+                key="upResId"
+                :value="editingData.pid"
+                :label="editingData.name"
+              >
+              </el-option>
+              <el-tree
+                node-key="id"
+                accordion
+                :data="departmentListData"
+                :props="{ children: '_child', label: 'name' }"
+                :default-expanded-keys="[editingData.id]"
+                :default-checked-keys="[editingData.id]"
+                :highlight-current="true"
+                :expand-on-click-node="true"
+                @node-click="handleNodeClick"
+              >
+              </el-tree>
+            </el-select>
+          </el-form-item>
           <el-form-item :label-position="right" label="状态" prop="status">
             <el-select
               v-model="statusText"
@@ -62,6 +89,8 @@ export default {
 
   data() {
     return {
+      departmentListData: [],
+      parentDepartmentName: "",
       rules: {
         name: [
           {
@@ -71,18 +100,19 @@ export default {
             trigger: "blur",
           },
         ],
+        depart_key: [
+          {
+            required: true,
+            type: "string",
+            message: "请输入部门编号",
+            trigger: "blur",
+          },
+        ],
         status: [
           {
             required: true,
             message: " 请选择状态",
             trigger: "change",
-          },
-        ],
-        desc: [
-          {
-            required: true,
-            message: " 请输入部门描述",
-            trigger: "blur",
           },
         ],
       },
@@ -120,9 +150,47 @@ export default {
     changeStatusValue(value) {
       this.editingData.status = value;
     },
-    editComplete() {
-      this.$parent.$parent.operateCompltet("edit", this.editingData);
+    handleNodeClick(data) {
+      this.parentDepartmentName = data.name;
+      this.editingData.pid = data.id;
     },
+    editComplete() {
+      this.$refs["editingData"].validate((valid) => {
+        if (valid) {
+          var obj = {
+            dep_id: this.editingData.id,
+            name: this.editingData.name,
+            pid: this.editingData.pid,
+            depart_key: this.editingData.depart_key,
+            depart_desc: this.editingData.depart_desc,
+            status: this.editingData.status,
+          };
+          console.log(obj);
+          this.$parent.$parent.operateCompltet("edit", obj);
+        } else {
+          return false;
+        }
+      });
+    },
+    init() {
+      // 获取部门列表
+      this.$appFetch(
+        {
+          url: "departmentList",
+          method: "POST",
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.departmentListData = res.result;
+          }
+        }
+      );
+    },
+  },
+  mounted() {
+    console.log(this.$props);
+    this.parentDepartmentName = "";
+    this.init();
   },
 };
 </script>

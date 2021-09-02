@@ -17,8 +17,45 @@
               maxlength="60"
             ></el-input>
           </el-form-item>
-          <el-form-item :label-position="right" label="编号" prop="id">
-            <el-input v-model="editingData.id" maxlength="60"></el-input>
+          <el-form-item
+            :label-position="right"
+            label="部门编号"
+            prop="depart_key"
+          >
+            <el-input
+              v-model="editingData.depart_key"
+              maxlength="60"
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            :label-position="right"
+            label="上级部门"
+            prop="editingData.pid"
+          >
+            <el-select
+              v-model="editingData.pid"
+              placeholder="请选择部门"
+              ref="selectDepartment"
+            >
+              <el-option
+                hidden
+                key="upResId"
+                :value="editingData.pid"
+                :label="upResName"
+              >
+              </el-option>
+              <el-tree
+                node-key="id"
+                :data="departmentListData"
+                :props="{ children: '_child', label: 'name' }"
+                :default-expanded-keys="[1]"
+                :default-checked-keys="[1]"
+                :highlight-current="true"
+                :expand-on-click-node="true"
+                @node-click="handleNodeClick"
+              >
+              </el-tree>
+            </el-select>
           </el-form-item>
           <el-form-item :label-position="right" label="状态" prop="status">
             <el-select
@@ -26,15 +63,15 @@
               placeholder="请选择"
               @change="changeStatusValue($event)"
             >
-              <el-option label="启用" value="0"></el-option>
-              <el-option label="禁用" value="1"></el-option>
+              <el-option label="启用" value="1"></el-option>
+              <el-option label="禁用" value="0"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item :label-position="right" label="描述" prop="desc">
             <el-input
               type="textarea"
               rows="3"
-              v-model="editingData.desc"
+              v-model="editingData.depart_desc"
               placeholder="请输入部门描述"
               maxlength="200"
             ></el-input>
@@ -59,11 +96,13 @@ export default {
 
   data() {
     return {
+      departmentListData: [],
       editingData: {
         name: "",
         depart_key: "",
-        status: "",
+        status: 1,
         depart_desc: "",
+        pid: "",
       },
       rules: {
         name: [
@@ -74,18 +113,19 @@ export default {
             trigger: "blur",
           },
         ],
+        depart_key: [
+          {
+            required: true,
+            type: "string",
+            message: "请输入部门编号",
+            trigger: "blur",
+          },
+        ],
         status: [
           {
             required: true,
             message: " 请选择状态",
             trigger: "change",
-          },
-        ],
-        desc: [
-          {
-            required: true,
-            message: " 请输入部门描述",
-            trigger: "blur",
           },
         ],
       },
@@ -102,7 +142,7 @@ export default {
       if (this.editingData.status == null) {
         return null;
       }
-      return this.editingData.status == "0" ? "启用" : "禁用";
+      return this.editingData.status == 1 ? "启用" : "禁用";
     },
   },
   components: {},
@@ -117,8 +157,31 @@ export default {
       this.editingData.status = value;
     },
     editComplete() {
-      this.$parent.$parent.operateCompltet("add", this.editingData);
+      this.$refs["editingData"].validate((valid) => {
+        if (valid) {
+          this.$parent.$parent.operateCompltet("add", this.editingData);
+        } else {
+          return false;
+        }
+      });
     },
+    initData() {
+      // 获取部门列表
+      this.$appFetch(
+        {
+          url: "departmentList",
+          method: "POST",
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.departmentListData = res.result;
+          }
+        }
+      );
+    },
+  },
+  mounted() {
+    this.initData();
   },
 };
 </script>

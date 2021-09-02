@@ -18,6 +18,6 @@ module.exports = {
 			css: [],
 			js: [],
 			notNeedLogin: false
-		},
+		}
 	}
 }

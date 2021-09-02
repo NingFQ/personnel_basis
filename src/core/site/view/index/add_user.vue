@@ -143,10 +143,10 @@
               @change="changeLevelReason($event)"
             >
               <el-option
-                v-for="(item, key) in levelReasonData"
+                v-for="(item, key) in levelReasonDictionary"
                 :key="key"
-                :label="item"
-                :value="item"
+                :label="item.name"
+                :value="item.id"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -198,7 +198,7 @@ export default {
         [],
         ["社聘", "公勤", "职工"],
       ],
-      levelReasonData: ["退休", "转业", "调动", "复员", "解聘", "其他"],
+      levelReasonDictionary: ["退休", "转业", "调动", "复员", "解聘", "其他"],
       nationListDictionary: [],
       rules: {
         personnelType: [
@@ -330,7 +330,7 @@ export default {
     },
     // 离职原因
     changeLevelReason(value) {
-      console.log(value);
+      console.log("选中的离职原因=====>" + value);
     },
     submitForm(formName) {
       // console.log(this.ruleForm);
@@ -353,6 +353,18 @@ export default {
         (res) => {
           if (res.code == 200 && res.result != null) {
             this.nationListDictionary = res.result;
+          }
+        }
+      );
+      // 获取离职原因列表
+      this.$appFetch(
+        {
+          url: "levelReasonList",
+          method: "POST",
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.levelReasonDictionary = res.result;
           }
         }
       );

@@ -14,8 +14,13 @@
           ></el-autocomplete>
         </div>
         <el-tree
+          node-key="id"
           :data="departmentListData"
           :props="{ children: '_child', label: 'name' }"
+          :default-expanded-keys="[1]"
+          :default-checked-keys="[1]"
+          :highlight-current="true"
+          :expand-on-click-node="true"
           @node-click="handleNodeClick"
         ></el-tree>
       </el-aside>
@@ -30,7 +35,7 @@
                 >已选择<b class="item_num_hint">{{
                   multipleSelection.length
                 }}</b
-                >条，共300条</span
+                >条，共{{ allUserNum }}条</span
               >
               <el-button class="out_btn" icon="el-icon-folder-remove"
                 >导出</el-button
@@ -66,12 +71,13 @@
             :header-cell-style="getRowClass"
           >
             <el-table-column
+              fixed="left"
               type="selection"
               width="68"
               align="center"
             ></el-table-column>
             <el-table-column
-              prop="loginCode"
+              prop="user_key"
               label="登录号"
               width="155"
               align="center"
@@ -85,7 +91,7 @@
             >
             </el-table-column>
             <el-table-column
-              prop="type"
+              prop="type_id"
               label="人员类型"
               width="155"
               align="center"
@@ -93,7 +99,7 @@
             >
             </el-table-column>
             <el-table-column
-              prop="type"
+              prop="identity_id"
               label="身份类型"
               width="155"
               align="center"
@@ -101,7 +107,15 @@
             >
             </el-table-column>
             <el-table-column
-              prop="idCode"
+              prop="identity_id"
+              label="领导职务"
+              width="155"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="card"
               label="身份证号"
               min-width="225"
               align="center"
@@ -109,7 +123,7 @@
             >
             </el-table-column>
             <el-table-column
-              prop="idNumber"
+              prop="credentials"
               label="证件号"
               width="156"
               align="center"
@@ -117,15 +131,15 @@
             >
             </el-table-column>
             <el-table-column
-              prop="sex"
+              prop="sexy_text"
               label="性别"
-              width="135"
+              width="80"
               align="center"
               show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
-              prop="ethnic"
+              prop="nation_name"
               label="民族"
               width="155"
               align="center"
@@ -141,7 +155,7 @@
             >
             </el-table-column>
             <el-table-column
-              prop="orginate"
+              prop="hometown"
               label="籍贯"
               width="149"
               align="center"
@@ -149,7 +163,7 @@
             >
             </el-table-column>
             <el-table-column
-              prop="orginate"
+              prop="office_at"
               label="入职时间"
               width="149"
               align="center"
@@ -157,7 +171,7 @@
             >
             </el-table-column>
             <el-table-column
-              prop="orginate"
+              prop="out_office_at"
               label="离职时间"
               width="149"
               align="center"
@@ -165,20 +179,36 @@
             >
             </el-table-column>
             <el-table-column
-              prop="orginate"
+              prop="qr_name"
               label="离职原因"
               width="149"
               align="center"
               show-overflow-tooltip
             >
             </el-table-column>
+            <el-table-column
+              align="center"
+              fixed="right"
+              prop=""
+              label="操作"
+              class-name="operate_col"
+            >
+              <template slot-scope="scope">
+                <el-button
+                  class="edit_btn"
+                  @click="handleClickEdit(scope.row)"
+                  type="text"
+                  >编辑</el-button
+                >
+              </template></el-table-column
+            >
           </el-table>
         </div>
         <el-pagination
           background
           layout="total, prev, pager, next, jumper"
-          :total="totalNumber"
-          :page-size="pageSize"
+          :total="allUserNum"
+          :page-size="10"
           @current-change="currentPageChange"
         >
         </el-pagination>
@@ -231,29 +261,16 @@ export default {
   data() {
     return {
       isLoading: false, // 页面loading
+      currentDepartmentId: "", // 当前部门id
       searchText: "", // 搜索框内容
-      // 部门级别树
-      departmentListData: [],
+      departmentListData: [], // 部门级别树
       dialogAddFormVisible: false, // 是否弹出新增用户dialog
       dialogDeleteFormVisible: false, // 是否弹出删除dialog
       dialogDeteteSuccess: false, // 是否弹出删除成功的弹窗
       // 表格数据
-      tableData: [
-        {
-          loginCode: 111,
-          name: "张笑死",
-          type: "共青团员",
-          idCode: "532581538",
-          idNumber: 4547476,
-          sex: "男",
-          ethnic: "汉族",
-          birthday: "dedq",
-          orginate: "山东省",
-        },
-      ],
-      totalNumber: 100, // 表格数据总长度
+      tableData: [],
+      allUserNum: 100, // 表格数据总长度
       pageNum: 1, // 当前第几页数据
-      pageSize: 10, // 每页展示多少条
       multipleSelection: [], // 选中的表格数据
     };
   },
@@ -264,10 +281,11 @@ export default {
       // cb(results);
     },
     handleSelect(item) {
-      console.log("搜索结果选中某一项=====>" + item);
+      console.log("搜索结果选中某一项=====>" + JSON.stringify(item));
     },
     handleNodeClick(data) {
-      console.log("部门树选中某一节点======>" + data);
+      this.currentDepartmentId = data.id;
+      this.getUserList();
     },
     currentPageChange(val) {
       this.pageNum = val;
@@ -313,6 +331,26 @@ export default {
         (res) => {
           if (res.code == 200 && res.result != null) {
             this.departmentListData = res.result;
+            this.currentDepartmentId = res.result[0].id;
+            this.getUserList();
+          }
+        }
+      );
+    },
+    getUserList() {
+      // 获取用户列表
+      this.$appFetch(
+        {
+          url: "userList",
+          method: "POST",
+          data: {
+            department_id: this.currentDepartmentId,
+          },
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.tableData = res.result.list;
+            this.allUserNum = res.result.count;
           }
         }
       );
@@ -357,7 +395,7 @@ export default {
   color: #333333;
   border-right: 1px solid #cccccc;
   .search_content {
-    height: 87px;
+    // height: 87px;
     border-bottom: 1px solid #cccccc;
     display: flex;
     justify-content: center;
@@ -371,12 +409,8 @@ export default {
   }
   .el-tree {
     font-size: 20px;
-    // font-weight: 400;
     color: #333333;
     background: transparent;
-    // .el-tree-node {
-    //   padding: 0 40px;
-    // }
     .el-tree-node__content {
       height: 68px;
     }
@@ -433,6 +467,18 @@ export default {
       }
       .single {
         background: #fff;
+      }
+      .operate_col {
+        .edit_btn {
+          font-size: 18px;
+          font-weight: 500;
+          color: #34428a;
+        }
+        .dele_btn {
+          font-size: 18px;
+          font-weight: 500;
+          color: #ff4e4e;
+        }
       }
     }
   }

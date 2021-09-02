@@ -4,6 +4,7 @@
 
 module.exports = {
 	'nationList': '/api/nation/lists',
+	'levelReasonList': '/api/common/quit_lists',
 	'loginImgCode': '/auth/captcha',
 	'loginIn': '/auth/login',
 	'loginOut': '/api/manager/logout',
@@ -11,11 +12,12 @@ module.exports = {
 	'departmentList': '/api/department/lists',
 	'departmentEdit': '/api/department/save',
 	'departmentDelete': '/api/department/remove',
+	'userList': '/api/user/lists',
 	'adminList': '/api/common/lists',
 	'adminUserList': '/api/manager/lists',
 	'addAdmin': '/api/manager/add',
 	'removeAdmin': '/api/manager/remove',
 	'webConfigInfo': '/sysconfig/info',
 	'saveWebConfig': '/api/sysconfig/save',
-	'uploadImg': '/api/upload/image',
+	'upFile': '/upload/image',
 }
