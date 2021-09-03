@@ -9,6 +9,8 @@ module.exports = {
 		nationList: "/api/nation/lists",
 		// 离职原因列表
 		levelReasonList: "/api/common/quit_lists",
+		// 领导职务字典
+		leaderList: "/api/common/job_lists",
 		// 登录图形验证码
 		loginImgCode: "/auth/captcha",
 		// 登录

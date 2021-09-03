@@ -5,6 +5,7 @@
 module.exports = {
 	'nationList': '/api/nation/lists',
 	'levelReasonList': '/api/common/quit_lists',
+	'leaderList': '/api/common/job_lists',
 	'loginImgCode': '/auth/captcha',
 	'loginIn': '/auth/login',
 	'loginOut': '/api/manager/logout',

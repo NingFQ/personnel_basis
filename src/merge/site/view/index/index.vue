@@ -18,7 +18,6 @@
           :data="departmentListData"
           :props="{ children: '_child', label: 'name' }"
           :default-expanded-keys="[1]"
-          :default-checked-keys="[1]"
           :highlight-current="true"
           :expand-on-click-node="true"
           @node-click="handleNodeClick"
@@ -395,7 +394,7 @@ export default {
   color: #333333;
   border-right: 1px solid #cccccc;
   .search_content {
-    // height: 87px;
+    height: 87px;
     border-bottom: 1px solid #cccccc;
     display: flex;
     justify-content: center;
