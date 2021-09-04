@@ -90,7 +90,7 @@
             >
             </el-table-column>
             <el-table-column
-              prop="type_id"
+              prop="type_name"
               label="人员类型"
               width="155"
               align="center"
@@ -98,7 +98,7 @@
             >
             </el-table-column>
             <el-table-column
-              prop="identity_id"
+              prop="identity_name"
               label="身份类型"
               width="155"
               align="center"

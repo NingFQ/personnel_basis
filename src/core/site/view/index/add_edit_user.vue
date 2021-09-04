@@ -79,8 +79,19 @@
           </el-form-item>
           <el-form-item :label-position="right" label="性别" prop="sexy">
             <el-select v-model="ruleForm.sexy" placeholder="请选择">
-              <el-option label="男" value="1"></el-option>
-              <el-option label="女" value="2"></el-option>
+              <el-option
+                v-for="(item, key) in [
+                  { name: '男', id: 1 },
+                  { name: '女', id: 2 },
+                ]"
+                :key="key"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
+
+              <!-- <el-option label="男" value="1"></el-option>
+              <el-option label="女" value="2"></el-option> -->
             </el-select>
           </el-form-item>
           <el-form-item :label-position="right" label="民族" prop="nation_id">
@@ -98,9 +109,9 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label-position="right" label="籍贯" prop="originate">
+          <el-form-item :label-position="right" label="籍贯" prop="hometown">
             <el-input
-              v-model="ruleForm.originate"
+              v-model="ruleForm.hometown"
               placeholder="请输入籍贯"
             ></el-input>
           </el-form-item>
@@ -187,13 +198,13 @@ export default {
         user_key: "", // 登录号
         name: "", // 姓名
         type_id: "", // 人员类型
-        identity_id: [], // 身份类型
-        job_id: [], // 领导职务
+        identity_id: "", // 身份类型
+        job_id: "", // 领导职务
         card: "", // 身份证号
         credentials: "", // 证件号
         sexy: "", // 性别
         nation_id: "", // 民族
-        originate: "", // 籍贯
+        hometown: "", // 籍贯
         birthday: "", // 出生日期
         office_at: "", // 入职时间
         out_office_at: "", // 离职时间
