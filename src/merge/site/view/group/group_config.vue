@@ -81,18 +81,21 @@
           class-name="operate_col"
         >
           <template slot-scope="scope">
-            <el-button
-              class="edit_btn"
-              @click="handleClickEdit(scope.row)"
-              type="text"
-              >编辑</el-button
-            >
-            <el-button
-              class="dele_btn"
-              type="text"
-              @click="handleClickDelete(scope.row)"
-              >删除</el-button
-            >
+            <el-row type="flex" justify="start">
+              <el-button
+                class="edit_btn"
+                @click="handleClickEdit(scope.row)"
+                type="text"
+                >编辑</el-button
+              >
+              <el-button
+                v-show="scope.row.is_base != 1"
+                class="dele_btn"
+                type="text"
+                @click="handleClickDelete(scope.row)"
+                >删除</el-button
+              >
+            </el-row>
           </template></el-table-column
         >
       </el-table>
@@ -359,11 +362,13 @@ export default {
       }
       .operate_col {
         .edit_btn {
+          width: 50%;
           font-size: 18px;
           font-weight: 500;
           color: #34428a;
         }
         .dele_btn {
+          width: 50%;
           font-size: 18px;
           font-weight: 500;
           color: #ff4e4e;

@@ -49,33 +49,31 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label-position="right" label="身份证号" prop="idCode">
+        <el-form-item :label-position="right" label="身份证号" prop="card">
           <el-input
             v-model="ruleForm.card"
             placeholder="请输入身份证号"
           ></el-input>
         </el-form-item>
-        <el-form-item :label-position="right" label="证件号" prop="idNumber">
+        <el-form-item :label-position="right" label="证件号" prop="credentials">
           <el-input
             v-model="ruleForm.credentials"
             placeholder="请输入证件号"
           ></el-input>
         </el-form-item>
         <el-form-item :label-position="right" label="性别" prop="sexy">
-          <el-select v-model="ruleForm.sexy" placeholder="请选择">
+          <el-select multiple v-model="ruleForm.sexy" placeholder="请选择">
             <el-option label="男" value="1"></el-option>
             <el-option label="女" value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label-position="right" label="民族" prop="nation_id">
-          <el-select v-model="ruleForm.nation_id" multiple placeholder="请选择">
-            <!-- <el-autocomplete
-              value-key="name"
-              class="inline-input"
-              v-model="ruleForm.nation_id"
-              :fetch-suggestions="querySearchNation"
-              placeholder="请选择或搜索"
-            ></el-autocomplete> -->
+          <el-select
+            v-model="ruleForm.nation_id"
+            filterable
+            multiple
+            placeholder="请选择"
+          >
             <el-option
               v-for="(item, key) in nationListDictionary"
               :key="key"
@@ -91,37 +89,36 @@
             placeholder="请输入籍贯"
           ></el-input>
         </el-form-item>
-        <el-form-item :label-position="right" label="出生日期" prop="birthday">
+        <el-form-item :label-position="right" label="出生日期">
           <el-date-picker
             v-model="birthdayList"
             @change="changeBirthdayTime"
             type="daterange"
+            value-format="yyyy-MM-dd"
             range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item
-          :label-position="right"
-          label="入职时间"
-          prop="entrantTime"
-        >
+        <el-form-item :label-position="right" label="入职时间">
           <el-date-picker
             v-model="entrantTimeList"
             @change="changeEntrantTime"
             type="daterange"
+            value-format="yyyy-MM-dd"
             range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item :label-position="right" label="离职时间" prop="leaveTime"
+        <el-form-item :label-position="right" label="离职时间"
           ><el-date-picker
             v-model="leaveTimeList"
             @change="changeLevelTime"
             type="daterange"
+            value-format="yyyy-MM-dd"
             range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
@@ -129,7 +126,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item :label-position="right" label="是否在职" prop="is_office">
-          <el-select v-model="ruleForm.sexy" placeholder="请选择">
+          <el-select v-model="ruleForm.is_office" placeholder="请选择">
             <el-option label="在职" value="1"></el-option>
             <el-option label="离职" value="2"></el-option>
           </el-select>
@@ -137,11 +134,11 @@
         <el-form-item
           :label-position="right"
           label="离职原因"
-          prop="levelReason"
+          prop="out_office_reason_id"
         >
           <el-select
             multiple
-            v-model="ruleForm.levelReason"
+            v-model="ruleForm.out_office_reason_id"
             placeholder="请选择"
           >
             <el-option
@@ -156,10 +153,7 @@
           <el-button type="primary" class="top_btn_item" @click="submitForm()"
             >搜索</el-button
           >
-          <el-button
-            type="primary"
-            class="top_btn_item"
-            @click="resetForm('ruleForm')"
+          <el-button type="primary" class="top_btn_item" @click="resetForm()"
             >重置</el-button
           >
         </el-form-item>
@@ -185,8 +179,8 @@ export default {
         job_id: [], // 领导职务
         card: "", // 身份证号
         credentials: "", // 证件号
-        sexy: "", // 性别
-        nation_id: "", // 民族
+        sexy: [], // 性别
+        nation_id: [], // 民族
         originate: "", // 籍贯
         birthday_start: "", // 出生日期开始时间
         birthday_end: "", // 出生日期结束时间
@@ -194,7 +188,7 @@ export default {
         office_at_end: "", // 入职结束时间
         out_office_at_start: "", // 离职开始时间
         out_office_at_end: "", // 离职结束时间
-        levelReason: "", // 离职原因
+        out_office_reason_id: "", // 离职原因
         is_office: "", // 是否在职
       },
       personnelTypeDictionary: [], // 人员类型字典
@@ -219,27 +213,22 @@ export default {
       this.ruleForm.out_office_at_start = t[0];
       this.ruleForm.out_office_at_end = t[1];
     },
-    // 选择民族搜索
-    querySearchNation(queryString, cb) {
-      var restaurants = this.nationListDictionary;
-      var results = queryString
-        ? restaurants.filter(this.createFilter(queryString))
-        : restaurants;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    createFilter(queryString) {
-      return (restaurant) => {
-        return restaurant.name.indexOf(queryString) === 0;
-      };
-    },
     // 搜索
     submitForm() {
       this.$emit("handleSearch", this.ruleForm);
     },
     // 重置
     resetForm(formName) {
-      this.$refs[formName].resetFields();
+      this.birthdayList = []; // 生日区间
+      this.entrantTimeList = []; // 入职时间
+      this.leaveTimeList = []; //离职时间
+      this.ruleForm.birthday_start = ""; // 出生日期开始时间
+      this.ruleForm.birthday_end = ""; // 出生日期结束时间
+      this.ruleForm.office_at_start = ""; // 入职开始时间
+      this.ruleForm.office_at_end = ""; // 入职结束时间
+      this.ruleForm.out_office_at_start = ""; // 离职开始时间
+      this.ruleForm.out_office_at_end = ""; // 离职结束时间
+      this.$refs["ruleForm"].resetFields();
     },
     initData() {
       // 获取民族字典

@@ -10,83 +10,93 @@
       </div>
       <div class="dialog_body_content">
         <el-form :model="ruleForm" ref="ruleForm" :rules="rules">
-          <el-form-item
-            :label-position="right"
-            label="人员类型"
-            prop="personnelType"
-          >
-            <el-select
-              v-model="ruleForm.personnelType"
-              placeholder="请选择"
-              @change="changePersonValue($event)"
-            >
+          <el-form-item :label-position="right" label="登录号" prop="user_key">
+            <el-input
+              disabled
+              v-model="ruleForm.user_key"
+              placeholder="请输入登录号"
+            ></el-input>
+          </el-form-item>
+          <el-form-item :label-position="right" label="姓名" prop="name">
+            <el-input
+              v-model="ruleForm.name"
+              placeholder="请输入姓名"
+            ></el-input>
+          </el-form-item>
+          <el-form-item :label-position="right" label="人员类型" prop="type_id">
+            <el-select multiple v-model="ruleForm.type_id" placeholder="请选择">
               <el-option
-                v-for="(item, index) in personnelData"
+                v-for="(item, index) in personnelTypeDictionary"
                 :key="index"
-                :label="item"
-                :value="index"
+                :label="item.name"
+                :value="item.id"
               ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item
             :label-position="right"
             label="身份类型"
-            prop="identityType"
+            prop="identity_id"
           >
             <el-select
-              v-model="ruleForm.identityType"
+              multiple
+              v-model="ruleForm.identity_id"
               placeholder="请选择"
-              @change="changeIdentityValue($event)"
             >
               <el-option
-                v-for="(item, key) in identityTypeData"
+                v-for="(item, key) in identityTypeDictionary"
                 :key="key"
-                :label="item"
-                :value="item"
+                :label="item.name"
+                :value="item.id"
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label-position="right" label="姓名" prop="userName">
-            <el-input
-              v-model="ruleForm.userName"
-              placeholder="请输入姓名"
-            ></el-input>
+          <el-form-item :label-position="right" label="领导职务" prop="job_id">
+            <el-select multiple v-model="ruleForm.job_id" placeholder="请选择">
+              <el-option
+                v-for="(item, key) in leaderPostDictionary"
+                :key="key"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item :label-position="right" label="身份证号" prop="idCode">
+          <el-form-item :label-position="right" label="身份证号" prop="card">
             <el-input
-              v-model="ruleForm.idCode"
+              v-model="ruleForm.card"
               placeholder="请输入身份证号"
             ></el-input>
           </el-form-item>
-          <el-form-item :label-position="right" label="证件号" prop="idNumber">
+          <el-form-item
+            :label-position="right"
+            label="证件号"
+            prop="credentials"
+          >
             <el-input
-              v-model="ruleForm.idNumber"
+              v-model="ruleForm.credentials"
               placeholder="请输入证件号"
             ></el-input>
           </el-form-item>
-          <el-form-item :label-position="right" label="性别" prop="sex">
-            <el-select v-model="ruleForm.sex" placeholder="请选择">
+          <el-form-item :label-position="right" label="性别" prop="sexy">
+            <el-select v-model="ruleForm.sexy" placeholder="请选择">
               <el-option label="男" value="1"></el-option>
-              <el-option label="女" value="0"></el-option>
+              <el-option label="女" value="2"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label-position="right" label="民族" prop="nation">
-            <el-autocomplete
-              value-key="name"
-              class="inline-input"
-              v-model="ruleForm.nation"
-              :fetch-suggestions="querySearchNation"
-              placeholder="请选择或搜索"
-              @select="handleSelectNation"
-            ></el-autocomplete>
-            <!-- <el-select v-model="ruleForm.nation" placeholder="请选择">
+          <el-form-item :label-position="right" label="民族" prop="nation_id">
+            <el-select
+              v-model="ruleForm.nation_id"
+              filterable
+              placeholder="请选择"
+            >
               <el-option
                 v-for="(item, key) in nationListDictionary"
                 :key="key"
                 :label="item.name"
                 :value="item.id"
-              ></el-option>
-            </el-select> -->
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item :label-position="right" label="籍贯" prop="originate">
             <el-input
@@ -100,7 +110,8 @@
             prop="birthday"
           >
             <el-date-picker
-              :disabled="true"
+              disabled
+              value-format="yyyy-MM-dd"
               v-model="ruleForm.birthday"
               type="date"
               placeholder="选择日期"
@@ -111,10 +122,11 @@
           <el-form-item
             :label-position="right"
             label="入职时间"
-            prop="entrantTime"
+            prop="office_at"
           >
             <el-date-picker
-              v-model="ruleForm.entrantTime"
+              value-format="yyyy-MM-dd"
+              v-model="ruleForm.office_at"
               type="date"
               placeholder="选择日期"
             >
@@ -123,10 +135,11 @@
           <el-form-item
             :label-position="right"
             label="离职时间"
-            prop="leaveTime"
+            prop="out_office_at"
           >
             <el-date-picker
-              v-model="ruleForm.leaveTime"
+              value-format="yyyy-MM-dd"
+              v-model="ruleForm.out_office_at"
               type="date"
               placeholder="选择日期"
             >
@@ -135,12 +148,11 @@
           <el-form-item
             :label-position="right"
             label="离职原因"
-            prop="levelReason"
+            prop="out_office_reason_id"
           >
             <el-select
-              v-model="ruleForm.levelReason"
+              v-model="ruleForm.out_office_reason_id"
               placeholder="请选择"
-              @change="changeLevelReason($event)"
             >
               <el-option
                 v-for="(item, key) in levelReasonDictionary"
@@ -156,7 +168,7 @@
               >取消</el-button
             >
             <el-button class="confrim_btn" @click="submitForm('ruleForm')"
-              >导入</el-button
+              >添加</el-button
             >
           </el-form-item>
         </el-form>
@@ -172,115 +184,88 @@ export default {
   data() {
     return {
       ruleForm: {
-        isWork: "", // 是否在职
-        personnelType: "", // 人员类型
-        identityType: "", // 身份类型
-        userName: "", // 姓名
-        idCode: "", // 身份证号
-        idNumber: "", // 证件号
-        sex: "", // 性别
-        nation: "", // 民族
+        user_key: "", // 登录号
+        name: "", // 姓名
+        type_id: "", // 人员类型
+        identity_id: [], // 身份类型
+        job_id: [], // 领导职务
+        card: "", // 身份证号
+        credentials: "", // 证件号
+        sexy: "", // 性别
+        nation_id: "", // 民族
         originate: "", // 籍贯
-        birthday: "", // 生日
-        entrantTime: "", // 入职时间
-        leaveTime: "", // 离职时间
-        levelReason: "", // 离职原因
+        birthday: "", // 出生日期
+        office_at: "", // 入职时间
+        out_office_at: "", // 离职时间
+        out_office_reason_id: "", // 离职原因
+        is_office: "", // 是否在职
       },
-      isWorkData: [
-        { key: 1, value: "是" },
-        { key: 0, value: "否" },
-      ],
-      personnelData: ["现役军官", "文职人员", "现役士兵", "社聘人员"],
-      identityTypeData: [],
-      identityTypeOriginData: [
-        ["行管干部", "专业技术"],
-        ["行管干部", "专业技术"],
-        [],
-        ["社聘", "公勤", "职工"],
-      ],
-      levelReasonDictionary: ["退休", "转业", "调动", "复员", "解聘", "其他"],
-      nationListDictionary: [],
+      personnelTypeDictionary: [], // 人员类型字典
+      identityTypeDictionary: [], // 身份类型字典
+      leaderPostDictionary: [], // 领导职务字典
+      levelReasonDictionary: [], // 离职原因字典
+      nationListDictionary: [], // 民族列表字典
       rules: {
-        personnelType: [
+        type_id: [
           {
             required: true,
-            type: "string",
             message: "请选择人员类型",
             trigger: "blur",
           },
         ],
-        identityType: [
+        identity_id: [
           {
             required: true,
-            type: "string",
             message: "请选择身份类型",
             trigger: "change",
           },
         ],
-        userName: [
+        job_id: [
           {
             required: true,
-            type: "string",
+            message: "请选择领导职务",
+            trigger: "change",
+          },
+        ],
+        name: [
+          {
+            required: true,
             message: "请输入姓名",
             trigger: "blur",
           },
         ],
-        idCode: [
+        card: [
           {
             required: true,
             message: " 请输入身份证号",
             trigger: "blur",
           },
         ],
-        idNumber: [
+        credentials: [
           {
             required: true,
             message: " 请输入证件号",
             trigger: "blur",
           },
         ],
-        sex: [
+        sexy: [
           {
             required: true,
             message: " 请选择性别",
             trigger: "change",
           },
         ],
-        nation: [
+        nation_id: [
           {
             required: true,
             message: " 请选择民族",
             trigger: "change",
           },
         ],
-        // originate: [
-        //   {
-        //     required: true,
-        //     message: " 请选择籍贯",
-        //     trigger: "change",
-        //   },
-        // ],
-        entrantTime: [
+        office_at: [
           {
-            type: "date",
             required: true,
             message: "请选择入职时间",
-            trigger: "change",
-          },
-        ],
-        leaveTime: [
-          {
-            type: "date",
-            required: true,
-            message: "请选择离职时间",
-            trigger: "change",
-          },
-        ],
-        levelReason: [
-          {
-            type: "string",
-            required: true,
-            message: "请选择离原因",
             trigger: "change",
           },
         ],
@@ -288,13 +273,20 @@ export default {
     };
   },
   props: {
+    type: {
+      type: String,
+      default: "",
+    },
     title: {
       type: String,
       default: "标题",
     },
+    parentData: {
+      type: Object,
+      default: () => {},
+    },
   },
   components: {},
-  mounted() {},
   methods: {
     // 选择民族搜索
     querySearchNation(queryString, cb) {
@@ -310,33 +302,15 @@ export default {
         return restaurant.name.indexOf(queryString) === 0;
       };
     },
-    // 选择民族后
-    handleSelectNation(item) {
-      console.log(item);
-    },
     // 关闭dialog
     closeAddDialog() {
       this.$parent.handleClose();
-    },
-    // 人员类型 切换 身份类型联动
-    changePersonValue(value) {
-      this.identityTypeData = [];
-      this.ruleForm.identityType = "";
-      this.identityTypeData = this.identityTypeOriginData[value];
-    },
-    // 身份类型选择时
-    changeIdentityValue(value) {
-      console.log(value);
-    },
-    // 离职原因
-    changeLevelReason(value) {
-      console.log("选中的离职原因=====>" + value);
     },
     submitForm(formName) {
       // console.log(this.ruleForm);
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$parent.$parent.handleAddUser();
+          this.$parent.$parent.handleUserCallBack(this.type);
         } else {
           console.log("error submit!!");
           return false;
@@ -368,10 +342,26 @@ export default {
           }
         }
       );
+      // 领导职务字典项
+      this.$appFetch(
+        {
+          url: "leaderList",
+          method: "POST",
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.leaderPostDictionary = res.result;
+          }
+        }
+      );
     },
   },
   mounted() {
     this.initData();
+    if (this.$props.type == "edit") {
+      this.ruleForm = Object.assign({}, this.$props.parentData);
+      console.log(this.ruleForm);
+    }
   },
 };
 </script>

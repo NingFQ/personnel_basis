@@ -57,7 +57,7 @@
 'site/view/group/delete_group_failed.vue' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/view/group/delete_group_failed.vue';
 'site/view/group/edit_group.vue' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/view/group/edit_group.vue';
 'site/view/group/group_config.vue' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/view/group/group_config.vue';
-'site/view/index/add_user.vue' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/view/index/add_user.vue';
+'site/view/index/add_edit_user.vue' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/view/index/add_edit_user.vue';
 'site/view/index/export_file.vue' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/view/index/export_file.vue';
 'site/view/index/import_file.vue' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/view/index/import_file.vue';
 'site/view/index/index.vue' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/view/index/index.vue';

@@ -27,6 +27,8 @@ module.exports = {
 		departmentDelete: "/api/department/remove",
 		// 获取用户列表
 		userList: "/api/user/lists",
+		// 用户删除
+		deleteUser: "/api/user/delete",
 		// 权限组列表
 		adminList: "/api/common/lists",
 		// 管理员列表

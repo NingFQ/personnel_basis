@@ -17,7 +17,7 @@
           node-key="id"
           :data="departmentListData"
           :props="{ children: '_child', label: 'name' }"
-          :default-expanded-keys="[1]"
+          :default-checked-keys="[1]"
           :highlight-current="true"
           :expand-on-click-node="true"
           @node-click="handleNodeClick"
@@ -49,7 +49,7 @@
               <el-button
                 type="primary"
                 icon="el-icon-folder-add"
-                @click="dialogAddFormVisible = true"
+                @click="handleAddUser"
                 >添加</el-button
               >
               <el-button type="primary" icon="el-icon-folder-add"
@@ -62,10 +62,10 @@
         <div class="main_table_wrap">
           <el-table
             ref="multipleTable"
-            :data="tableData"
+            :data="tableUserData"
             tooltip-effect="dark"
             border
-            @selection-change="handleSelectionChange"
+            @selection-change="multipleSelection = $event"
             :row-class-name="tableRowClassName"
             :header-cell-style="getRowClass"
           >
@@ -106,7 +106,7 @@
             >
             </el-table-column>
             <el-table-column
-              prop="identity_id"
+              prop="job_name"
               label="领导职务"
               width="155"
               align="center"
@@ -195,7 +195,7 @@
               <template slot-scope="scope">
                 <el-button
                   class="edit_btn"
-                  @click="handleClickEdit(scope.row)"
+                  @click="handleEditUser(scope.row)"
                   type="text"
                   >编辑</el-button
                 >
@@ -208,19 +208,27 @@
           layout="total, prev, pager, next, jumper"
           :total="allUserNum"
           :page-size="10"
-          @current-change="currentPageChange"
+          @current-change="currentPageNum = val"
         >
         </el-pagination>
       </el-main>
     </el-container>
-    <!-- 新增用户弹窗 -->
-    <el-dialog
-      :width="600"
-      center="true"
-      :show-close="false"
-      :visible.sync="dialogAddFormVisible"
-      ><add-user title="新建用户"> </add-user>
-    </el-dialog>
+    <!-- 新增或编辑用户弹窗 -->
+    <div v-if="dialogAddFormVisible">
+      <el-dialog
+        :width="600"
+        center="true"
+        :show-close="false"
+        :visible.sync="dialogAddFormVisible"
+        ><add-edit-user
+          :title="dialogTitle"
+          :type="addOrEdit"
+          :parentData="paramData"
+        >
+        </add-edit-user>
+      </el-dialog>
+    </div>
+
     <!-- 删除用户弹窗 -->
     <el-dialog
       :width="600"
@@ -244,7 +252,7 @@ import "@site/static/scss/index.scss";
 import siteCon from "@site/controller/indexCon";
 import CommonHeader from "../components/common_header.vue";
 import SearchConfigFrom from "./search_from.vue";
-import AddUser from "./add_user.vue";
+import AddEditUser from "./add_edit_user.vue";
 import DeleteConfirm from "../components/delete_confirm.vue";
 import DeleteSuccess from "../components/delete_success.vue";
 
@@ -253,7 +261,7 @@ export default {
   components: {
     CommonHeader,
     SearchConfigFrom,
-    AddUser,
+    AddEditUser,
     DeleteConfirm,
     DeleteSuccess,
   },
@@ -266,11 +274,19 @@ export default {
       dialogAddFormVisible: false, // 是否弹出新增用户dialog
       dialogDeleteFormVisible: false, // 是否弹出删除dialog
       dialogDeteteSuccess: false, // 是否弹出删除成功的弹窗
-      // 表格数据
-      tableData: [],
-      allUserNum: 100, // 表格数据总长度
-      pageNum: 1, // 当前第几页数据
+      tableUserData: [], // 表格数据
+      allUserNum: 0, // 表格数据总长度
+      currentPageNum: 1, // 当前第几页数据
+      pageSize: 20, // 每页多少条数据
       multipleSelection: [], // 选中的表格数据
+      dialogTitle: "",
+      paramData: {}, // 新增或编辑时传递数据
+      addOrEdit: "", // 新增还是编辑
+      requestParams: {}, // 请求用户列表参数
+      personnelTypeDictionary: [], // 人员类型字典
+      identityTypeDictionary: [], // 身份类型字典
+      leaderPostDictionary: [], // 领导职务字典
+      levelReasonDictionary: [], // 离职原因字典
     };
   },
   methods: {
@@ -282,43 +298,70 @@ export default {
     handleSelect(item) {
       console.log("搜索结果选中某一项=====>" + JSON.stringify(item));
     },
+    // 点击树节点回调
     handleNodeClick(data) {
       this.currentDepartmentId = data.id;
+      this.requestParams.department_id = data.id;
       this.getUserList();
     },
-    currentPageChange(val) {
-      this.pageNum = val;
-      console.log(`当前页: ${val}`);
-    },
-    handleSelectionChange(val) {
-      console.log("选中的表格数据=====" + JSON.stringify(val));
-      this.multipleSelection = val;
-    },
-    // 新增用回调
     handleAddUser() {
-      alert("新增了用户");
+      this.dialogTitle = "新增用户";
+      this.addOrEdit = "add";
+      this.paramData = {};
+      this.dialogAddFormVisible = true;
+    },
+    handleEditUser(data) {
+      this.dialogTitle = "编辑用户";
+      this.addOrEdit = "edit";
+      this.paramData = Object.assign({}, data);
+      this.dialogAddFormVisible = true;
+    },
+    // 新增用户回调
+    handleUserCallBack(type) {
+      alert("type====" + type);
       this.dialogAddFormVisible = false;
-      this.isLoading = true;
-      setTimeout(() => {
-        this.isLoading = false;
-      }, 1000);
+      // this.isLoading = true;
+      // setTimeout(() => {
+      //   this.isLoading = false;
+      // }, 1000);
     },
     // 删除表格项回调
     deleteConfrimCallBack() {
-      alert(
-        "删除表格项===长度===" + this.multipleSelection,
-        length + ">" + JSON.stringify(this.multipleSelection)
-      );
       this.dialogDeleteFormVisible = false;
       this.isLoading = true;
-      setTimeout(() => {
-        this.isLoading = false;
-        this.dialogDeteteSuccess = true;
-      }, 1000);
+      var len = this.multipleSelection.length;
+      var str = [];
+      for (let i = 0; i < len; i++) {
+        str.push(this.multipleSelection[i].id);
+      }
+      this.$appFetch(
+        {
+          url: "deleteUser",
+          method: "POST",
+          data: {
+            user_id: str,
+          },
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.isLoading = false;
+            this.dialogDeteteSuccess = true;
+            this.getUserList();
+          } else {
+            this.isLoading = false;
+            this.$notify({
+              title: "删除失败",
+              message: res.msg,
+              type: "error",
+            });
+          }
+        }
+      );
     },
     // 搜索表格回调
     handleSearch(searchParm) {
-      alert("执行搜索====>" + JSON.stringify(searchParm));
+      // alert("执行搜索====>" + JSON.stringify(searchParm));
+      this.getUserList(searchParm);
     },
     init() {
       // 获取部门列表
@@ -331,24 +374,54 @@ export default {
           if (res.code == 200 && res.result != null) {
             this.departmentListData = res.result;
             this.currentDepartmentId = res.result[0].id;
+            this.requestParams.department_id = res.result[0].id;
             this.getUserList();
           }
         }
       );
+      // 领导职务字典项
+      this.$appFetch(
+        {
+          url: "leaderList",
+          method: "POST",
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.leaderPostDictionary = res.result;
+          }
+        }
+      );
+      // 获取离职原因列表
+      this.$appFetch(
+        {
+          url: "levelReasonList",
+          method: "POST",
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.levelReasonDictionary = res.result;
+          }
+        }
+      );
     },
-    getUserList() {
+    getUserList(searchParm) {
+      var paramObj;
+      if (searchParm != null) {
+        paramObj = Object.assign(this.requestParams, searchParm);
+      } else {
+        paramObj = Object.assign({}, this.requestParams);
+      }
+      console.log(paramObj);
       // 获取用户列表
       this.$appFetch(
         {
           url: "userList",
           method: "POST",
-          data: {
-            department_id: this.currentDepartmentId,
-          },
+          data: paramObj,
         },
         (res) => {
           if (res.code == 200 && res.result != null) {
-            this.tableData = res.result.list;
+            this.tableUserData = res.result.list;
             this.allUserNum = res.result.count;
           }
         }
@@ -373,6 +446,8 @@ export default {
   },
   mounted() {
     this.init();
+    this.requestParams.page = this.currentPageNum;
+    this.requestParams.limit = this.pageSize;
   },
 };
 </script>
