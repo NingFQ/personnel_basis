@@ -22,4 +22,7 @@ module.exports = {
 	'webConfigInfo': '/sysconfig/info',
 	'saveWebConfig': '/api/sysconfig/save',
 	'upFile': '/upload/image',
+	'importExcel': '/api//user/import',
+	'importResult': '/api/importResult',
+	'exportUser': '/api/user/download',
 }

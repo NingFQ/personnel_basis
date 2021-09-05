@@ -14,10 +14,10 @@
           ></el-autocomplete>
         </div>
         <el-tree
-          node-key="id"
+          :node-key="id"
           :data="departmentListData"
           :props="{ children: '_child', label: 'name' }"
-          :default-checked-keys="[1]"
+          :default-expanded-keys="[1]"
           :highlight-current="true"
           :expand-on-click-node="true"
           @node-click="handleNodeClick"
@@ -29,7 +29,7 @@
         <!-- 中间操作区域 -->
         <div class="main_center_wrap">
           <el-row class="main_center">
-            <el-col :span="11" class="center_left">
+            <el-col :span="12" class="center_left">
               <span class="item_num"
                 >已选择<b class="item_num_hint">{{
                   multipleSelection.length
@@ -45,14 +45,17 @@
                 >删除</el-button
               >
             </el-col>
-            <el-col :span="11" class="center_right">
+            <el-col :span="12" class="center_right">
               <el-button
                 type="primary"
                 icon="el-icon-folder-add"
                 @click="handleAddUser"
                 >添加</el-button
               >
-              <el-button type="primary" icon="el-icon-folder-add"
+              <el-button
+                type="primary"
+                icon="el-icon-folder-add"
+                @click="dialogImportFile = true"
                 >导入</el-button
               >
             </el-col>
@@ -228,7 +231,6 @@
         </add-edit-user>
       </el-dialog>
     </div>
-
     <!-- 删除用户弹窗 -->
     <el-dialog
       :width="600"
@@ -245,6 +247,24 @@
       :visible.sync="dialogDeteteSuccess"
       ><delete-success title="操作确认"> </delete-success>
     </el-dialog>
+    <!-- 导入文件弹窗 -->
+    <div v-if="dialogImportFile">
+      <el-dialog
+        :width="'80%'"
+        center="true"
+        :show-close="false"
+        :visible.sync="dialogImportFile"
+        ><import-file title="导入文件" />
+      </el-dialog>
+    </div>
+
+    <!-- <el-dialog
+      :width="600"
+      center="true"
+      :show-close="false"
+      :visible.sync="dialogExportFile"
+      ><delete-success title="导出文件"> </delete-success>
+    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -255,6 +275,7 @@ import SearchConfigFrom from "./search_from.vue";
 import AddEditUser from "./add_edit_user.vue";
 import DeleteConfirm from "../components/delete_confirm.vue";
 import DeleteSuccess from "../components/delete_success.vue";
+import importFile from "./import_file.vue";
 
 export default {
   ...siteCon,
@@ -264,6 +285,7 @@ export default {
     AddEditUser,
     DeleteConfirm,
     DeleteSuccess,
+    importFile,
   },
   data() {
     return {
@@ -274,6 +296,8 @@ export default {
       dialogAddFormVisible: false, // 是否弹出新增用户dialog
       dialogDeleteFormVisible: false, // 是否弹出删除dialog
       dialogDeteteSuccess: false, // 是否弹出删除成功的弹窗
+      dialogImportFile: false, // 导入文件dialog
+      dialogExportFile: false, // 导出文件dialog
       tableUserData: [], // 表格数据
       allUserNum: 0, // 表格数据总长度
       currentPageNum: 1, // 当前第几页数据
@@ -494,11 +518,10 @@ export default {
 .el-main {
   background-color: white;
   padding: 0 !important;
-
   .main_center_wrap {
     width: 100%;
     height: 80px;
-    padding: 0 72px;
+    padding: 0 52px;
     .main_center {
       width: 100%;
       height: 80px;

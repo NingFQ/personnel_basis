@@ -43,6 +43,12 @@ module.exports = {
 		saveWebConfig: "/api/sysconfig/save",
 		// 上传图片
 		upFile: "/upload/image",
+		// 导入excel
+		importExcel: "/api//user/import",
+		// 查看导入进度
+		importResult: "/api/importResult",
+		// 导出用户
+		exportUser: "/api/user/download",
 	},
 
 	//页面配置列表

@@ -24,7 +24,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item :label-position="right" label="人员类型" prop="type_id">
-            <el-select multiple v-model="ruleForm.type_id" placeholder="请选择">
+            <el-select v-model="ruleForm.type_id" placeholder="请选择">
               <el-option
                 v-for="(item, index) in personnelTypeDictionary"
                 :key="index"
@@ -38,11 +38,7 @@
             label="身份类型"
             prop="identity_id"
           >
-            <el-select
-              multiple
-              v-model="ruleForm.identity_id"
-              placeholder="请选择"
-            >
+            <el-select v-model="ruleForm.identity_id" placeholder="请选择">
               <el-option
                 v-for="(item, key) in identityTypeDictionary"
                 :key="key"
@@ -52,7 +48,7 @@
             </el-select>
           </el-form-item>
           <el-form-item :label-position="right" label="领导职务" prop="job_id">
-            <el-select multiple v-model="ruleForm.job_id" placeholder="请选择">
+            <el-select v-model="ruleForm.job_id" placeholder="请选择">
               <el-option
                 v-for="(item, key) in leaderPostDictionary"
                 :key="key"
@@ -89,16 +85,13 @@
                 :value="item.id"
               >
               </el-option>
-
-              <!-- <el-option label="男" value="1"></el-option>
-              <el-option label="女" value="2"></el-option> -->
             </el-select>
           </el-form-item>
           <el-form-item :label-position="right" label="民族" prop="nation_id">
             <el-select
               v-model="ruleForm.nation_id"
               filterable
-              placeholder="请选择"
+              placeholder="请选择(可搜索)"
             >
               <el-option
                 v-for="(item, key) in nationListDictionary"

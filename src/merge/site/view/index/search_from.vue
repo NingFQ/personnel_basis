@@ -72,7 +72,7 @@
             v-model="ruleForm.nation_id"
             filterable
             multiple
-            placeholder="请选择"
+            placeholder="请选择(可搜索)"
           >
             <el-option
               v-for="(item, key) in nationListDictionary"
@@ -278,14 +278,13 @@ export default {
 <style lang="scss">
 .main_top_wrap {
   width: 100%;
-  padding-top: 40px;
-  padding-left: 72px;
+  padding: 40px 50px 0;
   .main_top {
     width: 100%;
     overflow: hidden;
     .el-form-item {
       float: left;
-      margin-right: 50px;
+      // margin-right: 50px;
       .el-form-item__label {
         float: left;
         width: 86px !important;
@@ -315,13 +314,13 @@ export default {
       // border-color: rgba(204, 204, 204, 1);
       // }
     }
-    // .top_btns {
-    //   float: right;
-    //   .top_btn_item {
-    //     width: 160px;
-    //     height: 44px;
-    //   }
-    // }
+    .top_btns {
+      float: right;
+      // .top_btn_item {
+      //   width: 160px;
+      //   height: 44px;
+      // }
+    }
   }
 }
 </style>

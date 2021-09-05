@@ -9,6 +9,8 @@
 'site/mixins/c_indexCon.js' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/mixins/c_indexCon.js';
 'site/mixins/indexCon.js' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/mixins/indexCon.js';
 'site/static/images/avatar.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/avatar.png';
+'site/static/images/download.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/download.png';
+'site/static/images/file_icon.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/file_icon.png';
 'site/static/images/group.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/group.png';
 'site/static/images/home.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/home.png';
 'site/static/images/limit.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/limit.png';
@@ -19,6 +21,7 @@
 'site/static/images/login_user.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/login_user.png';
 'site/static/images/setting.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/setting.png';
 'site/static/images/success.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/success.png';
+'site/static/images/upload.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/upload.png';
 'site/static/images/waring.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/waring.png';
 'site/static/images/修改密码.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/修改密码.png';
 'site/static/images/权限管理.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/权限管理.png';
@@ -42,9 +45,6 @@
 'site/static/images/组 319.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/组 319.png';
 'site/static/images/组 320.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/组 320.png';
 'site/static/images/组 321.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/组 321.png';
-'site/static/images/组 327.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/组 327.png';
-'site/static/images/组 328.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/组 328.png';
-'site/static/images/组 329.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/组 329.png';
 'site/static/images/组织架构.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/组织架构.png';
 'site/static/images/网站配置.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/网站配置.png';
 'site/static/images/首页.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/首页.png';
