@@ -39,8 +39,7 @@ const upFile = (files, type, progress, param) => {
     xhr.onload = (e) => {
       var args = JSON.parse(e.currentTarget.response);
       args.fileId = nowId;
-
-      if (args.e == 0) {
+      if (args.code == 200) {
         resolve(args)
       } else {
         reject(args)

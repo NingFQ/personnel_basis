@@ -91,7 +91,9 @@
               align="middle"
             >
               <span class="item_title">背景图预览</span>
-              <div class="show"></div>
+              <div class="show">
+                <img :src="roleFrom.logo_background" alt="" />
+              </div>
             </el-row>
           </div>
         </el-row>
@@ -157,13 +159,10 @@ export default {
     selectPicUpload({ file }) {
       upFile(file, "image").then(
         (args) => {
-          alert(1);
+          alert(JSON.stringify(args));
         },
         (req) => {}
       );
-    },
-    successUpload() {
-      alert(2);
     },
     saveData() {
       this.isLoading = true;
@@ -232,9 +231,10 @@ export default {
         .show {
           width: 460px;
           height: 300px;
-          background: #cccccc;
+          // background: #cccccc;
           opacity: 1;
           border-radius: 6px;
+          border: 1px solid #ccc;
         }
       }
     }

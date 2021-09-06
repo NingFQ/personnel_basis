@@ -10,13 +10,20 @@
       </div>
       <div class="dialog_body_content">
         <el-form :model="ruleForm" ref="ruleForm" :rules="rules">
-          <el-form-item :label-position="right" label="登录号" prop="user_key">
-            <el-input
-              disabled
-              v-model="ruleForm.user_key"
-              placeholder="请输入登录号"
-            ></el-input>
-          </el-form-item>
+          <div v-show="type == 'edit'">
+            <el-form-item
+              :label-position="right"
+              label="登录号"
+              prop="user_key"
+            >
+              <el-input
+                disabled
+                v-model="ruleForm.user_key"
+                placeholder="请输入登录号"
+              ></el-input>
+            </el-form-item>
+          </div>
+
           <el-form-item :label-position="right" label="姓名" prop="name">
             <el-input
               v-model="ruleForm.name"
@@ -108,21 +115,22 @@
               placeholder="请输入籍贯"
             ></el-input>
           </el-form-item>
-          <el-form-item
-            :label-position="right"
-            label="出生日期"
-            prop="birthday"
-          >
-            <el-date-picker
-              disabled
-              value-format="yyyy-MM-dd"
-              v-model="ruleForm.birthday"
-              type="date"
-              placeholder="选择日期"
+          <div v-show="type == 'edit'">
+            <el-form-item
+              :label-position="right"
+              label="出生日期"
+              prop="birthday"
             >
-            </el-date-picker>
-          </el-form-item>
-
+              <el-date-picker
+                disabled
+                value-format="yyyy-MM-dd"
+                v-model="ruleForm.birthday"
+                type="date"
+                placeholder="选择日期"
+              >
+              </el-date-picker>
+            </el-form-item>
+          </div>
           <el-form-item
             :label-position="right"
             label="入职时间"
@@ -355,6 +363,22 @@ export default {
         (res) => {
           if (res.code == 200 && res.result != null) {
             this.leaderPostDictionary = res.result;
+          }
+        }
+      );
+      // 人员类型字典
+      this.$appFetch(
+        {
+          url: "adminList",
+          method: "POST",
+          data: {
+            is_super: 2,
+          },
+        },
+        (res) => {
+          console.log(res);
+          if (res.code == 200 && res.result != null) {
+            this.personnelTypeDictionary = res.result;
           }
         }
       );

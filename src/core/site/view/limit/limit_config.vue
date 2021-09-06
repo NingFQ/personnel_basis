@@ -14,7 +14,7 @@
             ]"
             @click="handleCurrentDepartment(item.id)"
           >
-            {{ item.type_name }}
+            {{ item.auth_name }}
           </div>
         </div>
       </el-aside>
@@ -45,7 +45,7 @@
             >
             </el-table-column>
             <el-table-column
-              prop="idCode"
+              prop="username"
               label="身份证号"
               align="center"
               show-overflow-tooltip
@@ -169,12 +169,12 @@ export default {
         (res) => {
           console.log(res);
           if (res.code == 200 && res.result != null) {
-            this.initData();
             this.$notify({
               type: "success",
               title: "添加成功",
               message: res.msg,
             });
+            this.initData();
           } else {
             this.$notify.error({
               title: "添加失败",
@@ -206,6 +206,9 @@ export default {
         {
           url: "adminList",
           method: "POST",
+          data: {
+            is_super: 1,
+          },
         },
         (res) => {
           console.log(res);

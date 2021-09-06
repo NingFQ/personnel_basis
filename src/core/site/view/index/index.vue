@@ -14,10 +14,11 @@
           ></el-autocomplete>
         </div>
         <el-tree
-          :node-key="id"
+          ref="departTree"
+          node-key="id"
           :data="departmentListData"
           :props="{ children: '_child', label: 'name' }"
-          :default-expanded-keys="[1]"
+          :default-expanded-keys="defaultExpandNodes"
           :highlight-current="true"
           :expand-on-click-node="true"
           @node-click="handleNodeClick"
@@ -311,6 +312,7 @@ export default {
       identityTypeDictionary: [], // 身份类型字典
       leaderPostDictionary: [], // 领导职务字典
       levelReasonDictionary: [], // 离职原因字典
+      defaultExpandNodes: [], // 默认展开的id集合
     };
   },
   methods: {
@@ -399,6 +401,11 @@ export default {
             this.departmentListData = res.result;
             this.currentDepartmentId = res.result[0].id;
             this.requestParams.department_id = res.result[0].id;
+            this.defaultExpandNodes.push(res.result[0].id);
+            this.$nextTick(function () {
+              this.$refs.departTree.setCurrentKey(res.result[0].id);
+            });
+            // this.$refs.orgTree.$options.propsData.options.tree.defaultExpandedKeys = res.result[0].id;
             this.getUserList();
           }
         }

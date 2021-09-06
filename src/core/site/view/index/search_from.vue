@@ -267,6 +267,22 @@ export default {
           }
         }
       );
+      // 人员类型字典
+      this.$appFetch(
+        {
+          url: "adminList",
+          method: "POST",
+          data: {
+            is_super: 2,
+          },
+        },
+        (res) => {
+          console.log(res);
+          if (res.code == 200 && res.result != null) {
+            this.personnelTypeDictionary = res.result;
+          }
+        }
+      );
     },
   },
   mounted() {
