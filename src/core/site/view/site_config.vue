@@ -12,7 +12,10 @@
               align="middle"
             >
               <span class="item_title">登录页标题</span>
-              <el-input placeholder="请输入登录页标题" v-model="roleFrom.title">
+              <el-input
+                placeholder="请输入登录页标题"
+                v-model="requestObj.title"
+              >
               </el-input>
             </el-row>
             <el-row
@@ -22,27 +25,26 @@
               align="middle"
             >
               <span class="item_title">登录页logo</span>
-
-              <el-upload
-                action=""
-                :multiple="false"
-                :show-file-list="false"
-                :http-request="selectPicUpload"
-                :on-success="successUpload"
-              >
-                <img
-                  v-if="tempUrl"
-                  width="200px"
-                  height="200px"
-                  :src="tempUrl"
-                  class="avatar"
-                />
-                <i v-else>
-                  <el-button icon="el-icon-upload">上传图片</el-button>
-                </i>
-              </el-upload>
+              <div style="width: 460px">
+                <el-upload
+                  action=""
+                  :multiple="false"
+                  :show-file-list="false"
+                  :http-request="selectLoginLogoUpload"
+                >
+                  <img
+                    v-if="roleFrom.login_logo"
+                    height="200px"
+                    :src="roleFrom.login_logo"
+                    class="avatar"
+                  />
+                  <i v-else>
+                    <el-button icon="el-icon-upload">上传图片</el-button>
+                  </i>
+                </el-upload>
+              </div>
             </el-row>
-            <el-row
+            <!-- <el-row
               class="main_left_item"
               type="flex"
               justify="end"
@@ -50,7 +52,7 @@
             >
               <span class="item_title">浏览器图标</span>
               <el-button icon="el-icon-upload">上传图片</el-button>
-            </el-row>
+            </el-row> -->
             <el-row
               class="main_left_item"
               type="flex"
@@ -60,7 +62,7 @@
               <span class="item_title">网站名称</span>
               <el-input
                 placeholder="请输入网站名称"
-                v-model="roleFrom.website_name"
+                v-model="requestObj.website_name"
               >
               </el-input>
             </el-row>
@@ -71,7 +73,24 @@
               align="middle"
             >
               <span class="item_title">网站logo</span>
-              <el-button icon="el-icon-upload">上传图片</el-button>
+              <div style="width: 460px">
+                <el-upload
+                  action=""
+                  :multiple="false"
+                  :show-file-list="false"
+                  :http-request="selectSiteLogoUpload"
+                >
+                  <img
+                    v-if="roleFrom.website_logo"
+                    height="200px"
+                    :src="roleFrom.website_logo"
+                    class="avatar"
+                  />
+                  <i v-else>
+                    <el-button icon="el-icon-upload">上传图片</el-button>
+                  </i>
+                </el-upload>
+              </div>
             </el-row>
           </div>
           <div class="main_right">
@@ -82,7 +101,14 @@
               align="middle"
             >
               <span class="item_title">登录页背景</span>
-              <el-button icon="el-icon-upload">上传图片</el-button>
+              <el-upload
+                action=""
+                :multiple="false"
+                :show-file-list="false"
+                :http-request="selectLoginBgUpload"
+              >
+                <el-button icon="el-icon-upload">上传图片</el-button>
+              </el-upload>
             </el-row>
             <el-row
               class="main_left_item"
@@ -117,8 +143,13 @@ export default {
   data() {
     return {
       isLoading: false,
-      tempUrl: "",
       roleFrom: {
+        login_logo: "",
+        icon: "",
+        website_logo: "",
+        logo_background: "",
+      },
+      requestObj: {
         title: "",
         login_logo: "",
         icon: "",
@@ -142,10 +173,11 @@ export default {
         },
         (res) => {
           if (res.code == 200 && res.result != null) {
-            this.roleFrom.title = res.result.title;
+            this.requestObj.title = res.result.title;
+            this.requestObj.website_name = res.result.website_name;
+
             this.roleFrom.login_logo = res.result.login_logo;
             this.roleFrom.icon = res.result.icon;
-            this.roleFrom.website_name = res.result.website_name;
             this.roleFrom.website_logo = res.result.website_logo;
             this.roleFrom.logo_background = res.result.logo_background;
             this.$store.commit("UPDATA_CONFIG", res.result);
@@ -156,21 +188,41 @@ export default {
         }
       );
     },
-    selectPicUpload({ file }) {
+    selectLoginLogoUpload({ file }) {
       upFile(file, "image").then(
         (args) => {
-          alert(JSON.stringify(args));
+          this.requestObj.login_logo = args.result.file_url;
+          this.roleFrom.login_logo = args.result.image_url;
         },
         (req) => {}
       );
     },
+    selectSiteLogoUpload({ file }) {
+      upFile(file, "image").then(
+        (args) => {
+          this.requestObj.website_logo = args.result.file_url;
+          this.roleFrom.website_logo = args.result.image_url;
+        },
+        (req) => {}
+      );
+    },
+    selectLoginBgUpload({ file }) {
+      upFile(file, "image").then(
+        (args) => {
+          this.requestObj.logo_background = args.result.file_url;
+          this.roleFrom.logo_background = args.result.image_url;
+        },
+        (req) => {}
+      );
+    },
+
     saveData() {
       this.isLoading = true;
       this.$appFetch(
         {
           url: "saveWebConfig",
           method: "POST",
-          data: this.roleFrom,
+          data: this.requestObj,
         },
         (res) => {
           if (res.code == 200 && res.result != null) {
@@ -235,6 +287,9 @@ export default {
           opacity: 1;
           border-radius: 6px;
           border: 1px solid #ccc;
+          img {
+            width: 460px;
+          }
         }
       }
     }

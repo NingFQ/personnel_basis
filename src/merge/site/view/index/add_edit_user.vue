@@ -178,9 +178,9 @@
             <el-button class="cancel_btn" @click="closeAddDialog()"
               >取消</el-button
             >
-            <el-button class="confrim_btn" @click="submitForm('ruleForm')"
-              >添加</el-button
-            >
+            <el-button class="confrim_btn" @click="submitForm('ruleForm')">{{
+              type == "add" ? "添加" : "确定"
+            }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -299,29 +299,14 @@ export default {
   },
   components: {},
   methods: {
-    // 选择民族搜索
-    querySearchNation(queryString, cb) {
-      var restaurants = this.nationListDictionary;
-      var results = queryString
-        ? restaurants.filter(this.createFilter(queryString))
-        : restaurants;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    createFilter(queryString) {
-      return (restaurant) => {
-        return restaurant.name.indexOf(queryString) === 0;
-      };
-    },
     // 关闭dialog
     closeAddDialog() {
       this.$parent.handleClose();
     },
     submitForm(formName) {
-      // console.log(this.ruleForm);
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$parent.$parent.handleUserCallBack(this.type);
+          this.$parent.$parent.handleUserCallBack(this.type, this.ruleForm);
         } else {
           console.log("error submit!!");
           return false;
@@ -387,7 +372,7 @@ export default {
     this.initData();
     if (this.$props.type == "edit") {
       this.ruleForm = Object.assign({}, this.$props.parentData);
-      console.log("编辑时传进来的表单=====" + this.ruleForm);
+      // console.log("编辑时传进来的表单=====" + JSON.stringify(this.ruleForm));
     }
   },
 };

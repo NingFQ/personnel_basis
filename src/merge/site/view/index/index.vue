@@ -5,6 +5,7 @@
       <el-aside>
         <div class="search_content">
           <el-autocomplete
+            value-key="name"
             class="inline-input"
             v-model="searchText"
             :fetch-suggestions="querySearch"
@@ -312,12 +313,42 @@ export default {
   },
   methods: {
     querySearch(queryString, cb) {
-      console.log("this.searchText=====>" + this.searchText);
-      // 调用 callback 返回建议列表的数据
-      // cb(results);
+      this.$appFetch(
+        {
+          url: "departmentList",
+          method: "POST",
+          data: {
+            keywords: this.searchText,
+          },
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            console.log(res.result);
+            if (
+              res.result[0]._child != null &&
+              res.result[0]._child != undefined
+            ) {
+              var arr = [];
+              for (var i = 0, len = res.result[0]._child.length; i < len; i++) {
+                arr.push({
+                  name: `${res.result[0]["name"]} > ${res.result[0]._child[i]["name"]}`,
+                  id: res.result[0]._child[i]["id"],
+                });
+              }
+              cb(arr);
+            } else {
+              cb(res.result);
+            }
+          }
+        }
+      );
     },
     handleSelect(item) {
       console.log("搜索结果选中某一项=====>" + JSON.stringify(item));
+      this.currentDepartmentId = item.id;
+      this.searchStr = "";
+      this.requestParams.department_id = item.id;
+      this.getUserList();
     },
     // 点击树节点回调
     handleNodeClick(data) {
@@ -335,10 +366,11 @@ export default {
       this.paramData = Object.assign({}, data);
       this.dialogAddFormVisible = true;
     },
-    // 新增用户回调
-    handleUserCallBack(type) {
-      alert("type====" + type);
+    // 新增或编辑用户回调
+    handleUserCallBack(type, data) {
+      alert("type====" + type + "===data===" + JSON.stringify(data));
       this.dialogAddFormVisible = false;
+
       // this.isLoading = true;
       // setTimeout(() => {
       //   this.isLoading = false;
@@ -379,10 +411,9 @@ export default {
     },
     // 搜索表格回调
     handleSearch(searchParm) {
-      // alert("执行搜索====>" + JSON.stringify(searchParm));
       this.getUserList(searchParm);
     },
-    init() {
+    getDepartmentLis() {
       // 获取部门列表
       this.$appFetch(
         {
@@ -398,7 +429,6 @@ export default {
             this.$nextTick(function () {
               this.$refs.departTree.setCurrentKey(res.result[0].id);
             });
-            // this.$refs.orgTree.$options.propsData.options.tree.defaultExpandedKeys = res.result[0].id;
             this.getUserList();
           }
         }
@@ -445,7 +475,7 @@ export default {
     },
   },
   mounted() {
-    this.init();
+    this.getDepartmentLis();
     this.requestParams.page = this.currentPageNum;
     this.requestParams.limit = this.pageSize;
   },
