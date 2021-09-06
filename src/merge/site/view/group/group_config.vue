@@ -144,6 +144,7 @@
 </template>
 
 <script>
+import Sortable from "sortablejs";
 import CommonHeader from "../components/common_header.vue";
 import EditGroup from "./edit_group.vue";
 import AddGroup from "./add_group.vue";

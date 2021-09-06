@@ -225,7 +225,7 @@
         :show-close="false"
         :visible.sync="dialogAddFormVisible"
         ><add-edit-user
-          :title="dialogTitle"
+          :title="addOrEdit == 'add' ? '新增用户' : '编辑用户'"
           :type="addOrEdit"
           :parentData="paramData"
         >
@@ -304,14 +304,9 @@ export default {
       currentPageNum: 1, // 当前第几页数据
       pageSize: 20, // 每页多少条数据
       multipleSelection: [], // 选中的表格数据
-      dialogTitle: "",
       paramData: {}, // 新增或编辑时传递数据
       addOrEdit: "", // 新增还是编辑
       requestParams: {}, // 请求用户列表参数
-      personnelTypeDictionary: [], // 人员类型字典
-      identityTypeDictionary: [], // 身份类型字典
-      leaderPostDictionary: [], // 领导职务字典
-      levelReasonDictionary: [], // 离职原因字典
       defaultExpandNodes: [], // 默认展开的id集合
     };
   },
@@ -331,13 +326,11 @@ export default {
       this.getUserList();
     },
     handleAddUser() {
-      this.dialogTitle = "新增用户";
       this.addOrEdit = "add";
       this.paramData = {};
       this.dialogAddFormVisible = true;
     },
     handleEditUser(data) {
-      this.dialogTitle = "编辑用户";
       this.addOrEdit = "edit";
       this.paramData = Object.assign({}, data);
       this.dialogAddFormVisible = true;
@@ -407,30 +400,6 @@ export default {
             });
             // this.$refs.orgTree.$options.propsData.options.tree.defaultExpandedKeys = res.result[0].id;
             this.getUserList();
-          }
-        }
-      );
-      // 领导职务字典项
-      this.$appFetch(
-        {
-          url: "leaderList",
-          method: "POST",
-        },
-        (res) => {
-          if (res.code == 200 && res.result != null) {
-            this.leaderPostDictionary = res.result;
-          }
-        }
-      );
-      // 获取离职原因列表
-      this.$appFetch(
-        {
-          url: "levelReasonList",
-          method: "POST",
-        },
-        (res) => {
-          if (res.code == 200 && res.result != null) {
-            this.levelReasonDictionary = res.result;
           }
         }
       );

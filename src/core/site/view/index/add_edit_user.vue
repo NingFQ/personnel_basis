@@ -10,7 +10,7 @@
       </div>
       <div class="dialog_body_content">
         <el-form :model="ruleForm" ref="ruleForm" :rules="rules">
-          <div v-show="type == 'edit'">
+          <!-- <div v-show="type == 'edit'">
             <el-form-item
               :label-position="right"
               label="登录号"
@@ -22,8 +22,7 @@
                 placeholder="请输入登录号"
               ></el-input>
             </el-form-item>
-          </div>
-
+          </div> -->
           <el-form-item :label-position="right" label="姓名" prop="name">
             <el-input
               v-model="ruleForm.name"
@@ -115,7 +114,7 @@
               placeholder="请输入籍贯"
             ></el-input>
           </el-form-item>
-          <div v-show="type == 'edit'">
+          <!-- <div v-show="type == 'edit'">
             <el-form-item
               :label-position="right"
               label="出生日期"
@@ -130,7 +129,7 @@
               >
               </el-date-picker>
             </el-form-item>
-          </div>
+          </div> -->
           <el-form-item
             :label-position="right"
             label="入职时间"
@@ -388,7 +387,7 @@ export default {
     this.initData();
     if (this.$props.type == "edit") {
       this.ruleForm = Object.assign({}, this.$props.parentData);
-      console.log(this.ruleForm);
+      console.log("编辑时传进来的表单=====" + this.ruleForm);
     }
   },
 };
