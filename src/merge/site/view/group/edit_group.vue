@@ -23,33 +23,35 @@
               maxlength="60"
             ></el-input>
           </el-form-item>
-          <el-form-item :label-position="right" label="上级部门">
-            <el-select
-              v-model="parentDepartmentName"
-              placeholder="请选择部门"
-              ref="selectDepartment"
-            >
-              <el-option
-                hidden
-                key="upResId"
-                :value="editingData.pid"
-                :label="editingData.name"
+          <div v-show="editingData.is_base != 1">
+            <el-form-item :label-position="right" label="上级部门">
+              <el-select
+                v-model="parentDepartmentName"
+                placeholder="请选择部门"
+                ref="selectDepartment"
               >
-              </el-option>
-              <el-tree
-                node-key="id"
-                accordion
-                :data="departmentListData"
-                :props="{ children: '_child', label: 'name' }"
-                :default-expanded-keys="[editingData.id]"
-                :default-checked-keys="[editingData.id]"
-                :highlight-current="true"
-                :expand-on-click-node="true"
-                @node-click="handleNodeClick"
-              >
-              </el-tree>
-            </el-select>
-          </el-form-item>
+                <el-option
+                  hidden
+                  :key="editingData.pid"
+                  :value="editingData.pid"
+                  :label="editingData.name"
+                >
+                </el-option>
+                <el-tree
+                  node-key="id"
+                  accordion
+                  :data="departmentListData"
+                  :props="{ children: '_child', label: 'name' }"
+                  :default-expanded-keys="[editingData.pid]"
+                  :highlight-current="true"
+                  :expand-on-click-node="true"
+                  @node-click="handleNodeClick"
+                >
+                </el-tree>
+              </el-select>
+            </el-form-item>
+          </div>
+
           <el-form-item :label-position="right" label="状态" prop="status">
             <el-select
               v-model="statusText"
@@ -188,7 +190,6 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$props);
     this.parentDepartmentName = "";
     this.init();
   },

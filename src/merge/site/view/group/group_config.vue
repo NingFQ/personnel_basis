@@ -15,13 +15,6 @@
         <el-col :span="9">
           <el-row type="flex" justify="end">
             <el-button
-              icon="el-icon-sort"
-              type="primary"
-              width="100"
-              @click="handleSortDepartment"
-              >排序</el-button
-            >
-            <el-button
               type="primary"
               width="100"
               icon="el-icon-folder-add"
@@ -50,6 +43,7 @@
         border
         default-expand-all
         :header-cell-style="getRowClass"
+        :expand-on-click-node="true"
         :tree-props="{ children: '_child', hasChildren: 'hasChildren' }"
       >
         <el-table-column align="center" prop="name" label="部门名称">
@@ -78,7 +72,11 @@
         </el-table-column>
         <el-table-column align="center" prop="" label="排序">
           <div v-show="scope.row.is_base != 1" slot-scope="scope">
-            <img src="../../static/images/order.png" alt="" />
+            <img
+              style="width: 26px"
+              src="../../static/images/order.png"
+              alt=""
+            />
           </div>
         </el-table-column>
         <el-table-column
@@ -113,6 +111,7 @@
       center="true"
       :show-close="false"
       :visible.sync="dialogAddFormVisible"
+      destroy-on-close
       ><add-group title="新增部门"> </add-group>
     </el-dialog>
     <!-- 编辑弹窗 -->
@@ -121,6 +120,7 @@
       center="true"
       :show-close="false"
       :visible.sync="dialogEditFormVisible"
+      destroy-on-close
       ><edit-group title="编辑部门" :editingData="editData"> </edit-group>
     </el-dialog>
     <!-- 删除弹窗 -->
@@ -226,13 +226,13 @@ export default {
         },
       });
     },
-    handleSortDepartment() {},
     // 新增一个部门
     handleAddNewGroup() {
       this.dialogAddFormVisible = true;
     },
     // 点击编辑
     handleClickEdit(data) {
+      console.log(data);
       this.editData = Object.assign({}, data);
       this.dialogEditFormVisible = true;
     },
@@ -253,10 +253,23 @@ export default {
           }
         );
         this.dialogEditFormVisible = false;
+        this.isLoading = false;
       }
       if (_type == "add") {
-        alert("新增的数据======>" + JSON.stringify(_data));
+        this.$appFetch(
+          {
+            url: "departmentAdd",
+            method: "POST",
+            data: _data,
+          },
+          (res) => {
+            if (res.code == 200 && res.result != null) {
+              this.initData();
+            }
+          }
+        );
         this.dialogAddFormVisible = false;
+        this.isLoading = false;
       }
     },
     // 点击删除

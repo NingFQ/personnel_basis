@@ -27,34 +27,29 @@
               maxlength="60"
             ></el-input>
           </el-form-item>
-          <el-form-item
-            :label-position="right"
-            label="上级部门"
-            prop="editingData.pid"
-          >
+          <el-form-item :label-position="right" label="上级部门">
             <el-select
+              ref="selectTree"
               v-model="editingData.pid"
+              filterable
               placeholder="请选择部门"
-              ref="selectDepartment"
             >
               <el-option
-                hidden
-                key="upResId"
+                :key="editingData.pid"
                 :value="editingData.pid"
-                :label="upResName"
-              >
-              </el-option>
+                :label="parentDepartmentName"
+                style="height: auto"
+                hidden
+              />
               <el-tree
                 node-key="id"
+                accordion
                 :data="departmentListData"
                 :props="{ children: '_child', label: 'name' }"
-                :default-expanded-keys="[1]"
-                :default-checked-keys="[1]"
                 :highlight-current="true"
                 :expand-on-click-node="true"
                 @node-click="handleNodeClick"
-              >
-              </el-tree>
+              />
             </el-select>
           </el-form-item>
           <el-form-item :label-position="right" label="状态" prop="status">
@@ -67,7 +62,7 @@
               <el-option label="禁用" value="0"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label-position="right" label="描述" prop="desc">
+          <el-form-item :label-position="right" label="描述" prop="depart_desc">
             <el-input
               type="textarea"
               rows="3"
@@ -96,6 +91,7 @@ export default {
 
   data() {
     return {
+      parentDepartmentName: "",
       departmentListData: [],
       editingData: {
         name: "",
@@ -155,6 +151,10 @@ export default {
     changeStatusValue(value) {
       console.log(value);
       this.editingData.status = value;
+    },
+    handleNodeClick(data) {
+      this.parentDepartmentName = data.name;
+      this.editingData.pid = data.id;
     },
     editComplete() {
       this.$refs["editingData"].validate((valid) => {
