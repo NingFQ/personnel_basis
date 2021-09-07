@@ -43,15 +43,31 @@
                 </el-upload>
               </div>
             </el-row>
-            <!-- <el-row
+            <el-row
               class="main_left_item"
               type="flex"
               justify="end"
               align="middle"
             >
               <span class="item_title">浏览器图标</span>
-              <el-button icon="el-icon-upload">上传图片</el-button>
-            </el-row> -->
+              <div style="width: 460px">
+                <el-upload
+                  action=""
+                  :multiple="false"
+                  :show-file-list="false"
+                  :http-request="selectIconUpload"
+                >
+                  <img
+                    v-if="roleFrom.icon"
+                    height="50px"
+                    :src="roleFrom.icon"
+                  />
+                  <i v-else>
+                    <el-button icon="el-icon-upload">上传图片</el-button>
+                  </i>
+                </el-upload>
+              </div>
+            </el-row>
             <el-row
               class="main_left_item"
               type="flex"
@@ -176,15 +192,30 @@ export default {
 
             this.roleFrom.login_logo = res.result.login_logo;
             this.roleFrom.icon = res.result.icon;
+
             this.roleFrom.website_logo = res.result.website_logo;
             this.roleFrom.logo_background = res.result.logo_background;
             this.$store.commit("UPDATA_CONFIG", res.result);
+            this.changeSiteFavicon(res.result.icon);
             if (this.isLoading) {
               this.isLoading = false;
             }
           }
         }
       );
+    },
+    changeSiteFavicon(url) {
+      var link =
+        document.querySelector("link[rel*='icon']") ||
+        document.createElement("link");
+
+      link.type = "image/x-icon";
+
+      link.rel = "shortcut icon";
+
+      link.href = url;
+
+      document.getElementsByTagName("head")[0].appendChild(link);
     },
     selectLoginLogoUpload({ file }) {
       upFile(file, "image").then(
@@ -209,6 +240,15 @@ export default {
         (args) => {
           this.requestObj.logo_background = args.result.file_url;
           this.roleFrom.logo_background = args.result.image_url;
+        },
+        (req) => {}
+      );
+    },
+    selectIconUpload({ file }) {
+      upFile(file, "image").then(
+        (args) => {
+          this.requestObj.icon = args.result.file_url;
+          this.roleFrom.icon = args.result.image_url;
         },
         (req) => {}
       );
