@@ -42,11 +42,13 @@
         </el-col>
       </el-row>
       <el-table
-        ref="dataTreeList"
+        ref="dragTable"
         :data="tableData"
-        style="width: 100%; margin-bottom: 20px"
+        style="width: 100%"
         row-key="id"
+        current-row-key="id"
         border
+        default-expand-all
         :header-cell-style="getRowClass"
         :tree-props="{ children: '_child', hasChildren: 'hasChildren' }"
       >
@@ -73,6 +75,11 @@
         <el-table-column align="center" prop="user_num" label="成员数量">
         </el-table-column>
         <el-table-column align="center" prop="depart_desc" label="部门描述">
+        </el-table-column>
+        <el-table-column align="center" prop="" label="排序">
+          <div v-show="scope.row.is_base != 1" slot-scope="scope">
+            <img src="../../static/images/order.png" alt="" />
+          </div>
         </el-table-column>
         <el-table-column
           align="center"
@@ -176,6 +183,7 @@ export default {
       dialogDeleteFailed: false, // 删除失败
       editData: {}, // 被编辑的数据
       deleteData: {}, // 要删除的数据
+      sortable: {}, // 拖拽数据
     };
   },
   computed: {},
@@ -194,18 +202,30 @@ export default {
         return "";
       }
     },
+    // 全部展开 全部收起
     toggleRowExpansion(isExpansion) {
       this.toggleRowExpansion_forAll(this.tableData, isExpansion);
     },
     toggleRowExpansion_forAll(data, isExpansion) {
       data.forEach((item) => {
-        this.$refs.dataTreeList.toggleRowExpansion(item, isExpansion);
+        this.$refs.dragTable.toggleRowExpansion(item, isExpansion);
         if (item._child != undefined && item._child != null) {
           this.toggleRowExpansion_forAll(item._child, isExpansion);
         }
       });
     },
-    // 点击排序
+    // 排序
+    rowDrop() {
+      const tbody = document.querySelector(".el-table__body-wrapper tbody");
+      this.sortable = Sortable.create(tbody, {
+        onEnd: (evt) => {
+          //拖动结束时触发，我在这里调用接口，改变后台的排序
+          console.log(evt);
+          if (evt.oldIndex !== evt.newIndex) {
+          }
+        },
+      });
+    },
     handleSortDepartment() {},
     // 新增一个部门
     handleAddNewGroup() {
@@ -289,6 +309,7 @@ export default {
   },
   mounted() {
     this.initData();
+    this.rowDrop();
   },
 };
 </script>

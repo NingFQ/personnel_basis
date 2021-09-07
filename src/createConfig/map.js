@@ -19,6 +19,7 @@
 'site/static/images/login_error.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/login_error.png';
 'site/static/images/login_password.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/login_password.png';
 'site/static/images/login_user.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/login_user.png';
+'site/static/images/order.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/order.png';
 'site/static/images/setting.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/setting.png';
 'site/static/images/success.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/success.png';
 'site/static/images/upload.png' => '/Users/ningfangqiang/work/personnel_basis/src/core/site/static/images/upload.png';
