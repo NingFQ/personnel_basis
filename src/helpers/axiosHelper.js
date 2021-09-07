@@ -57,10 +57,7 @@ const appFetch = function (params, success, error) {
 	return new Promise((resolve, reject) => {
 		axios(params)
 			.then(function (response) {
-				if (response.data.code == 401) {
-					window.sessionStorage.removeItem("userName");
-					window.sessionStorage.removeItem("token");
-				}
+
 				let d = response.data || {};
 
 				d.e = +d.e;

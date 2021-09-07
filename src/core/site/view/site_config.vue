@@ -286,7 +286,7 @@ export default {
           // background: #cccccc;
           opacity: 1;
           border-radius: 6px;
-          border: 1px solid #ccc;
+          // border: 1px solid #ccc;
           img {
             width: 460px;
           }

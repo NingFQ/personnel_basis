@@ -158,10 +158,6 @@ export default {
             this.loginTitle = res.result.title;
             this.loginBgUrl = res.result.logo_background;
             this.$store.commit("UPDATA_CONFIG", res.result);
-            // window.sessionStorage.setItem(
-            //   "site_config_info",
-            //   JSON.stringify(res.result)
-            // );
           }
         }
       );
@@ -181,7 +177,8 @@ export default {
   display: flex
   justify-content: center
   align-items: center
-  background-color: white
+  background-size: cover
+  background-repeat: no-repeat
   .login_dialog_wrap
     display: flex
     flex-direction: column
