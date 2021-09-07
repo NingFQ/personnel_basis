@@ -229,6 +229,7 @@ export default {
       this.ruleForm.out_office_at_start = ""; // 离职开始时间
       this.ruleForm.out_office_at_end = ""; // 离职结束时间
       this.$refs["ruleForm"].resetFields();
+      this.$emit("handleSearch", this.ruleForm);
     },
     initData() {
       // 获取民族字典

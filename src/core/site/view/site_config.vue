@@ -34,9 +34,8 @@
                 >
                   <img
                     v-if="roleFrom.login_logo"
-                    height="200px"
+                    height="100px"
                     :src="roleFrom.login_logo"
-                    class="avatar"
                   />
                   <i v-else>
                     <el-button icon="el-icon-upload">上传图片</el-button>
@@ -82,9 +81,8 @@
                 >
                   <img
                     v-if="roleFrom.website_logo"
-                    height="200px"
+                    height="50px"
                     :src="roleFrom.website_logo"
-                    class="avatar"
                   />
                   <i v-else>
                     <el-button icon="el-icon-upload">上传图片</el-button>
@@ -215,7 +213,6 @@ export default {
         (req) => {}
       );
     },
-
     saveData() {
       this.isLoading = true;
       this.$appFetch(

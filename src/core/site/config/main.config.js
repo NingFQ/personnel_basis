@@ -42,11 +42,11 @@ module.exports = {
 		// 网站配置修改
 		saveWebConfig: "/api/sysconfig/save",
 		// 上传图片
-		upFile: "/upload/image",
+		uploadImg: "/upload/image",
 		// 导入excel
-		importExcel: "/api//user/import",
+		uploadExcel: "/api/user/import",
 		// 查看导入进度
-		importResult: "/api/importResult",
+		importResult: "/api/user/importResult",
 		// 导出用户
 		exportUser: "/api/user/download",
 	},

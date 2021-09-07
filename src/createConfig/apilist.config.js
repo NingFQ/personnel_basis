@@ -21,8 +21,8 @@ module.exports = {
 	'removeAdmin': '/api/manager/remove',
 	'webConfigInfo': '/sysconfig/info',
 	'saveWebConfig': '/api/sysconfig/save',
-	'upFile': '/upload/image',
-	'importExcel': '/api//user/import',
-	'importResult': '/api/importResult',
+	'uploadImg': '/upload/image',
+	'uploadExcel': '/api/user/import',
+	'importResult': '/api/user/importResult',
 	'exportUser': '/api/user/download',
 }

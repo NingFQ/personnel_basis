@@ -38,12 +38,13 @@
                 }}</b
                 >条，共{{ allUserNum }}条</span
               >
-              <el-button class="out_btn" icon="el-icon-folder-remove"
+              <el-button
+                class="out_btn"
+                icon="el-icon-folder-remove"
+                @click="exportUser"
                 >导出</el-button
               >
-              <el-button
-                icon="el-icon-delete"
-                @click="dialogDeleteFormVisible = true"
+              <el-button icon="el-icon-delete" @click="deleteUser"
                 >删除</el-button
               >
             </el-col>
@@ -66,16 +67,14 @@
         <!-- 表格 -->
         <div class="main_table_wrap">
           <el-table
-            ref="multipleTable"
+            id="out-table"
             :data="tableUserData"
-            tooltip-effect="dark"
             border
             @selection-change="multipleSelection = $event"
             :row-class-name="tableRowClassName"
             :header-cell-style="getRowClass"
           >
             <el-table-column
-              fixed="left"
               type="selection"
               width="68"
               align="center"
@@ -192,7 +191,6 @@
             </el-table-column>
             <el-table-column
               align="center"
-              fixed="right"
               prop=""
               label="操作"
               class-name="operate_col"
@@ -212,8 +210,8 @@
           background
           layout="total, prev, pager, next, jumper"
           :total="allUserNum"
-          :page-size="10"
-          @current-change="currentPageNum = val"
+          :page-size="pageSize"
+          @current-change="changePageNum"
         >
         </el-pagination>
       </el-main>
@@ -259,14 +257,6 @@
         ><import-file title="导入文件" />
       </el-dialog>
     </div>
-
-    <!-- <el-dialog
-      :width="600"
-      center="true"
-      :show-close="false"
-      :visible.sync="dialogExportFile"
-      ><delete-success title="导出文件"> </delete-success>
-    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -278,6 +268,8 @@ import AddEditUser from "./add_edit_user.vue";
 import DeleteConfirm from "../components/delete_confirm.vue";
 import DeleteSuccess from "../components/delete_success.vue";
 import importFile from "./import_file.vue";
+import FileSaver from "file-saver";
+import XLSX from "xlsx";
 
 export default {
   ...siteCon,
@@ -299,15 +291,14 @@ export default {
       dialogDeleteFormVisible: false, // 是否弹出删除dialog
       dialogDeteteSuccess: false, // 是否弹出删除成功的弹窗
       dialogImportFile: false, // 导入文件dialog
-      dialogExportFile: false, // 导出文件dialog
       tableUserData: [], // 表格数据
       allUserNum: 0, // 表格数据总长度
-      currentPageNum: 1, // 当前第几页数据
       pageSize: 20, // 每页多少条数据
       multipleSelection: [], // 选中的表格数据
       paramData: {}, // 新增或编辑时传递数据
       addOrEdit: "", // 新增还是编辑
       requestParams: {}, // 请求用户列表参数
+      requestSearchParams: {}, // 请求用户列表检索条件参数
       defaultExpandNodes: [], // 默认展开的id集合
     };
   },
@@ -319,26 +310,27 @@ export default {
           method: "POST",
           data: {
             keywords: this.searchText,
+            one_level: "1",
           },
         },
         (res) => {
           if (res.code == 200 && res.result != null) {
             console.log(res.result);
-            if (
-              res.result[0]._child != null &&
-              res.result[0]._child != undefined
-            ) {
-              var arr = [];
-              for (var i = 0, len = res.result[0]._child.length; i < len; i++) {
-                arr.push({
-                  name: `${res.result[0]["name"]} > ${res.result[0]._child[i]["name"]}`,
-                  id: res.result[0]._child[i]["id"],
-                });
-              }
-              cb(arr);
-            } else {
-              cb(res.result);
-            }
+            // if (
+            //   res.result[0]._child != null &&
+            //   res.result[0]._child != undefined
+            // ) {
+            //   var arr = [];
+            //   for (var i = 0, len = res.result[0]._child.length; i < len; i++) {
+            //     arr.push({
+            //       name: `${res.result[0]["name"]} > ${res.result[0]._child[i]["name"]}`,
+            //       id: res.result[0]._child[i]["id"],
+            //     });
+            //   }
+            //   cb(arr);
+            // } else {
+            //   cb(res.result);
+            // }
           }
         }
       );
@@ -370,11 +362,42 @@ export default {
     handleUserCallBack(type, data) {
       alert("type====" + type + "===data===" + JSON.stringify(data));
       this.dialogAddFormVisible = false;
-
       // this.isLoading = true;
       // setTimeout(() => {
       //   this.isLoading = false;
       // }, 1000);
+    },
+    // 导出用户
+    exportUser() {
+      /* generate workbook object from table */
+      var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
+      /* get binary string as output */
+      var wbout = XLSX.write(wb, {
+        bookType: "xlsx",
+        bookSST: true,
+        type: "array",
+      });
+      try {
+        FileSaver.saveAs(
+          new Blob([wbout], { type: "application/octet-stream" }),
+          "sheetjs.xlsx"
+        );
+      } catch (e) {
+        if (typeof console !== "undefined") console.log(e, wbout);
+      }
+      return wbout;
+    },
+    // 删除用户
+    deleteUser() {
+      if (this.multipleSelection.length == 0) {
+        this.$notify({
+          title: "删除失败",
+          message: "请先选择用户",
+          type: "error",
+        });
+      } else {
+        this.dialogDeleteFormVisible = true;
+      }
     },
     // 删除表格项回调
     deleteConfrimCallBack() {
@@ -409,9 +432,10 @@ export default {
         }
       );
     },
-    // 搜索表格回调
+    // 搜索回调
     handleSearch(searchParm) {
-      this.getUserList(searchParm);
+      this.requestSearchParams = Object.assign({}, searchParm);
+      this.getUserList();
     },
     getDepartmentLis() {
       // 获取部门列表
@@ -434,13 +458,16 @@ export default {
         }
       );
     },
-    getUserList(searchParm) {
-      var paramObj;
-      if (searchParm != null) {
-        paramObj = Object.assign(this.requestParams, searchParm);
-      } else {
-        paramObj = Object.assign({}, this.requestParams);
-      }
+    // 下一页
+    changePageNum(val) {
+      this.requestParams.page = val;
+      this.getUserList();
+    },
+    getUserList() {
+      var paramObj = Object.assign(
+        this.requestParams,
+        this.requestSearchParams
+      );
       console.log(paramObj);
       // 获取用户列表
       this.$appFetch(
@@ -476,7 +503,7 @@ export default {
   },
   mounted() {
     this.getDepartmentLis();
-    this.requestParams.page = this.currentPageNum;
+    this.requestParams.page = 1;
     this.requestParams.limit = this.pageSize;
   },
 };

@@ -42,10 +42,22 @@
             src="../../static/images/upload.png"
             alt=""
           />
-          <div>
-            <span class="operate-hint">上传excel文件</span>
-            <span class="operate-intr">部门数据xls</span>
-            <span class="operate-delete">删除</span>
+          <div class="upload-file-info">
+            <el-upload
+              action=""
+              :multiple="false"
+              :show-file-list="false"
+              :http-request="selectExcelUpload"
+            >
+              <span class="operate-hint">上传excel文件</span>
+            </el-upload>
+            <span class="operate-intr">{{ fileName }}</span>
+            <span
+              class="operate-delete"
+              v-show="fileName != ''"
+              @click="deleteFile"
+              >删除</span
+            >
           </div>
         </div>
         <div class="operate-desc">文件后缀名必须为 xls 或 xlsx</div>
@@ -84,7 +96,9 @@
               src="../../static/images/file_icon.png"
               alt=""
             />
-            <span class="operate-success-text">100条数据导入成功</span>
+            <span class="operate-success-text"
+              >{{ successNum }}条数据导入成功</span
+            >
             <img
               class="operate-success-icon"
               src="../../static/images/success.png"
@@ -102,7 +116,7 @@
               src="../../static/images/file_icon.png"
               alt=""
             />
-            <span class="operate-error-text">33条数据导入失败</span>
+            <span class="operate-error-text">{{ errorNum }}条数据导入失败</span>
             <img
               class="operate-error-icon"
               src="../../static/images/login_error.png"
@@ -115,7 +129,7 @@
         </div>
       </div>
       <div v-show="active != 2">
-        <el-button type="primary" @click="nextStept">{{
+        <el-button type="primary" :disabled="!nextDisable" @click="nextStept">{{
           active == 1 ? "下一步" : "关闭"
         }}</el-button>
       </div>
@@ -124,12 +138,20 @@
 </template>
 
 <script>
+import upFile from "../../../../helpers/upFileHelper.js";
+
 export default {
   name: "PersonnelBasisImportFile",
 
   data() {
     return {
       active: 1,
+      fileName: "",
+      fileKey: "",
+      fileSize: "",
+      successNum: "",
+      errorNum: "",
+      downloadUrl: "",
     };
   },
   props: {
@@ -139,21 +161,54 @@ export default {
     },
   },
   mounted() {},
-
+  computed: {
+    nextDisable() {
+      return this.fileName != "" && this.fileKey != "";
+    },
+  },
   methods: {
     // 关闭dialog
     closeAddDialog() {
       this.$parent.handleClose();
     },
+    // 选取文件上传
+    selectExcelUpload({ file }) {
+      console.log(file);
+      this.fileName = file.name;
+      this.fileSize = file.size;
+      upFile(file, "excel").then(
+        (args) => {
+          this.fileKey = args.result.key;
+        },
+        (req) => {}
+      );
+    },
+    deleteFile() {
+      this.fileName = "";
+      this.fileKey = "";
+    },
     nextStept() {
-      if (this.active < 3) {
-        this.active++;
-      } else {
-        if (this.active == 3) {
-          this.$parent.handleClose();
-        } else {
-          this.active = 1;
-        }
+      if (this.active == 1) {
+        this.active = 2;
+        this.$appFetch(
+          {
+            url: "importResult",
+            method: "POST",
+            data: {
+              key: this.fileKey,
+            },
+          },
+          (res) => {
+            if (res.code == 200 && res.result != null) {
+              this.active = 3;
+              this.successNum = res.result.success_num;
+              this.errorNum = res.result.error_num;
+              this.downloadUrl = res.result.download_url;
+            }
+          }
+        );
+      } else if (this.active == 3) {
+        this.$parent.handleClose();
       }
     },
   },
@@ -181,6 +236,12 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    .upload-file-info {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
     .operate-icon {
       width: 84px;
     }
@@ -194,6 +255,7 @@ export default {
       line-height: 0px;
       color: #409eff;
       cursor: pointer;
+      margin-right: 10px;
       text-decoration: underline;
     }
     .operate-intr {
@@ -208,6 +270,7 @@ export default {
       line-height: 0px;
       cursor: pointer;
       color: #ff4e4e;
+      margin-left: 10px;
     }
     .file-info {
       display: flex;

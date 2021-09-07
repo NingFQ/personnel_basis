@@ -21,7 +21,7 @@ const upFile = (files, type, progress, param) => {
     var data = new FormData();
     let nowId = Math.random().toString();
     data.append('file', files);
-    // data.append('category', type);
+    data.append('category', type);
     if (param && param.constructor === Object) {
       for (const key in param) {
         data.append(key, param[key]);
@@ -32,7 +32,12 @@ const upFile = (files, type, progress, param) => {
     xhr.upload.onprogress = function (event) {
       progress && progress(event, nowId);
     }
-    xhr.open('post', apiHelper.getApi("upFile"));
+    if (type == 'image') {
+      xhr.open('post', apiHelper.getApi("uploadImg"));
+    } else if (type == "excel") {
+      xhr.open('post', apiHelper.getApi("uploadExcel"));
+    }
+
     xhr.setRequestHeader('token', window.sessionStorage.getItem('token'));
     xhr.send(data)
 
