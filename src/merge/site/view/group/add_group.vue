@@ -55,12 +55,20 @@
           </el-form-item>
           <el-form-item :label-position="right" label="状态" prop="status">
             <el-select
-              v-model="statusText"
+              v-model="editingData.status"
               placeholder="请选择"
               @change="changeStatusValue($event)"
             >
-              <el-option label="启用" value="1"></el-option>
-              <el-option label="禁用" value="0"></el-option>
+              <el-option
+                v-for="(item, key) in [
+                  { name: '启用', id: 1 },
+                  { name: '禁用', id: 0 },
+                ]"
+                :key="key"
+                :label="item.name"
+                :value="item.id"
+              >
+              </el-option>
             </el-select>
           </el-form-item>
           <el-form-item :label-position="right" label="描述" prop="depart_desc">
@@ -133,14 +141,6 @@ export default {
     title: {
       type: String,
       default: "标题",
-    },
-  },
-  computed: {
-    statusText() {
-      if (this.editingData.status == null) {
-        return null;
-      }
-      return this.editingData.status == 1 ? "启用" : "禁用";
     },
   },
   components: {},
