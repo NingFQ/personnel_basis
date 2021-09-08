@@ -16,6 +16,8 @@ module.exports = {
 	'departmentDelete': '/api/department/remove',
 	'departmentAdd': '/api/department/add',
 	'userList': '/api/user/lists',
+	'userAdd': '/api/user/add',
+	'userEdit': '/api/user/update',
 	'deleteUser': '/api/user/delete',
 	'adminList': '/api/common/lists',
 	'adminUserList': '/api/manager/lists',

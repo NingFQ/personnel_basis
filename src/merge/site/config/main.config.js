@@ -31,6 +31,10 @@ module.exports = {
 		departmentAdd: "/api/department/add",
 		// 获取用户列表
 		userList: "/api/user/lists",
+		// 用户添加
+		userAdd: "/api/user/add",
+		// 用户编辑
+		userEdit: "/api/user/update",
 		// 用户删除
 		deleteUser: "/api/user/delete",
 		// 权限组列表

@@ -64,10 +64,144 @@
             </el-col>
           </el-row>
         </div>
+        <!-- 隐藏的表格 -->
+        <div style="display: none">
+          <el-table id="out-table" :data="multipleSelection">
+            <!-- <el-table-column
+              type="selection"
+              width="68"
+              align="center"
+            ></el-table-column> -->
+            <el-table-column
+              prop="user_key"
+              label="登录号"
+              width="155"
+              align="center"
+            ></el-table-column>
+            <el-table-column
+              prop="name"
+              label="姓名"
+              width="106"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="type_name"
+              label="人员类型"
+              width="155"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="identity_name"
+              label="身份类型"
+              width="155"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="job_name"
+              label="领导职务"
+              width="155"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="card"
+              label="身份证号"
+              min-width="225"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="credentials"
+              label="证件号"
+              width="156"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="sexy_text"
+              label="性别"
+              width="80"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="nation_name"
+              label="民族"
+              width="155"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="birthday"
+              label="出生日期"
+              width="155"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="hometown"
+              label="籍贯"
+              width="149"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="office_at"
+              label="入职时间"
+              width="149"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="out_office_at"
+              label="离职时间"
+              width="149"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <el-table-column
+              prop="qr_name"
+              label="离职原因"
+              width="149"
+              align="center"
+              show-overflow-tooltip
+            >
+            </el-table-column>
+            <!-- <el-table-column
+              align="center"
+              prop=""
+              label="操作"
+              class-name="operate_col"
+            >
+              <template slot-scope="scope">
+                <el-button
+                  class="edit_btn"
+                  @click="handleEditUser(scope.row)"
+                  type="text"
+                  >编辑</el-button
+                >
+              </template></el-table-column
+            > -->
+          </el-table>
+        </div>
         <!-- 表格 -->
         <div class="main_table_wrap">
           <el-table
-            id="out-table"
             :data="tableUserData"
             border
             @selection-change="multipleSelection = $event"
@@ -360,32 +494,99 @@ export default {
     },
     // 新增或编辑用户回调
     handleUserCallBack(type, data) {
-      alert("type====" + type + "===data===" + JSON.stringify(data));
+      // alert("type====" + type + "===data===" + JSON.stringify(data));
+      this.isLoading = true;
+      if (type == "add") {
+        var obj = {
+          department_id: this.currentDepartmentId,
+        };
+        var requestObj = Object.assign(obj, data);
+        this.$appFetch(
+          {
+            url: "userAdd",
+            method: "POST",
+            data: requestObj,
+          },
+          (res) => {
+            if (res.code == 200 && res.result != null) {
+              this.getUserList();
+            } else {
+              this.$notify({
+                title: "新增失败",
+                message: res.msg,
+                type: "error",
+              });
+            }
+          }
+        );
+      }
+      if (type == "edit") {
+        var obj = {
+          user_id: data.id,
+        };
+        var requestObj = Object.assign(obj, data);
+        this.$appFetch(
+          {
+            url: "userEdit",
+            method: "POST",
+            data: requestObj,
+          },
+          (res) => {
+            if (res.code == 200 && res.result != null) {
+              this.getUserList();
+            } else {
+              this.$notify({
+                title: "编辑失败",
+                message: res.msg,
+                type: "error",
+              });
+            }
+          }
+        );
+      }
+      this.isLoading = false;
       this.dialogAddFormVisible = false;
-      // this.isLoading = true;
-      // setTimeout(() => {
-      //   this.isLoading = false;
-      // }, 1000);
     },
     // 导出用户
     exportUser() {
-      /* generate workbook object from table */
-      var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
-      /* get binary string as output */
-      var wbout = XLSX.write(wb, {
-        bookType: "xlsx",
-        bookSST: true,
-        type: "array",
-      });
-      try {
-        FileSaver.saveAs(
-          new Blob([wbout], { type: "application/octet-stream" }),
-          "sheetjs.xlsx"
+      if (this.multipleSelection.length > 0) {
+        /* generate workbook object from table */
+        var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
+        /* get binary string as output */
+        var wbout = XLSX.write(wb, {
+          bookType: "xlsx",
+          bookSST: true,
+          type: "array",
+        });
+        try {
+          FileSaver.saveAs(
+            new Blob([wbout], { type: "application/octet-stream" }),
+            "sheetjs.xlsx"
+          );
+        } catch (e) {
+          if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        return wbout;
+      } else {
+        this.requestParams.type = 2;
+        var paramObj = Object.assign(
+          this.requestParams,
+          this.requestSearchParams
         );
-      } catch (e) {
-        if (typeof console !== "undefined") console.log(e, wbout);
+        console.log(paramObj);
+        // 获取用户列表
+        this.$appFetch(
+          {
+            url: "userList",
+            method: "POST",
+            data: paramObj,
+          },
+          (res) => {
+            if (res.code == 200 && res.result != null) {
+            }
+          }
+        );
       }
-      return wbout;
     },
     // 删除用户
     deleteUser() {
