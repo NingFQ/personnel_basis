@@ -142,14 +142,6 @@ export default {
       default: false,
     },
   },
-  computed: {
-    statusText() {
-      if (this.editingData.status == null) {
-        return null;
-      }
-      return this.editingData.status == "1" ? "启用" : "禁用";
-    },
-  },
   components: {},
   methods: {
     // 关闭dialog
