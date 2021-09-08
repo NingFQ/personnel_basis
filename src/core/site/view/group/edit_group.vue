@@ -190,7 +190,7 @@ export default {
     },
   },
   mounted() {
-    this.parentDepartmentName = "";
+    this.parentDepartmentName = this.$props.editingData.parent_name;
     this.init();
   },
 };

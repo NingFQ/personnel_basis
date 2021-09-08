@@ -46,6 +46,7 @@
                 accordion
                 :data="departmentListData"
                 :props="{ children: '_child', label: 'name' }"
+                :default-expanded-keys="[defaultId]"
                 :highlight-current="true"
                 :expand-on-click-node="true"
                 @node-click="handleNodeClick"
@@ -93,6 +94,7 @@ export default {
     return {
       parentDepartmentName: "",
       departmentListData: [],
+      defaultId: "",
       editingData: {
         name: "",
         depart_key: "",
@@ -175,6 +177,7 @@ export default {
         (res) => {
           if (res.code == 200 && res.result != null) {
             this.departmentListData = res.result;
+            this.defaultId = res.result[0].id;
           }
         }
       );

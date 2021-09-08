@@ -106,23 +106,25 @@
       </el-table>
     </div>
     <!-- 新增弹窗 -->
-    <el-dialog
-      :width="600"
-      center="true"
-      :show-close="false"
-      :visible.sync="dialogAddFormVisible"
-      destroy-on-close
-      ><add-group title="新增部门"> </add-group>
-    </el-dialog>
+    <div v-if="dialogAddFormVisible">
+      <el-dialog
+        :width="600"
+        center="true"
+        :show-close="false"
+        :visible.sync="dialogAddFormVisible"
+        ><add-group title="新增部门"> </add-group>
+      </el-dialog>
+    </div>
     <!-- 编辑弹窗 -->
-    <el-dialog
-      :width="600"
-      center="true"
-      :show-close="false"
-      :visible.sync="dialogEditFormVisible"
-      destroy-on-close
-      ><edit-group title="编辑部门" :editingData="editData"> </edit-group>
-    </el-dialog>
+    <div v-if="dialogEditFormVisible">
+      <el-dialog
+        :width="600"
+        center="true"
+        :show-close="false"
+        :visible.sync="dialogEditFormVisible"
+        ><edit-group title="编辑部门" :editingData="editData"> </edit-group>
+      </el-dialog>
+    </div>
     <!-- 删除弹窗 -->
     <el-dialog
       :width="600"

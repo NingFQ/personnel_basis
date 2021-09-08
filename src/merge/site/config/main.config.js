@@ -11,6 +11,8 @@ module.exports = {
 		levelReasonList: "/api/common/quit_lists",
 		// 领导职务字典
 		leaderList: "/api/common/job_lists",
+		// 人员身份类型
+		idenType: "/api/common/iden_type",
 		// 登录图形验证码
 		loginImgCode: "/auth/captcha",
 		// 登录

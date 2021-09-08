@@ -29,7 +29,7 @@
               placeholder="请输入姓名"
             ></el-input>
           </el-form-item>
-          <el-form-item :label-position="right" label="人员类型" prop="type_id">
+          <!-- <el-form-item :label-position="right" label="人员类型" prop="type_id">
             <el-select v-model="ruleForm.type_id" placeholder="请选择">
               <el-option
                 v-for="(item, index) in personnelTypeDictionary"
@@ -52,6 +52,19 @@
                 :value="item.id"
               ></el-option>
             </el-select>
+          </el-form-item> -->
+          <el-form-item :label-position="right" label="人员身份" prop="type_id">
+            <el-cascader
+              placeholder="请选择"
+              :options="personnelTypeDictionary"
+              :props="{
+                multiple: false,
+                value: 'id',
+                label: 'type_name',
+                children: 'identity',
+              }"
+              @change="changeIdenType"
+            ></el-cascader>
           </el-form-item>
           <el-form-item :label-position="right" label="领导职务" prop="job_id">
             <el-select v-model="ruleForm.job_id" placeholder="请选择">
@@ -212,7 +225,7 @@ export default {
         is_office: "", // 是否在职
       },
       personnelTypeDictionary: [], // 人员类型字典
-      identityTypeDictionary: [], // 身份类型字典
+      // identityTypeDictionary: [], // 身份类型字典
       leaderPostDictionary: [], // 领导职务字典
       levelReasonDictionary: [], // 离职原因字典
       nationListDictionary: [], // 民族列表字典
@@ -303,6 +316,15 @@ export default {
     closeAddDialog() {
       this.$parent.handleClose();
     },
+    changeIdenType(value) {
+      // if (value[i].length == 1) {
+      //   this.ruleForm.type_id = value[i][0];
+      // } else {
+      //   this.ruleForm.identity_id.push(value[i][1]);
+      // }
+      this.ruleForm.type_id = value[0];
+      this.ruleForm.identity_id = value[1];
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -353,11 +375,8 @@ export default {
       // 人员类型字典
       this.$appFetch(
         {
-          url: "adminList",
+          url: "idenType",
           method: "POST",
-          data: {
-            is_super: 2,
-          },
         },
         (res) => {
           console.log(res);

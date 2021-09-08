@@ -505,6 +505,7 @@ export default {
     this.getDepartmentLis();
     this.requestParams.page = 1;
     this.requestParams.limit = this.pageSize;
+    this.requestParams.type = 1;
   },
 };
 </script>
