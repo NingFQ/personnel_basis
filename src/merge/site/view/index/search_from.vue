@@ -204,8 +204,7 @@ export default {
         out_office_reason_id: "", // 离职原因
         is_office: "", // 是否在职
       },
-      personnelTypeDictionary: [], // 人员类型字典
-      // identityTypeDictionary: [], // 身份类型字典
+      personnelTypeDictionary: [], //人员类型身份类型字典
       leaderPostDictionary: [], // 领导职务字典
       levelReasonDictionary: [], // 离职原因字典
       nationListDictionary: [], // 民族列表字典

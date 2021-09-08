@@ -29,34 +29,11 @@
               placeholder="请输入姓名"
             ></el-input>
           </el-form-item>
-          <!-- <el-form-item :label-position="right" label="人员类型" prop="type_id">
-            <el-select v-model="ruleForm.type_id" placeholder="请选择">
-              <el-option
-                v-for="(item, index) in personnelTypeDictionary"
-                :key="index"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item
-            :label-position="right"
-            label="身份类型"
-            prop="identity_id"
-          >
-            <el-select v-model="ruleForm.identity_id" placeholder="请选择">
-              <el-option
-                v-for="(item, key) in identityTypeDictionary"
-                :key="key"
-                :label="item.name"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </el-form-item> -->
           <el-form-item :label-position="right" label="人员身份" prop="type_id">
             <el-cascader
               placeholder="请选择"
               :options="personnelTypeDictionary"
+              v-model="selectedOptions"
               :props="{
                 multiple: false,
                 value: 'id',
@@ -224,8 +201,8 @@ export default {
         out_office_reason_id: "", // 离职原因
         is_office: "", // 是否在职
       },
-      personnelTypeDictionary: [], // 人员类型字典
-      // identityTypeDictionary: [], // 身份类型字典
+      selectedOptions: [],
+      personnelTypeDictionary: [], // 人员类型身份类型字典
       leaderPostDictionary: [], // 领导职务字典
       levelReasonDictionary: [], // 离职原因字典
       nationListDictionary: [], // 民族列表字典
@@ -317,17 +294,13 @@ export default {
       this.$parent.handleClose();
     },
     changeIdenType(value) {
-      // if (value[i].length == 1) {
-      //   this.ruleForm.type_id = value[i][0];
-      // } else {
-      //   this.ruleForm.identity_id.push(value[i][1]);
-      // }
       this.ruleForm.type_id = value[0];
       this.ruleForm.identity_id = value[1];
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          alert(JSON.stringify(this.ruleForm));
           this.$parent.$parent.handleUserCallBack(this.type, this.ruleForm);
         } else {
           console.log("error submit!!");
@@ -391,7 +364,10 @@ export default {
     this.initData();
     if (this.$props.type == "edit") {
       this.ruleForm = Object.assign({}, this.$props.parentData);
-      // console.log("编辑时传进来的表单=====" + JSON.stringify(this.ruleForm));
+      this.selectedOptions = [
+        this.$props.parentData.type_id,
+        this.$props.parentData.identity_id,
+      ];
     }
   },
 };
