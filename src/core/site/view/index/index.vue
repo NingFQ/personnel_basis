@@ -550,9 +550,16 @@ export default {
     // 导出用户
     exportUser() {
       if (this.multipleSelection.length > 0) {
-        /* generate workbook object from table */
+        var y = new Date().getFullYear();
+        var m = new Date().getMonth() + 1;
+        var d = new Date().getDate();
+        var str =
+          "人员信息" +
+          y +
+          `${m < 10 ? "0" + m : m}` +
+          `${d < 10 ? "0" + d : d}`;
+        console.log("===" + str);
         var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
-        /* get binary string as output */
         var wbout = XLSX.write(wb, {
           bookType: "xlsx",
           bookSST: true,
@@ -561,7 +568,7 @@ export default {
         try {
           FileSaver.saveAs(
             new Blob([wbout], { type: "application/octet-stream" }),
-            "sheetjs.xlsx"
+            `${str}.xlsx`
           );
         } catch (e) {
           if (typeof console !== "undefined") console.log(e, wbout);

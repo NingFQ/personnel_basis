@@ -42,6 +42,7 @@
         current-row-key="id"
         border
         default-expand-all
+        :row-class-name="tableRowClassName"
         :header-cell-style="getRowClass"
         :expand-on-click-node="true"
         :tree-props="{ children: '_child', hasChildren: 'hasChildren' }"
@@ -204,6 +205,14 @@ export default {
         return "";
       }
     },
+    // 表格赋值className
+    tableRowClassName({ row, rowIndex }) {
+      if (row.is_base == 1) {
+        return "disable-drag";
+      } else {
+        return "";
+      }
+    },
     // 全部展开 全部收起
     toggleRowExpansion(isExpansion) {
       this.toggleRowExpansion_forAll(this.tableData, isExpansion);
@@ -220,6 +229,7 @@ export default {
     rowDrop() {
       const tbody = document.querySelector(".el-table__body-wrapper tbody");
       this.sortable = Sortable.create(tbody, {
+        filter: ".disable-drag",
         onEnd: (evt) => {
           //拖动结束时触发，我在这里调用接口，改变后台的排序
           console.log(evt);
