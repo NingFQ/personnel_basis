@@ -187,35 +187,27 @@ export default {
         },
         (res) => {
           if (res.code == 200 && res.result != null) {
-            this.requestObj.title = res.result.title;
-            this.requestObj.website_name = res.result.website_name;
+            var dataObj = res.result;
+            this.requestObj.title = dataObj.title;
+            this.requestObj.website_name = dataObj.website_name;
+            this.requestObj.login_logo = dataObj.login_logo;
+            this.requestObj.website_logo = dataObj.website_logo;
+            this.requestObj.logo_background = dataObj.logo_background;
+            this.requestObj.icon = dataObj.icon;
 
-            this.roleFrom.login_logo = res.result.login_logo;
-            this.roleFrom.icon = res.result.icon;
-
-            this.roleFrom.website_logo = res.result.website_logo;
-            this.roleFrom.logo_background = res.result.logo_background;
+            this.roleFrom.login_logo = dataObj.host_url + dataObj.login_logo;
+            this.roleFrom.icon = dataObj.host_url + dataObj.icon;
+            this.roleFrom.website_logo =
+              dataObj.host_url + dataObj.website_logo;
+            this.roleFrom.logo_background =
+              dataObj.host_url + dataObj.logo_background;
             this.$store.commit("UPDATA_CONFIG", res.result);
-            this.changeSiteFavicon(res.result.icon);
             if (this.isLoading) {
               this.isLoading = false;
             }
           }
         }
       );
-    },
-    changeSiteFavicon(url) {
-      var link =
-        document.querySelector("link[rel*='icon']") ||
-        document.createElement("link");
-
-      link.type = "image/x-icon";
-
-      link.rel = "shortcut icon";
-
-      link.href = url;
-
-      document.getElementsByTagName("head")[0].appendChild(link);
     },
     selectLoginLogoUpload({ file }) {
       upFile(file, "image").then(

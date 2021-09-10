@@ -66,7 +66,7 @@ export default {
       return this.$store.state.site.siteConfig.website_name;
     },
     siteLogo() {
-      return this.$store.state.site.siteConfig.website_logo;
+      return `${this.$store.state.site.siteConfig.host_url}${this.$store.state.site.siteConfig.website_logo}`;
     },
   },
 
@@ -108,14 +108,14 @@ export default {
     justify-content: flex-start
     align-items: center
     .site_logo
-      width: 46px
-      height: 46px
+      // width: 46px
+      height: 52px
       border-radius: 50%
-      overflow: hidden
+      // overflow: hidden
       .logo_img
         display: block
-        width: 46px
-        height: 46px
+        // width: 46px
+        height: 52px
     .site_name
       height: 100%
       font-size: 20px

@@ -15,7 +15,17 @@ export default {
   },
   mutations: {
     UPDATA_CONFIG(state, data) {
-      state.siteConfig = Object.assign({}, data);
+
+      if (data != null) {
+        state.siteConfig = Object.assign({}, data);
+        var link =
+          document.querySelector("link[rel*='icon']") ||
+          document.createElement("link");
+        link.type = "image/x-icon";
+        link.rel = "shortcut icon";
+        link.href = `${data.host_url}${data.icon}`;
+        document.getElementsByTagName("head")[0].appendChild(link);
+      }
     }
   },
   actions: {

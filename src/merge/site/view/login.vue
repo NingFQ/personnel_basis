@@ -154,10 +154,11 @@ export default {
         },
         (res) => {
           if (res.code == 200 && res.result != null) {
-            this.loginIcon = res.result.login_logo;
-            this.loginTitle = res.result.title;
-            this.loginBgUrl = res.result.logo_background;
-            this.changeSiteFavicon(res.result.icon);
+            var dataObj = res.result;
+            this.loginIcon = dataObj.host_url + dataObj.login_logo;
+            this.loginTitle = dataObj.title;
+            this.loginBgUrl = dataObj.host_url + dataObj.logo_background;
+            // this.changeSiteFavicon(dataObj.icon);
             this.$store.commit("UPDATA_CONFIG", res.result);
           }
         }
