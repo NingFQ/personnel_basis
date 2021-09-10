@@ -29,7 +29,12 @@
             alt=""
           />
           <div>
-            <span class="operate-hint">下载excel模板</span>
+            <a
+              class="operate-hint"
+              href="http://personal.dripm.cn/user.xlsx"
+              download="人员信息.xlsx"
+              >下载excel模板</a
+            >
             <span class="operate-intr">填写信息</span>
           </div>
         </div>
@@ -122,16 +127,21 @@
               src="../../static/images/login_error.png"
               alt=""
             />
-            <span class="operate-error-text operate-download"
+            <span
+              class="operate-error-text operate-download"
+              @click="downloadFile()"
               >下载失败数据</span
             >
           </el-row>
         </div>
       </div>
       <div v-show="active != 2">
-        <el-button type="primary" :disabled="!nextDisable" @click="nextStept">{{
-          active == 1 ? "下一步" : "关闭"
-        }}</el-button>
+        <el-button
+          type="primary"
+          :disabled="!nextDisable"
+          @click="nextStept()"
+          >{{ active == 1 ? "下一步" : "关闭" }}</el-button
+        >
       </div>
     </div>
   </div>
@@ -169,7 +179,11 @@ export default {
   methods: {
     // 关闭dialog
     closeAddDialog() {
-      this.$parent.handleClose();
+      if (this.active != 3) {
+        this.$parent.handleClose();
+      } else {
+        this.$parent.$parent.importExcelCallBack();
+      }
     },
     // 选取文件上传
     selectExcelUpload({ file }) {
@@ -186,6 +200,36 @@ export default {
     deleteFile() {
       this.fileName = "";
       this.fileKey = "";
+    },
+    downloadFile() {
+      // var a = document.createElement("a");
+      // a.href = "http://personal.dripm.cn/user.xlsx";
+      // a.download = "test.xlsx";
+      // a.click();
+      // this.downloadUrlFile("http://personal.dripm.cn/员工.xlsx");
+      // window.open("http://personal.dripm.cn/员工.xlsx");
+      // window.location.href =
+      //   "http://personal.dripm.cn/upload/Upload/2021/09/09/32471631185885.xlsx";
+    },
+    downloadUrlFile(url) {
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", url, true);
+      xhr.responseType = "blob";
+      xhr.setRequestHeader("token", window.sessionStorage.getItem("token"));
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          this.saveAs(xhr.response, fileInfo.name);
+        }
+      };
+      xhr.send();
+    },
+    saveAs(data, name) {
+      var urlObject = window.URL || window.webkitURL || window;
+      var export_blob = new Blob([data]);
+      var save_link = document.createElementNS("", "a");
+      save_link.href = urlObject.createObjectURL(export_blob);
+      save_link.download = name;
+      save_link.click();
     },
     nextStept() {
       if (this.active == 1) {
@@ -205,10 +249,11 @@ export default {
               this.errorNum = res.result.error_num;
               this.downloadUrl = res.result.download_url;
             }
+            this.active = 3;
           }
         );
       } else if (this.active == 3) {
-        this.$parent.handleClose();
+        this.closeAddDialog();
       }
     },
   },

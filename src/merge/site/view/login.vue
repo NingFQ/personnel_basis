@@ -157,7 +157,7 @@ export default {
             this.loginIcon = res.result.login_logo;
             this.loginTitle = res.result.title;
             this.loginBgUrl = res.result.logo_background;
-            this.changeSiteFavicon();
+            this.changeSiteFavicon(res.result.icon);
             this.$store.commit("UPDATA_CONFIG", res.result);
           }
         }

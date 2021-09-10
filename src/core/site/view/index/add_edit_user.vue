@@ -366,6 +366,7 @@ export default {
       this.ruleForm = Object.assign({}, this.$props.parentData);
       this.selectedOptions.push(this.$props.parentData.type_id);
       this.selectedOptions.push(this.$props.parentData.identity_id);
+      console.log(this.$props.parentData);
       console.log(this.selectedOptions);
     }
   },

@@ -209,6 +209,7 @@
             :header-cell-style="getRowClass"
           >
             <el-table-column
+              fixed="left"
               type="selection"
               width="68"
               align="center"
@@ -324,8 +325,8 @@
             >
             </el-table-column>
             <el-table-column
+              fixed="right"
               align="center"
-              prop=""
               label="操作"
               class-name="operate_col"
             >
@@ -482,11 +483,13 @@ export default {
       this.requestParams.department_id = data.id;
       this.getUserList();
     },
+    // 新增用户
     handleAddUser() {
       this.addOrEdit = "add";
       this.paramData = {};
       this.dialogAddFormVisible = true;
     },
+    // 编辑用户
     handleEditUser(data) {
       this.addOrEdit = "edit";
       this.paramData = Object.assign({}, data);
@@ -509,6 +512,7 @@ export default {
           },
           (res) => {
             if (res.code == 200 && res.result != null) {
+              this.dialogAddFormVisible = false;
               this.getUserList();
             } else {
               this.$notify({
@@ -533,6 +537,7 @@ export default {
           },
           (res) => {
             if (res.code == 200 && res.result != null) {
+              this.dialogAddFormVisible = false;
               this.getUserList();
             } else {
               this.$notify({
@@ -545,7 +550,11 @@ export default {
         );
       }
       this.isLoading = false;
-      this.dialogAddFormVisible = false;
+    },
+    //  导入回调
+    importExcelCallBack() {
+      this.dialogImportFile = false;
+      this.getUserList();
     },
     // 导出用户
     exportUser() {

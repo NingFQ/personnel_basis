@@ -198,9 +198,9 @@ export default {
       this.searchData = "";
     },
     // 设置表头颜色
-    getRowClass({ rowIndex }) {
+    getRowClass({ row, rowIndex }) {
       if (rowIndex == 0) {
-        return "background:#E5E7F3";
+        return `background:#E5E7F3`;
       } else {
         return "";
       }
@@ -208,9 +208,9 @@ export default {
     // 表格赋值className
     tableRowClassName({ row, rowIndex }) {
       if (row.is_base == 1) {
-        return "disable-drag";
+        return `data-id=${row.sort} disable-drag`;
       } else {
-        return "";
+        return `data-id=${row.sort} allow-drag`;
       }
     },
     // 全部展开 全部收起
@@ -230,10 +230,23 @@ export default {
       const tbody = document.querySelector(".el-table__body-wrapper tbody");
       this.sortable = Sortable.create(tbody, {
         filter: ".disable-drag",
+        draggable: ".allow-drag",
+        // dataIdAttr: "data-id",
+        onStart: function (evt) {
+          console.log(evt);
+        },
         onEnd: (evt) => {
           //拖动结束时触发，我在这里调用接口，改变后台的排序
-          console.log(evt);
+          console.log(
+            "evt.sort=====" + evt.item.parentNode.getAttribute("data-id")
+          );
+          // var arr = this.sortable.toArray();
+          // console.log(JSON.stringify(arr));
           if (evt.oldIndex !== evt.newIndex) {
+            console.log(
+              "结束拖动",
+              `拖动前索引${evt.oldIndex}---拖动后索引${evt.newIndex}`
+            );
           }
         },
       });
