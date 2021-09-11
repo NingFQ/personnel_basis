@@ -75,9 +75,17 @@
           ></el-input>
         </el-form-item>
         <el-form-item :label-position="right" label="性别" prop="sexy">
-          <el-select multiple v-model="ruleForm.sexy" placeholder="请选择">
-            <el-option label="男" value="1"></el-option>
-            <el-option label="女" value="2"></el-option>
+          <el-select v-model="ruleForm.sexy" placeholder="请选择">
+            <el-option
+              v-for="(item, key) in [
+                { name: '男', id: 1 },
+                { name: '女', id: 2 },
+              ]"
+              :key="key"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label-position="right" label="民族" prop="nation_id">
@@ -192,7 +200,7 @@ export default {
         job_id: [], // 领导职务
         card: "", // 身份证号
         credentials: "", // 证件号
-        sexy: [], // 性别
+        sexy: "", // 性别
         nation_id: [], // 民族
         originate: "", // 籍贯
         birthday_start: "", // 出生日期开始时间

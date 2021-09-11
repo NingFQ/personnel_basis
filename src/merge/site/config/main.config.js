@@ -56,7 +56,8 @@ module.exports = {
 		// 查看导入进度
 		importResult: "/api/user/importResult",
 		// 导出用户
-		exportUser: "/api/user/download",
+		exportUser: "/api/user/export",
+
 	},
 
 	//页面配置列表

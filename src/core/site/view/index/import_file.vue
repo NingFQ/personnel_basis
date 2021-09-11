@@ -32,10 +32,9 @@
             <a
               class="operate-hint"
               href="http://personal.dripm.cn/user.xlsx"
-              download="人员信息.xlsx"
+              download="人员信息模板.xlsx"
               >下载excel模板</a
-            >
-            <span class="operate-intr">填写信息</span>
+            ><span class="operate-intr">填写信息</span>
           </div>
         </div>
         <div class="operate-desc">
@@ -81,10 +80,12 @@
               alt=""
             />
             <div class="file-info">
-              <span>我是文件名我是文件名.xls</span>
-              <span>234kB</span>
+              <span>{{ fileName }}</span>
+              <span>{{ fileSize }}kB</span>
             </div>
-            <el-progress :percentage="50" :color="'#409EFF'"></el-progress>
+            <!-- <i class="el-icon-loading" style="margin-left: 30px"></i> -->
+            <span style="margin-left: 30px">文件上传中...</span>
+            <!-- <el-progress :percentage="50" :color="'#409EFF'"></el-progress> -->
           </el-row>
         </div>
       </div>
@@ -127,10 +128,11 @@
               src="../../static/images/login_error.png"
               alt=""
             />
-            <span
+            <a
               class="operate-error-text operate-download"
-              @click="downloadFile()"
-              >下载失败数据</span
+              :href="downloadUrl"
+              download="人员信息.xlsx"
+              >下载失败数据</a
             >
           </el-row>
         </div>
@@ -201,36 +203,6 @@ export default {
       this.fileName = "";
       this.fileKey = "";
     },
-    downloadFile() {
-      // var a = document.createElement("a");
-      // a.href = "http://personal.dripm.cn/user.xlsx";
-      // a.download = "test.xlsx";
-      // a.click();
-      // this.downloadUrlFile("http://personal.dripm.cn/员工.xlsx");
-      // window.open("http://personal.dripm.cn/员工.xlsx");
-      // window.location.href =
-      //   "http://personal.dripm.cn/upload/Upload/2021/09/09/32471631185885.xlsx";
-    },
-    downloadUrlFile(url) {
-      const xhr = new XMLHttpRequest();
-      xhr.open("GET", url, true);
-      xhr.responseType = "blob";
-      xhr.setRequestHeader("token", window.sessionStorage.getItem("token"));
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          this.saveAs(xhr.response, fileInfo.name);
-        }
-      };
-      xhr.send();
-    },
-    saveAs(data, name) {
-      var urlObject = window.URL || window.webkitURL || window;
-      var export_blob = new Blob([data]);
-      var save_link = document.createElementNS("", "a");
-      save_link.href = urlObject.createObjectURL(export_blob);
-      save_link.download = name;
-      save_link.click();
-    },
     nextStept() {
       if (this.active == 1) {
         this.active = 2;
@@ -243,13 +215,15 @@ export default {
             },
           },
           (res) => {
+            var that = this;
             if (res.code == 200 && res.result != null) {
-              this.active = 3;
               this.successNum = res.result.success_num;
               this.errorNum = res.result.error_num;
               this.downloadUrl = res.result.download_url;
+              setTimeout(function () {
+                that.active = 3;
+              }, 1000);
             }
-            this.active = 3;
           }
         );
       } else if (this.active == 3) {

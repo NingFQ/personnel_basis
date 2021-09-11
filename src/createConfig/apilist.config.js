@@ -28,5 +28,5 @@ module.exports = {
 	'uploadImg': '/upload/image',
 	'uploadExcel': '/api/user/import',
 	'importResult': '/api/user/importResult',
-	'exportUser': '/api/user/download',
+	'exportUser': '/api/user/export',
 }

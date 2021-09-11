@@ -300,7 +300,6 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // alert(JSON.stringify(this.ruleForm));
           this.$parent.$parent.handleUserCallBack(this.type, this.ruleForm);
         } else {
           console.log("error submit!!");
@@ -366,8 +365,6 @@ export default {
       this.ruleForm = Object.assign({}, this.$props.parentData);
       this.selectedOptions.push(this.$props.parentData.type_id);
       this.selectedOptions.push(this.$props.parentData.identity_id);
-      console.log(this.$props.parentData);
-      console.log(this.selectedOptions);
     }
   },
 };

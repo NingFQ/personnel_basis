@@ -405,6 +405,7 @@ import DeleteSuccess from "../components/delete_success.vue";
 import importFile from "./import_file.vue";
 import FileSaver from "file-saver";
 import XLSX from "xlsx";
+import apiHelper from "apiHelper";
 
 export default {
   ...siteCon,
@@ -558,16 +559,16 @@ export default {
     },
     // 导出用户
     exportUser() {
+      var y = new Date().getFullYear();
+      var m = new Date().getMonth() + 1;
+      var d = new Date().getDate();
+      var dateStr =
+        "人员信息" +
+        y +
+        `${m < 10 ? "0" + m : m}` +
+        `${d < 10 ? "0" + d : d}` +
+        ".xlsx";
       if (this.multipleSelection.length > 0) {
-        var y = new Date().getFullYear();
-        var m = new Date().getMonth() + 1;
-        var d = new Date().getDate();
-        var str =
-          "人员信息" +
-          y +
-          `${m < 10 ? "0" + m : m}` +
-          `${d < 10 ? "0" + d : d}`;
-        console.log("===" + str);
         var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
         var wbout = XLSX.write(wb, {
           bookType: "xlsx",
@@ -577,7 +578,7 @@ export default {
         try {
           FileSaver.saveAs(
             new Blob([wbout], { type: "application/octet-stream" }),
-            `${str}.xlsx`
+            dateStr
           );
         } catch (e) {
           if (typeof console !== "undefined") console.log(e, wbout);
@@ -589,8 +590,6 @@ export default {
           this.requestParams,
           this.requestSearchParams
         );
-        console.log(paramObj);
-        // 获取用户列表
         this.$appFetch(
           {
             url: "userList",
@@ -599,6 +598,25 @@ export default {
           },
           (res) => {
             if (res.code == 200 && res.result != null) {
+              var queryParams = res.result.query;
+              const xhr = new XMLHttpRequest();
+              xhr.open(
+                "GET",
+                `${apiHelper.getApi("exportUser")}?${queryParams}`,
+                true
+              );
+              xhr.setRequestHeader(
+                "token",
+                window.sessionStorage.getItem("token")
+              );
+              xhr.onload = (e) => {
+                var resultObj = JSON.parse(xhr.response);
+                var save_link = document.createElement("a");
+                save_link.href = resultObj.result.url;
+                save_link.download = dateStr;
+                save_link.click();
+              };
+              xhr.send();
             }
           }
         );
