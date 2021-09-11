@@ -4,12 +4,21 @@
     <div class="main_container">
       <el-row type="flex" class="container_top">
         <el-col :span="15">
-          <el-input
+          <el-autocomplete
+            value-key="name"
+            class="inline-input"
+            v-model="searchText"
+            :fetch-suggestions="querySearch"
+            placeholder="请输入内容"
+            :trigger-on-focus="false"
+            @select="handleSelect"
+          ></el-autocomplete>
+          <!-- <el-input
             v-model="searchData"
             placeholder="请输入部门名称"
             suffix-icon="el-icon-search"
-          ></el-input>
-          <el-button type="primary" @click="handleSearch">搜索</el-button>
+          ></el-input> -->
+          <!-- <el-button type="primary" @click="handleSearch">搜索</el-button> -->
           <el-button type="primary" @click="handleResetInput">重置</el-button>
         </el-col>
         <el-col :span="9">
@@ -38,13 +47,16 @@
         ref="dragTable"
         :data="tableData"
         style="width: 100%"
+        node-key="id"
         row-key="id"
         current-row-key="id"
         border
         default-expand-all
+        @row-click="handleRowClick"
+        :highlight-current="true"
+        :expand-on-click-node="true"
         :row-class-name="tableRowClassName"
         :header-cell-style="getRowClass"
-        :expand-on-click-node="true"
         :tree-props="{ children: '_child', hasChildren: 'hasChildren' }"
       >
         <el-table-column align="center" prop="name" label="部门名称">
@@ -177,7 +189,7 @@ export default {
   data() {
     return {
       isLoading: false,
-      searchData: "",
+      searchText: "",
       tableData: [],
       dialogAddFormVisible: false,
       dialogEditFormVisible: false, // 编辑控制
@@ -195,7 +207,41 @@ export default {
   methods: {
     handleSearch() {},
     handleResetInput() {
-      this.searchData = "";
+      this.searchText = "";
+    },
+    querySearch(queryString, cb) {
+      this.$appFetch(
+        {
+          url: "departmentSerarch",
+          method: "POST",
+          data: {
+            keywords: this.searchText,
+          },
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            if (res.result != null && res.result.length != undefined) {
+              var arr = [];
+              var searchData = res.result;
+              for (var i = 0, len = searchData.length; i < len; i++) {
+                arr.push({
+                  name: `${searchData[i]["pname"]} > ${searchData[i]["name"]}`,
+                  id: searchData[i]["id"],
+                });
+              }
+              cb(arr);
+            } else {
+              cb([]);
+            }
+          }
+        }
+      );
+    },
+    handleSelect(item) {
+      this.searchText = "";
+    },
+    handleRowClick(row) {
+      this.$refs.dragTable.toggleRowExpansion(row);
     },
     // 设置表头颜色
     getRowClass({ row, rowIndex }) {

@@ -16,6 +16,7 @@ module.exports = {
 	'departmentDelete': '/api/department/remove',
 	'departmentAdd': '/api/department/add',
 	'userList': '/api/user/lists',
+	'departmentSerarch': '/api/department/search/list',
 	'userAdd': '/api/user/add',
 	'userEdit': '/api/user/update',
 	'deleteUser': '/api/user/delete',

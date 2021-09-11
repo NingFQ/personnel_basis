@@ -31,6 +31,8 @@ module.exports = {
 		departmentAdd: "/api/department/add",
 		// 获取用户列表
 		userList: "/api/user/lists",
+		// 部门搜索
+		departmentSerarch: "/api/department/search/list",
 		// 用户添加
 		userAdd: "/api/user/add",
 		// 用户编辑
@@ -57,7 +59,6 @@ module.exports = {
 		importResult: "/api/user/importResult",
 		// 导出用户
 		exportUser: "/api/user/export",
-
 	},
 
 	//页面配置列表

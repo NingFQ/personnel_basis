@@ -442,41 +442,46 @@ export default {
     querySearch(queryString, cb) {
       this.$appFetch(
         {
-          url: "departmentList",
+          url: "departmentSerarch",
           method: "POST",
           data: {
             keywords: this.searchText,
-            one_level: "1",
           },
         },
         (res) => {
           if (res.code == 200 && res.result != null) {
-            console.log(res.result);
-            // if (
-            //   res.result[0]._child != null &&
-            //   res.result[0]._child != undefined
-            // ) {
-            //   var arr = [];
-            //   for (var i = 0, len = res.result[0]._child.length; i < len; i++) {
-            //     arr.push({
-            //       name: `${res.result[0]["name"]} > ${res.result[0]._child[i]["name"]}`,
-            //       id: res.result[0]._child[i]["id"],
-            //     });
-            //   }
-            //   cb(arr);
-            // } else {
-            //   cb(res.result);
-            // }
+            if (res.result != null && res.result.length != undefined) {
+              var arr = [];
+              var searchData = res.result;
+              for (var i = 0, len = searchData.length; i < len; i++) {
+                arr.push({
+                  name: `${searchData[i]["pname"]} > ${searchData[i]["name"]}`,
+                  id: searchData[i]["id"],
+                });
+              }
+              cb(arr);
+            } else {
+              cb([]);
+            }
           }
         }
       );
     },
     handleSelect(item) {
-      console.log("搜索结果选中某一项=====>" + JSON.stringify(item));
       this.currentDepartmentId = item.id;
-      this.searchStr = "";
+      this.searchText = "";
       this.requestParams.department_id = item.id;
+      this.$nextTick(function () {
+        this.$refs.departTree.setCurrentKey(item.id);
+        this.expandNodes(this.$refs.departTree.store.nodesMap[item.id]);
+      });
       this.getUserList();
+    },
+    expandNodes(node) {
+      if (null != node.parent) {
+        this.expandNodes(node.parent);
+      }
+      node.expanded = true;
     },
     // 点击树节点回调
     handleNodeClick(data) {
