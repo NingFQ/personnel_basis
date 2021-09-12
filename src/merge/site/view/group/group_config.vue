@@ -59,7 +59,7 @@
         :header-cell-style="getRowClass"
         :tree-props="{ children: '_child', hasChildren: 'hasChildren' }"
       >
-        <el-table-column align="center" prop="name" label="部门名称">
+        <el-table-column align="left" prop="name" label="部门名称">
         </el-table-column>
         <el-table-column align="center" prop="depart_key" label="部门编号">
         </el-table-column>
@@ -191,6 +191,7 @@ export default {
       isLoading: false,
       searchText: "",
       tableData: [],
+      activeRows: [],
       dialogAddFormVisible: false,
       dialogEditFormVisible: false, // 编辑控制
       dialogDeleteFormVisible: false, // 删除控制
@@ -240,13 +241,14 @@ export default {
     handleSelect(item) {
       this.searchText = "";
     },
+    // 点击某行
     handleRowClick(row) {
       this.$refs.dragTable.toggleRowExpansion(row);
     },
     // 设置表头颜色
     getRowClass({ row, rowIndex }) {
       if (rowIndex == 0) {
-        return `background:#E5E7F3`;
+        return `background:#E5E7F3;text-align: center;`;
       } else {
         return "";
       }
@@ -254,9 +256,9 @@ export default {
     // 表格赋值className
     tableRowClassName({ row, rowIndex }) {
       if (row.is_base == 1) {
-        return `data-id=${row.sort} disable-drag`;
+        return `data-id=${row.id} disable-drag`;
       } else {
-        return `data-id=${row.sort} allow-drag`;
+        return `data-id=${row.id} allow-drag`;
       }
     },
     // 全部展开 全部收起
@@ -274,28 +276,81 @@ export default {
     // 排序
     rowDrop() {
       const tbody = document.querySelector(".el-table__body-wrapper tbody");
-      this.sortable = Sortable.create(tbody, {
-        filter: ".disable-drag",
-        draggable: ".allow-drag",
-        // dataIdAttr: "data-id",
-        onStart: function (evt) {
-          console.log(evt);
-        },
-        onEnd: (evt) => {
-          //拖动结束时触发，我在这里调用接口，改变后台的排序
-          console.log(
-            "evt.sort=====" + evt.item.parentNode.getAttribute("data-id")
-          );
-          // var arr = this.sortable.toArray();
-          // console.log(JSON.stringify(arr));
-          if (evt.oldIndex !== evt.newIndex) {
-            console.log(
-              "结束拖动",
-              `拖动前索引${evt.oldIndex}---拖动后索引${evt.newIndex}`
-            );
-          }
-        },
+      this.$nextTick(function () {
+        let _this = this;
+        _this.sortable = Sortable.create(tbody, {
+          filter: ".disable-drag",
+          draggable: ".allow-drag",
+          dataIdAttr: "data-id",
+          onMove({ dragged, related }) {
+            _this.$set(
+              _this,
+              "tableData",
+              _this.arrayTreeSetLevel(_this.tableData)
+            ); // 树形结构数据添加level
+            _this.$set(_this, "activeRows", _this.treeToTile(_this.tableData)); // 把树形的结构转为列表再进行拖拽
+            console.log(_this.activeRows);
+            // const oldRow = _this.activeRows[dragged.rowIndex];
+            // const newRow = _this.activeRows[related.rowIndex];
+            // if (oldRow.level !== newRow.level && oldRow.pid !== newRow.pid) {
+            //   //不能跨级拖拽
+            //   return false;
+            // }
+          },
+          onEnd({ oldIndex, newIndex }) {
+            const oldRow = _this.activeRows[oldIndex]; // 移动的那个元素
+            const newRow = _this.activeRows[newIndex]; // 新的元素
+
+            if (oldIndex !== newIndex) {
+              alert(1);
+              const modelProperty = _this.activeRows[oldIndex];
+              const changeIndex = newIndex - oldIndex;
+              const index = _this.activeRows.indexOf(modelProperty);
+              if (index < 0) {
+                return;
+              }
+              _this.activeRows.splice(index, 1);
+              _this.activeRows.splice(index + changeIndex, 0, modelProperty);
+              // _this.sortMenuData(); //把排列的数据重新返回给后台
+              console.log(_this.activeRows);
+            }
+          },
+        });
       });
+    },
+    // 给树形的数据去添加每一层的层级
+    arrayTreeSetLevel(array, levelName = "level", childrenName = "_child") {
+      if (!Array.isArray(array)) {
+        return [];
+      }
+      const recursive = (array, level = 0) => {
+        level++;
+        return array.map((v) => {
+          v[levelName] = level;
+          const child = v[childrenName];
+          if (child && child.length) {
+            recursive(child, level);
+          }
+          return v;
+        });
+      };
+      return recursive(array);
+    },
+    treeToTile(treeData, childKey = "_child") {
+      // 将树数据转化为平铺数据
+      const arr = [];
+      const expanded = (data) => {
+        if (data && data.length > 0) {
+          data
+            .filter((d) => d)
+            .forEach((e) => {
+              arr.push(e);
+              expanded(e[childKey] || []);
+            });
+        }
+      };
+      expanded(treeData);
+      return arr;
     },
     // 新增一个部门
     handleAddNewGroup() {
