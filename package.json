@@ -31,6 +31,7 @@
     "chokidar": "^3.3.1",
     "concurrently": "^5.1.0",
     "css-loader": "^3.4.2",
+    "drag-tree-table": "^2.2.0",
     "fibers": "^4.0.2",
     "file-loader": "^6.0.0",
     "less": "^3.11.1",

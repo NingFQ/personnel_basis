@@ -43,80 +43,14 @@
           </el-row>
         </el-col>
       </el-row>
-      <el-table
-        ref="dragTable"
-        :data="tableData"
-        style="width: 100%"
-        node-key="id"
-        row-key="id"
-        current-row-key="id"
-        border
-        default-expand-all
-        @row-click="handleRowClick"
-        :highlight-current="true"
-        :expand-on-click-node="true"
-        :row-class-name="tableRowClassName"
-        :header-cell-style="getRowClass"
-        :tree-props="{ children: '_child', hasChildren: 'hasChildren' }"
+      <dragTreeTable
+        ref="dragTree"
+        :data="dragTableData"
+        hightRowChange
+        :beforeDragOver="beforeDragOver"
+        :onDrag="onTreeDataChange"
       >
-        <el-table-column align="left" prop="name" label="部门名称">
-        </el-table-column>
-        <el-table-column align="center" prop="depart_key" label="部门编号">
-        </el-table-column>
-        <el-table-column align="center" prop="status" label="状态">
-          <template slot-scope="scope">
-            <div class="status_style">
-              <span
-                :class="[
-                  scope.row.status == 1
-                    ? 'status_cricle status_green'
-                    : 'status_cricle status_red',
-                ]"
-              ></span>
-              <span class="status_text">{{
-                scope.row.status == 1 ? "启用" : "禁用"
-              }}</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" prop="user_num" label="成员数量">
-        </el-table-column>
-        <el-table-column align="center" prop="depart_desc" label="部门描述">
-        </el-table-column>
-        <el-table-column align="center" prop="" label="排序">
-          <div v-show="scope.row.is_base != 1" slot-scope="scope">
-            <img
-              style="width: 26px"
-              src="../../static/images/order.png"
-              alt=""
-            />
-          </div>
-        </el-table-column>
-        <el-table-column
-          align="center"
-          prop=""
-          label="操作"
-          class-name="operate_col"
-        >
-          <template slot-scope="scope">
-            <el-row type="flex" justify="start">
-              <el-button
-                class="edit_btn"
-                @click="handleClickEdit(scope.row)"
-                type="text"
-                >编辑</el-button
-              >
-              <el-button
-                v-show="scope.row.is_base != 1"
-                class="dele_btn"
-                type="text"
-                @click="handleClickDelete(scope.row)"
-                >删除</el-button
-              >
-            </el-row>
-          </template></el-table-column
-        >
-      </el-table>
+      </dragTreeTable>
     </div>
     <!-- 新增弹窗 -->
     <div v-if="dialogAddFormVisible">
@@ -166,7 +100,7 @@
 </template>
 
 <script>
-import Sortable from "sortablejs";
+import dragTreeTable from "drag-tree-table";
 import CommonHeader from "../components/common_header.vue";
 import EditGroup from "./edit_group.vue";
 import AddGroup from "./add_group.vue";
@@ -176,7 +110,6 @@ import DeleteFailed from "./delete_group_failed.vue";
 
 export default {
   name: "ZhilinFrontGroupConfig",
-
   components: {
     CommonHeader,
     AddGroup,
@@ -184,14 +117,13 @@ export default {
     DeleteConfirm,
     DeleteSuccess,
     DeleteFailed,
+    dragTreeTable,
   },
-
   data() {
     return {
       isLoading: false,
       searchText: "",
       tableData: [],
-      activeRows: [],
       dialogAddFormVisible: false,
       dialogEditFormVisible: false, // 编辑控制
       dialogDeleteFormVisible: false, // 删除控制
@@ -199,12 +131,103 @@ export default {
       dialogDeleteFailed: false, // 删除失败
       editData: {}, // 被编辑的数据
       deleteData: {}, // 要删除的数据
-      sortable: {}, // 拖拽数据
+      dragTableData: {
+        lists: [],
+        custom_field: {
+          id: "id",
+          order: "sort",
+          lists: "_child",
+          parent_id: "pid",
+        },
+        columns: [
+          {
+            type: "selection",
+            title: "部门名称",
+            field: "name",
+            width: 400,
+            align: "center",
+          },
+          {
+            title: "部门编号",
+            field: "depart_key",
+            width: 200,
+            align: "center",
+          },
+          {
+            title: "状态",
+            field: "status",
+            width: 200,
+            align: "center",
+            formatter: (item) => {
+              return (
+                '<div class="status_style">' +
+                `<span class="${
+                  item.status == 1
+                    ? "status_cricle status_green"
+                    : "status_cricle status_red"
+                }></span>` +
+                `<span class="status_text">${
+                  item.status == 1 ? "启用" : "禁用"
+                }</span>` +
+                "</div>"
+              );
+            },
+          },
+          {
+            title: "成员数量",
+            field: "user_num",
+            width: 200,
+            align: "center",
+          },
+          {
+            title: "部门描述",
+            field: "depart_desc",
+            width: 200,
+            align: "center",
+            flex: 1,
+          },
+          {
+            title: "排序",
+            field: "depart_desc",
+            width: 200,
+            align: "center",
+            formatter: (item) => {
+              return `<img style="width: 26px"
+              src="../../static/images/order.png"
+              alt=""
+            />`;
+            },
+          },
+          {
+            title: "操作",
+            type: "action",
+            width: 200,
+            // align: "center",
+            actions: [
+              {
+                text: "编辑",
+                onclick: this.handleClickEdit,
+                formatter: (item) => {
+                  return `<span class="edit_btn"
+                >编辑</span>`;
+                },
+              },
+              {
+                text: "删除",
+                onclick: this.handleClickDelete,
+                formatter: (item) => {
+                  return `<span class="dele_btn"
+                >删除</span>`;
+                },
+              },
+            ],
+          },
+        ],
+      },
     };
   },
   computed: {},
   mounted() {},
-
   methods: {
     handleSearch() {},
     handleResetInput() {
@@ -241,116 +264,36 @@ export default {
     handleSelect(item) {
       this.searchText = "";
     },
-    // 点击某行
-    handleRowClick(row) {
-      this.$refs.dragTable.toggleRowExpansion(row);
-    },
-    // 设置表头颜色
-    getRowClass({ row, rowIndex }) {
-      if (rowIndex == 0) {
-        return `background:#E5E7F3;text-align: center;`;
-      } else {
-        return "";
-      }
-    },
-    // 表格赋值className
-    tableRowClassName({ row, rowIndex }) {
-      if (row.is_base == 1) {
-        return `data-id=${row.id} disable-drag`;
-      } else {
-        return `data-id=${row.id} allow-drag`;
-      }
-    },
     // 全部展开 全部收起
     toggleRowExpansion(isExpansion) {
-      this.toggleRowExpansion_forAll(this.tableData, isExpansion);
-    },
-    toggleRowExpansion_forAll(data, isExpansion) {
-      data.forEach((item) => {
-        this.$refs.dragTable.toggleRowExpansion(item, isExpansion);
-        if (item._child != undefined && item._child != null) {
-          this.toggleRowExpansion_forAll(item._child, isExpansion);
-        }
-      });
+      if (isExpansion) {
+        this.$refs.dragTree.OpenAll();
+      } else {
+        this.$refs.dragTree.ZipAll();
+      }
     },
     // 排序
-    rowDrop() {
-      const tbody = document.querySelector(".el-table__body-wrapper tbody");
-      this.$nextTick(function () {
-        let _this = this;
-        _this.sortable = Sortable.create(tbody, {
-          filter: ".disable-drag",
-          draggable: ".allow-drag",
-          dataIdAttr: "data-id",
-          onMove({ dragged, related }) {
-            _this.$set(
-              _this,
-              "tableData",
-              _this.arrayTreeSetLevel(_this.tableData)
-            ); // 树形结构数据添加level
-            _this.$set(_this, "activeRows", _this.treeToTile(_this.tableData)); // 把树形的结构转为列表再进行拖拽
-            console.log(_this.activeRows);
-            // const oldRow = _this.activeRows[dragged.rowIndex];
-            // const newRow = _this.activeRows[related.rowIndex];
-            // if (oldRow.level !== newRow.level && oldRow.pid !== newRow.pid) {
-            //   //不能跨级拖拽
-            //   return false;
-            // }
-          },
-          onEnd({ oldIndex, newIndex }) {
-            const oldRow = _this.activeRows[oldIndex]; // 移动的那个元素
-            const newRow = _this.activeRows[newIndex]; // 新的元素
-
-            if (oldIndex !== newIndex) {
-              alert(1);
-              const modelProperty = _this.activeRows[oldIndex];
-              const changeIndex = newIndex - oldIndex;
-              const index = _this.activeRows.indexOf(modelProperty);
-              if (index < 0) {
-                return;
-              }
-              _this.activeRows.splice(index, 1);
-              _this.activeRows.splice(index + changeIndex, 0, modelProperty);
-              // _this.sortMenuData(); //把排列的数据重新返回给后台
-              console.log(_this.activeRows);
-            }
-          },
-        });
-      });
+    onTreeDataChange(lists) {
+      console.log(JSON.stringify(lists));
+      this.dragTableData.lists = lists;
+      // var rowList = document.getElementsByClassName("tree-row");
+      // var arr = [];
+      // for (let i = 0, len = rowList.length; i < len; i++) {
+      //   var row_id = rowList[i].getAttribute("tree-id");
+      //   var row_pid = rowList[i].getAttribute("tree-p-id");
+      //   arr.push({
+      //     id: row_id,
+      //     pid: row_pid,
+      //   });
+      // }
+      // console.log(JSON.stringify(arr));
     },
-    // 给树形的数据去添加每一层的层级
-    arrayTreeSetLevel(array, levelName = "level", childrenName = "_child") {
-      if (!Array.isArray(array)) {
-        return [];
+    beforeDragOver(e) {
+      console.log(e);
+      if (e.is_base == 1) {
+        return false;
       }
-      const recursive = (array, level = 0) => {
-        level++;
-        return array.map((v) => {
-          v[levelName] = level;
-          const child = v[childrenName];
-          if (child && child.length) {
-            recursive(child, level);
-          }
-          return v;
-        });
-      };
-      return recursive(array);
-    },
-    treeToTile(treeData, childKey = "_child") {
-      // 将树数据转化为平铺数据
-      const arr = [];
-      const expanded = (data) => {
-        if (data && data.length > 0) {
-          data
-            .filter((d) => d)
-            .forEach((e) => {
-              arr.push(e);
-              expanded(e[childKey] || []);
-            });
-        }
-      };
-      expanded(treeData);
-      return arr;
+      // console.log(e);
     },
     // 新增一个部门
     handleAddNewGroup() {
@@ -438,9 +381,11 @@ export default {
         (res) => {
           if (res.code == 200 && res.result != null) {
             this.tableData = res.result;
+            this.dragTableData.lists = res.result;
             if (this.isLoading) {
               this.isLoading = false;
             }
+            this.$refs.dragTree.OpenAll();
           }
         }
       );
@@ -448,7 +393,6 @@ export default {
   },
   mounted() {
     this.initData();
-    this.rowDrop();
   },
 };
 </script>
@@ -501,7 +445,7 @@ export default {
         border-radius: 2px;
       }
     }
-    .el-table {
+    .drag-tree-table {
       font-size: 18px !important;
       .status_style {
         display: flex;
@@ -521,19 +465,17 @@ export default {
           background: #ff4e4e;
         }
       }
-      .operate_col {
-        .edit_btn {
-          width: 50%;
-          font-size: 18px;
-          font-weight: 500;
-          color: #34428a;
-        }
-        .dele_btn {
-          width: 50%;
-          font-size: 18px;
-          font-weight: 500;
-          color: #ff4e4e;
-        }
+      .edit_btn {
+        width: 50%;
+        font-size: 18px;
+        font-weight: 500;
+        color: #34428a;
+      }
+      .dele_btn {
+        width: 50%;
+        font-size: 18px;
+        font-weight: 500;
+        color: #ff4e4e;
       }
     }
   }
