@@ -145,7 +145,7 @@ export default {
             title: "部门名称",
             field: "name",
             width: 400,
-            align: "center",
+            align: "left",
           },
           {
             title: "部门编号",
@@ -274,7 +274,7 @@ export default {
     },
     // 排序
     onTreeDataChange(lists) {
-      console.log(JSON.stringify(lists));
+      // console.log(JSON.stringify(lists));
       this.dragTableData.lists = lists;
       // var rowList = document.getElementsByClassName("tree-row");
       // var arr = [];
@@ -372,6 +372,7 @@ export default {
     },
     // 获取部门列表
     initData() {
+      this.isLoading = true;
       // 获取部门列表
       this.$appFetch(
         {
@@ -384,8 +385,8 @@ export default {
             this.dragTableData.lists = res.result;
             if (this.isLoading) {
               this.isLoading = false;
+              this.$refs.dragTree.OpenAll();
             }
-            this.$refs.dragTree.OpenAll();
           }
         }
       );
