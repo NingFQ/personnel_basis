@@ -117,8 +117,8 @@ export default {
           },
           (res) => {
             if (res.code == 200) {
-              window.sessionStorage.setItem("userName", res.result.name);
-              window.sessionStorage.setItem("token", res.result.token);
+              window.localStorage.setItem("userName", res.result.name);
+              window.localStorage.setItem("token", res.result.token);
               setTimeout(() => {
                 this.$router.push({ path: "/site/index" });
               }, 10);

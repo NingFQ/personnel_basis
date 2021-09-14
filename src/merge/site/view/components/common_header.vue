@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     userName() {
-      return window.sessionStorage.getItem("userName");
+      return window.localStorage.getItem("userName");
     },
     siteName() {
       return this.$store.state.site.siteConfig.website_name;
@@ -79,8 +79,8 @@ export default {
           method: "POST",
         },
         (res) => {
-          window.sessionStorage.removeItem("userName");
-          window.sessionStorage.removeItem("token");
+          window.localStorage.removeItem("userName");
+          window.localStorage.removeItem("token");
           this.$router.push({ path: "/site/login" });
         }
       );

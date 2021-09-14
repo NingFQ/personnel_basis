@@ -30,7 +30,7 @@ appRouter.beforeEach((to, from, next) => {
 	if (to.path.indexOf('login') != -1) {
 		next()
 	} else {
-		if (window.sessionStorage.getItem('token') == null) {
+		if (window.localStorage.getItem('token') == null) {
 			next({
 				path: '/site/login',
 			})
@@ -43,18 +43,10 @@ appRouter.beforeEach((to, from, next) => {
 axios.interceptors.response.use(response => {
 	if (response) {
 		if (response.data.code == 401) {
-			window.sessionStorage.removeItem("userName");
-			window.sessionStorage.removeItem("token");
-			// window.sessionStorage.removeItem("site_config_info");
+			window.localStorage.removeItem("userName");
+			window.localStorage.removeItem("token");
+			window.localStorage.removeItem("site_config_info");
 			//如果超时就处理 ，指定要跳转的页面(比如登陆页)
-			// Message({
-			// 	message: 'token失效,请重新登录!',
-			// 	type: 'warning',
-			// 	center: true,
-			// 	onClose: function () {
-
-			// 	}
-			// });
 			appRouter.replace({
 				path: '/site/login',
 			})

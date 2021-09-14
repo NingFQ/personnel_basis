@@ -15,7 +15,6 @@ export default {
   },
   mutations: {
     UPDATA_CONFIG(state, data) {
-
       if (data != null) {
         state.siteConfig = Object.assign({}, data);
         var link =

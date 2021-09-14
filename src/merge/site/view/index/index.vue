@@ -612,7 +612,7 @@ export default {
               );
               xhr.setRequestHeader(
                 "token",
-                window.sessionStorage.getItem("token")
+                window.localStorage.getItem("token")
               );
               xhr.onload = (e) => {
                 var resultObj = JSON.parse(xhr.response);

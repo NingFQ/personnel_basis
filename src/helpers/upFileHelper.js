@@ -38,7 +38,7 @@ const upFile = (files, type, progress, param) => {
       xhr.open('post', apiHelper.getApi("uploadExcel"));
     }
 
-    xhr.setRequestHeader('token', window.sessionStorage.getItem('token'));
+    xhr.setRequestHeader('token', window.localStorage.getItem('token'));
     xhr.send(data)
 
     xhr.onload = (e) => {

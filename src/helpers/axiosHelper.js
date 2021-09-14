@@ -33,7 +33,7 @@ const appFetch = function (params, success, error) {
 	}
 	// 非auth服务的都加token验证
 	if (params.url.indexOf("/api/") != -1) {
-		defaultHeaders['token'] = window.sessionStorage.getItem('token');
+		defaultHeaders['token'] = window.localStorage.getItem('token');
 	}
 
 	if (params.headers) {

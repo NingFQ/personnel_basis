@@ -57,6 +57,7 @@
             <el-input
               v-model="ruleForm.card"
               placeholder="请输入身份证号"
+              maxlength="18"
             ></el-input>
           </el-form-item>
           <el-form-item
