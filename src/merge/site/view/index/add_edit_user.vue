@@ -242,6 +242,12 @@ export default {
             message: " 请输入身份证号",
             trigger: "blur",
           },
+          {
+            min: 18,
+            max: 18,
+            message: "请输入18位合法身份证号",
+            trigger: "blur",
+          },
         ],
         credentials: [
           {
