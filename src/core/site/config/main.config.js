@@ -29,6 +29,8 @@ module.exports = {
 		departmentDelete: "/api/department/remove",
 		// 部门添加
 		departmentAdd: "/api/department/add",
+		// 部门排序
+		departmentSort: "/api/department/sort",
 		// 获取用户列表
 		userList: "/api/user/lists",
 		// 部门搜索

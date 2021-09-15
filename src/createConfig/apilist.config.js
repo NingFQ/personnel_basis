@@ -15,6 +15,7 @@ module.exports = {
 	'departmentEdit': '/api/department/save',
 	'departmentDelete': '/api/department/remove',
 	'departmentAdd': '/api/department/add',
+	'departmentSort': '/api/department/sort',
 	'userList': '/api/user/lists',
 	'departmentSerarch': '/api/department/search/list',
 	'userAdd': '/api/user/add',

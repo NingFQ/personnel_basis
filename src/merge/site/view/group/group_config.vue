@@ -4,7 +4,7 @@
     <div class="main_container">
       <el-row type="flex" class="container_top">
         <el-col :span="15">
-          <el-autocomplete
+          <!-- <el-autocomplete
             value-key="name"
             class="inline-input"
             v-model="searchText"
@@ -12,14 +12,14 @@
             placeholder="请输入内容"
             :trigger-on-focus="false"
             @select="handleSelect"
-          ></el-autocomplete>
+          ></el-autocomplete> -->
           <!-- <el-input
             v-model="searchData"
             placeholder="请输入部门名称"
             suffix-icon="el-icon-search"
           ></el-input> -->
           <!-- <el-button type="primary" @click="handleSearch">搜索</el-button> -->
-          <el-button type="primary" @click="handleResetInput">重置</el-button>
+          <!-- <el-button type="primary" @click="handleResetInput">重置</el-button> -->
         </el-col>
         <el-col :span="9">
           <el-row type="flex" justify="end">
@@ -47,6 +47,7 @@
         ref="dragTree"
         :data="dragTableData"
         hightRowChange
+        border
         :beforeDragOver="beforeDragOver"
         :onDrag="onTreeDataChange"
       >
@@ -123,7 +124,6 @@ export default {
     return {
       isLoading: false,
       searchText: "",
-      tableData: [],
       dialogAddFormVisible: false,
       dialogEditFormVisible: false, // 编辑控制
       dialogDeleteFormVisible: false, // 删除控制
@@ -131,6 +131,7 @@ export default {
       dialogDeleteFailed: false, // 删除失败
       editData: {}, // 被编辑的数据
       deleteData: {}, // 要删除的数据
+      rootId: "",
       dragTableData: {
         lists: [],
         custom_field: {
@@ -144,65 +145,53 @@ export default {
             type: "selection",
             title: "部门名称",
             field: "name",
-            width: 400,
+            width: 300,
             align: "left",
           },
           {
             title: "部门编号",
             field: "depart_key",
-            width: 200,
+            width: 210,
             align: "center",
           },
           {
             title: "状态",
             field: "status",
-            width: 200,
+            width: 210,
             align: "center",
             formatter: (item) => {
-              return (
-                '<div class="status_style">' +
-                `<span class="${
-                  item.status == 1
-                    ? "status_cricle status_green"
-                    : "status_cricle status_red"
-                }></span>` +
-                `<span class="status_text">${
-                  item.status == 1 ? "启用" : "禁用"
-                }</span>` +
-                "</div>"
-              );
+              if (item.status == 1) {
+                return '<span class="status_green"></span><span class="status_text">启用</span>';
+              }
+              if (item.status == 0) {
+                return '<span class="status_red"></span><span class="status_text">禁用</span>';
+              }
             },
           },
           {
             title: "成员数量",
             field: "user_num",
-            width: 200,
+            width: 210,
             align: "center",
           },
           {
             title: "部门描述",
             field: "depart_desc",
-            width: 200,
             align: "center",
             flex: 1,
           },
           {
             title: "排序",
-            field: "depart_desc",
-            width: 200,
+            width: 110,
             align: "center",
             formatter: (item) => {
-              return `<img style="width: 26px"
-              src="../../static/images/order.png"
-              alt=""
-            />`;
+              return `<img src="../../static/images/order.png" />`;
             },
           },
           {
             title: "操作",
             type: "action",
-            width: 200,
-            // align: "center",
+            width: 300,
             actions: [
               {
                 text: "编辑",
@@ -273,9 +262,41 @@ export default {
       }
     },
     // 排序
-    onTreeDataChange(lists) {
-      // console.log(JSON.stringify(lists));
-      this.dragTableData.lists = lists;
+    onTreeDataChange(lists, from, to, where) {
+      console.log(from);
+      console.log(to);
+      console.log(where);
+      if (lists[0].is_base == 1) {
+        this.isLoading = true;
+        this.$appFetch(
+          {
+            url: "departmentSort",
+            method: "POST",
+            data: {
+              departments: lists,
+            },
+          },
+          (res) => {
+            if (res.code == 200 && res.result != null) {
+              console.log(lists);
+              this.initData();
+            } else {
+              this.isLoading = false;
+              this.$notify({
+                title: "失败",
+                message: res.msg,
+                type: "error",
+              });
+            }
+          }
+        );
+      } else {
+        this.$notify({
+          title: "失败",
+          message: "只能有一个根部门",
+          type: "error",
+        });
+      }
       // var rowList = document.getElementsByClassName("tree-row");
       // var arr = [];
       // for (let i = 0, len = rowList.length; i < len; i++) {
@@ -289,15 +310,17 @@ export default {
       // console.log(JSON.stringify(arr));
     },
     beforeDragOver(e) {
-      console.log(e);
+      // console.log(e);
       if (e.is_base == 1) {
         return false;
       }
-      // console.log(e);
     },
     // 新增一个部门
     handleAddNewGroup() {
-      this.dialogAddFormVisible = true;
+      var a = this.$refs.dragTree.GetLevelById(4);
+      console.log(a);
+      // a[0].open = false;
+      // this.dialogAddFormVisible = true;
     },
     // 点击编辑
     handleClickEdit(data) {
@@ -381,8 +404,8 @@ export default {
         },
         (res) => {
           if (res.code == 200 && res.result != null) {
-            this.tableData = res.result;
             this.dragTableData.lists = res.result;
+            this.rootId = res.result.id;
             if (this.isLoading) {
               this.isLoading = false;
               this.$refs.dragTree.OpenAll();
@@ -448,35 +471,74 @@ export default {
     }
     .drag-tree-table {
       font-size: 18px !important;
-      .status_style {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
+      .drag-tree-table-header {
+        height: 44px;
+        line-height: 44px;
+        background: #e5e7f3;
+        opacity: 1;
+        .tree-column {
+          padding: 0;
+          span {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 0px;
+            color: #34428a;
+          }
+        }
+      }
+      .drag-tree-table-body {
+        .tree-row {
+          .colIndex0 {
+            padding-left: 50px;
+          }
+        }
+        .status_style {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+        }
         .status_cricle {
+          display: inline-block;
           width: 16px;
           height: 16px;
           border-radius: 50%;
           margin-right: 10px;
         }
         .status_green {
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          margin-right: 10px;
           background: #5cbc79;
         }
         .status_red {
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          margin-right: 10px;
           background: #ff4e4e;
         }
+        .edit_btn {
+          display: inline-block;
+          width: 50%;
+          font-size: 18px;
+          font-weight: 500;
+          color: #34428a;
+        }
+        .dele_btn {
+          display: inline-block;
+          width: 50%;
+          font-size: 18px;
+          font-weight: 500;
+          color: #ff4e4e;
+        }
       }
-      .edit_btn {
-        width: 50%;
-        font-size: 18px;
-        font-weight: 500;
-        color: #34428a;
-      }
-      .dele_btn {
-        width: 50%;
-        font-size: 18px;
-        font-weight: 500;
-        color: #ff4e4e;
+      .border {
+        border: none !important;
+        border-right: 1px solid #eee !important;
       }
     }
   }

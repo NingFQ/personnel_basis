@@ -214,7 +214,9 @@ export default {
           console.log(res);
           if (res.code == 200 && res.result != null) {
             this.limtNameList = res.result;
-            this.currentDepartmentId = res.result[0].id;
+            if (this.currentDepartmentId == null) {
+              this.currentDepartmentId = res.result[0].id;
+            }
             this.getUserList();
           }
         }
