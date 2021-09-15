@@ -101,6 +101,7 @@
 </template>
 
 <script>
+import orderImg from "../../static/images/order.png";
 import dragTreeTable from "drag-tree-table";
 import CommonHeader from "../components/common_header.vue";
 import EditGroup from "./edit_group.vue";
@@ -122,6 +123,7 @@ export default {
   },
   data() {
     return {
+      orderImg,
       isLoading: false,
       searchText: "",
       dialogAddFormVisible: false,
@@ -185,7 +187,9 @@ export default {
             width: 110,
             align: "center",
             formatter: (item) => {
-              return `<img src="../../static/images/order.png" />`;
+              return (
+                '<img class="order-img" src="' + orderImg + '" alt="图片" />'
+              );
             },
           },
           {
@@ -481,13 +485,13 @@ export default {
           span {
             font-size: 16px;
             font-weight: 400;
-            line-height: 0px;
             color: #34428a;
           }
         }
       }
       .drag-tree-table-body {
         .tree-row {
+          height: 68px;
           .colIndex0 {
             padding-left: 50px;
           }
@@ -521,16 +525,21 @@ export default {
           margin-right: 10px;
           background: #ff4e4e;
         }
+        .order-img {
+          width: 16px;
+          height: 16px;
+        }
         .edit_btn {
           display: inline-block;
-          width: 50%;
+          // width: 50%;
           font-size: 18px;
           font-weight: 500;
           color: #34428a;
+          margin-right: 30px;
         }
         .dele_btn {
           display: inline-block;
-          width: 50%;
+          // width: 50%;
           font-size: 18px;
           font-weight: 500;
           color: #ff4e4e;
