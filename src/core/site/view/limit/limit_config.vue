@@ -146,6 +146,7 @@ export default {
           method: "POST",
           data: {
             id: this.deleteData.id,
+            type_id: this.currentDepartmentId,
           },
         },
         (res) => {
@@ -211,7 +212,6 @@ export default {
           },
         },
         (res) => {
-          console.log(res);
           if (res.code == 200 && res.result != null) {
             this.limtNameList = res.result;
             if (this.currentDepartmentId == null) {
