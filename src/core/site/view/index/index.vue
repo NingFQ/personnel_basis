@@ -12,6 +12,7 @@
             placeholder="请输入内容"
             :trigger-on-focus="false"
             @select="handleSelect"
+            ><i class="el-icon-search el-input__icon" slot="suffix"> </i
           ></el-autocomplete>
         </div>
         <el-tree

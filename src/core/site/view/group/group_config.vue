@@ -4,22 +4,17 @@
     <div class="main_container">
       <el-row type="flex" class="container_top">
         <el-col :span="15">
-          <!-- <el-autocomplete
+          <el-autocomplete
             value-key="name"
             class="inline-input"
             v-model="searchText"
             :fetch-suggestions="querySearch"
-            placeholder="请输入内容"
+            placeholder="请输入部门名称"
             :trigger-on-focus="false"
             @select="handleSelect"
-          ></el-autocomplete> -->
-          <!-- <el-input
-            v-model="searchData"
-            placeholder="请输入部门名称"
-            suffix-icon="el-icon-search"
-          ></el-input> -->
-          <!-- <el-button type="primary" @click="handleSearch">搜索</el-button> -->
-          <!-- <el-button type="primary" @click="handleResetInput">重置</el-button> -->
+            ><i class="el-icon-search el-input__icon" slot="suffix"> </i
+          ></el-autocomplete>
+          <el-button type="primary" @click="resetStatus">重置</el-button>
         </el-col>
         <el-col :span="9">
           <el-row type="flex" justify="end">
@@ -27,7 +22,7 @@
               type="primary"
               width="100"
               icon="el-icon-folder-add"
-              @click="handleAddNewGroup"
+              @click="dialogAddFormVisible = true"
               >新建</el-button
             >
             <el-button
@@ -123,17 +118,17 @@ export default {
   },
   data() {
     return {
-      orderImg,
       isLoading: false,
-      searchText: "",
-      dialogAddFormVisible: false,
+      orderImg, // 排序图片
+      searchText: "", // 搜索框关键词
+      dialogAddFormVisible: false, // 新增
       dialogEditFormVisible: false, // 编辑控制
       dialogDeleteFormVisible: false, // 删除控制
       dialogDeleteSuccess: false, // 删除成功
       dialogDeleteFailed: false, // 删除失败
       editData: {}, // 被编辑的数据
       deleteData: {}, // 要删除的数据
-      rootId: "",
+      currentHightLightId: "", // 当前高亮显示的行
       dragTableData: {
         lists: [],
         custom_field: {
@@ -222,10 +217,6 @@ export default {
   computed: {},
   mounted() {},
   methods: {
-    handleSearch() {},
-    handleResetInput() {
-      this.searchText = "";
-    },
     querySearch(queryString, cb) {
       this.$appFetch(
         {
@@ -254,8 +245,21 @@ export default {
         }
       );
     },
+    // 点击搜索结果的某项
     handleSelect(item) {
       this.searchText = "";
+      this.currentHightLightId = item.id;
+      this.toggleRowExpansion(true);
+      this.toggleRowHightLight(true);
+    },
+    // 重置
+    resetStatus() {
+      this.searchText = "";
+      this.toggleRowHightLight(false);
+    },
+    // 高亮某行 取消高亮
+    toggleRowHightLight(flag) {
+      this.$refs.dragTree.HighlightRow(this.currentHightLightId, flag, false);
     },
     // 全部展开 全部收起
     toggleRowExpansion(isExpansion) {
@@ -267,33 +271,36 @@ export default {
     },
     // 排序
     onTreeDataChange(lists, from, to, where) {
-      console.log(from);
-      console.log(to);
-      console.log(where);
+      console.log(lists);
+      // console.log(from);
+      // console.log(to);
+      // console.log(where);
       if (lists[0].is_base == 1) {
-        this.isLoading = true;
-        this.$appFetch(
-          {
-            url: "departmentSort",
-            method: "POST",
-            data: {
-              departments: lists,
-            },
-          },
-          (res) => {
-            if (res.code == 200 && res.result != null) {
-              console.log(lists);
-              this.initData();
-            } else {
-              this.isLoading = false;
-              this.$notify({
-                title: "失败",
-                message: res.msg,
-                type: "error",
-              });
-            }
-          }
-        );
+        this.dragTableData.lists = lists;
+        // this.isLoading = true;
+        // alert(1);
+        // this.$appFetch(
+        //   {
+        //     url: "departmentSort",
+        //     method: "POST",
+        //     data: {
+        //       departments: lists,
+        //     },
+        //   },
+        //   (res) => {
+        //     if (res.code == 200 && res.result != null) {
+        //       // console.log(lists);
+        //       this.initData();
+        //     } else {
+        //       this.isLoading = false;
+        //       this.$notify({
+        //         title: "失败",
+        //         message: res.msg,
+        //         type: "error",
+        //       });
+        //     }
+        //   }
+        // );
       } else {
         this.$notify({
           title: "失败",
@@ -319,16 +326,8 @@ export default {
         return false;
       }
     },
-    // 新增一个部门
-    handleAddNewGroup() {
-      var a = this.$refs.dragTree.GetLevelById(4);
-      console.log(a);
-      // a[0].open = false;
-      // this.dialogAddFormVisible = true;
-    },
     // 点击编辑
     handleClickEdit(data) {
-      console.log(data);
       this.editData = Object.assign({}, data);
       this.dialogEditFormVisible = true;
     },
@@ -409,7 +408,6 @@ export default {
         (res) => {
           if (res.code == 200 && res.result != null) {
             this.dragTableData.lists = res.result;
-            this.rootId = res.result.id;
             if (this.isLoading) {
               this.isLoading = false;
               this.$refs.dragTree.OpenAll();
@@ -492,9 +490,16 @@ export default {
       .drag-tree-table-body {
         .tree-row {
           height: 68px;
+          line-height: 68px;
           .colIndex0 {
             padding-left: 50px;
           }
+        }
+        .tree-column {
+          padding: 0;
+        }
+        .highlight-row {
+          background: rgba(52, 66, 138, 0.4);
         }
         .status_style {
           display: flex;
@@ -526,8 +531,8 @@ export default {
           background: #ff4e4e;
         }
         .order-img {
-          width: 16px;
-          height: 16px;
+          width: 18px;
+          height: 18px;
         }
         .edit_btn {
           display: inline-block;
