@@ -301,8 +301,13 @@ export default {
       this.$parent.handleClose();
     },
     changeIdenType(value) {
-      this.ruleForm.type_id = value[0];
-      this.ruleForm.identity_id = value[1];
+      if (value.length > 1) {
+        this.ruleForm.type_id = value[0];
+        this.ruleForm.identity_id = value[1];
+      } else {
+        this.ruleForm.type_id = value[0];
+        this.ruleForm.identity_id = 0;
+      }
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
