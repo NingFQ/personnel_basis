@@ -314,7 +314,7 @@ export default {
         if (valid) {
           this.$parent.$parent.handleUserCallBack(this.type, this.ruleForm);
         } else {
-          console.log("error submit!!");
+          // console.log("error submit!!");
           return false;
         }
       });
@@ -363,7 +363,6 @@ export default {
           method: "POST",
         },
         (res) => {
-          console.log(res);
           if (res.code == 200 && res.result != null) {
             this.personnelTypeDictionary = res.result;
           }
@@ -375,8 +374,13 @@ export default {
     this.initData();
     if (this.$props.type == "edit") {
       this.ruleForm = Object.assign({}, this.$props.parentData);
+      if (this.ruleForm.out_office_reason_id == 0) {
+        this.ruleForm.out_office_reason_id = "";
+      }
       this.selectedOptions.push(this.$props.parentData.type_id);
-      this.selectedOptions.push(this.$props.parentData.identity_id);
+      if (this.$props.parentData.identity_id != 0) {
+        this.selectedOptions.push(this.$props.parentData.identity_id);
+      }
     }
   },
 };
