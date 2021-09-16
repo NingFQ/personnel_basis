@@ -276,31 +276,29 @@ export default {
       // console.log(to);
       // console.log(where);
       if (lists[0].is_base == 1) {
-        this.dragTableData.lists = lists;
-        // this.isLoading = true;
-        // alert(1);
-        // this.$appFetch(
-        //   {
-        //     url: "departmentSort",
-        //     method: "POST",
-        //     data: {
-        //       departments: lists,
-        //     },
-        //   },
-        //   (res) => {
-        //     if (res.code == 200 && res.result != null) {
-        //       // console.log(lists);
-        //       this.initData();
-        //     } else {
-        //       this.isLoading = false;
-        //       this.$notify({
-        //         title: "失败",
-        //         message: res.msg,
-        //         type: "error",
-        //       });
-        //     }
-        //   }
-        // );
+        // this.dragTableData.lists = lists;
+        this.isLoading = true;
+        this.$appFetch(
+          {
+            url: "departmentSort",
+            method: "POST",
+            data: {
+              departments: lists,
+            },
+          },
+          (res) => {
+            if (res.code == 200 && res.result != null) {
+              this.initData();
+            } else {
+              this.isLoading = false;
+              this.$notify({
+                title: "失败",
+                message: res.msg,
+                type: "error",
+              });
+            }
+          }
+        );
       } else {
         this.$notify({
           title: "失败",
@@ -388,11 +386,11 @@ export default {
           if (res.code == 200 && res.result != null) {
             this.isLoading = false;
             this.dialogDeleteSuccess = true; // 删除成功
+            this.initData();
           } else {
             this.isLoading = false;
             this.dialogDeleteFailed = true; //删除失败
           }
-          this.initData();
         }
       );
     },
