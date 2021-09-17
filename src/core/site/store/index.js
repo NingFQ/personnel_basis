@@ -17,6 +17,7 @@ export default {
     UPDATA_CONFIG(state, data) {
       if (data != null) {
         state.siteConfig = Object.assign({}, data);
+        window.localStorage.setItem('site_config_info', data);
         var link =
           document.querySelector("link[rel*='icon']") ||
           document.createElement("link");

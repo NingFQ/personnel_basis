@@ -10,7 +10,7 @@ export default {
   },
   created() {
     //在页面加载时读取sessionStorage里的状态信息
-    if (localStorage.getItem("site_config_info")) {
+    if (localStorage.getItem("site_config_info") != undefined) {
       this.$store.replaceState(
         Object.assign(
           {},

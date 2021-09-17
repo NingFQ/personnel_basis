@@ -678,6 +678,19 @@ export default {
       this.requestSearchParams = Object.assign({}, searchParm);
       this.getUserList();
     },
+    getSiteConfig() {
+      this.$appFetch(
+        {
+          url: "webConfigInfo",
+          method: "POST",
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.$store.commit("UPDATA_CONFIG", res.result);
+          }
+        }
+      );
+    },
     getDepartmentLis() {
       // 获取部门列表
       this.$appFetch(
@@ -743,6 +756,7 @@ export default {
     },
   },
   mounted() {
+    this.getSiteConfig();
     this.getDepartmentLis();
     this.requestParams.page = 1;
     this.requestParams.limit = this.pageSize;

@@ -158,24 +158,10 @@ export default {
             this.loginIcon = dataObj.host_url + dataObj.login_logo;
             this.loginTitle = dataObj.title;
             this.loginBgUrl = dataObj.host_url + dataObj.logo_background;
-            // this.changeSiteFavicon(dataObj.icon);
             this.$store.commit("UPDATA_CONFIG", res.result);
           }
         }
       );
-    },
-    changeSiteFavicon(url) {
-      var link =
-        document.querySelector("link[rel*='icon']") ||
-        document.createElement("link");
-
-      link.type = "image/x-icon";
-
-      link.rel = "shortcut icon";
-
-      link.href = url;
-
-      document.getElementsByTagName("head")[0].appendChild(link);
     },
   },
   mounted() {

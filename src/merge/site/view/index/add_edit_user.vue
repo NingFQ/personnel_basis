@@ -249,13 +249,13 @@ export default {
             trigger: "blur",
           },
         ],
-        credentials: [
-          {
-            required: true,
-            message: " 请输入证件号",
-            trigger: "blur",
-          },
-        ],
+        // credentials: [
+        //   {
+        //     required: true,
+        //     message: " 请输入证件号",
+        //     trigger: "blur",
+        //   },
+        // ],
         sexy: [
           {
             required: true,
