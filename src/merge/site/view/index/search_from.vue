@@ -11,34 +11,6 @@
         <el-form-item :label-position="right" label="姓名" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <!-- <el-form-item :label-position="right" label="人员类型" prop="type_id">
-          <el-select multiple v-model="ruleForm.type_id" placeholder="请选择">
-            <el-option
-              v-for="(item, index) in personnelTypeDictionary"
-              :key="index"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          :label-position="right"
-          label="身份类型"
-          prop="identity_id"
-        >
-          <el-select
-            multiple
-            v-model="ruleForm.identity_id"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="(item, key) in identityTypeDictionary"
-              :key="key"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
-        </el-form-item> -->
         <el-form-item :label-position="right" label="人员身份">
           <el-cascader
             placeholder="请选择"
@@ -76,7 +48,7 @@
           ></el-input>
         </el-form-item>
         <el-form-item :label-position="right" label="性别" prop="sexy">
-          <el-select v-model="ruleForm.sexy" placeholder="请选择">
+          <el-select clearable v-model="ruleForm.sexy" placeholder="请选择">
             <el-option
               v-for="(item, key) in [
                 { name: '男', id: 1 },
@@ -148,7 +120,11 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item :label-position="right" label="是否在职" prop="is_office">
-          <el-select v-model="ruleForm.is_office" placeholder="请选择">
+          <el-select
+            clearable
+            v-model="ruleForm.is_office"
+            placeholder="请选择"
+          >
             <el-option label="在职" value="1"></el-option>
             <el-option label="离职" value="2"></el-option>
           </el-select>
@@ -251,7 +227,7 @@ export default {
       this.$emit("handleSearch", this.ruleForm);
     },
     // 重置
-    resetForm(formName) {
+    resetForm() {
       this.birthdayList = []; // 生日区间
       this.entrantTimeList = []; // 入职时间
       this.leaveTimeList = []; //离职时间
@@ -308,7 +284,6 @@ export default {
           method: "POST",
         },
         (res) => {
-          console.log(res);
           if (res.code == 200 && res.result != null) {
             this.personnelTypeDictionary = res.result;
           }
@@ -343,22 +318,22 @@ export default {
         float: left;
       }
       // .el-input {
-      // float: left;
-      // width: 400px;
-      // height: 44px;
-      // border-color: rgba(204, 204, 204, 1);
+      //   float: left;
+      //   width: 400px;
+      //   height: 44px;
+      //   border-color: rgba(204, 204, 204, 1);
       // }
       // .el-select {
-      // float: left;
-      // width: 400px;
-      // height: 44px;
-      // border-color: rgba(204, 204, 204, 1);
+      //   float: left;
+      //   width: 400px;
+      //   height: 44px;
+      //   border-color: rgba(204, 204, 204, 1);
       // }
       // .el-date-editor {
-      // float: left;
-      // width: 400px;
-      // height: 44px;
-      // border-color: rgba(204, 204, 204, 1);
+      //   float: left;
+      //   width: 400px;
+      //   height: 44px;
+      //   border-color: rgba(204, 204, 204, 1);
       // }
     }
     .top_btns {

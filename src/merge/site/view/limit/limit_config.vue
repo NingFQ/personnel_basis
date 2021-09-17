@@ -152,6 +152,7 @@ export default {
         (res) => {
           if (res.code == 200 && res.result != null) {
             this.dialogDeleteSuccess = true;
+            this.getUserList();
           }
         }
       );

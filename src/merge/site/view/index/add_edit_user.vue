@@ -377,6 +377,9 @@ export default {
       if (this.ruleForm.out_office_reason_id == 0) {
         this.ruleForm.out_office_reason_id = "";
       }
+      if (this.ruleForm.out_office_at == 0) {
+        this.ruleForm.out_office_at = "";
+      }
       this.selectedOptions.push(this.$props.parentData.type_id);
       if (this.$props.parentData.identity_id != 0) {
         this.selectedOptions.push(this.$props.parentData.identity_id);

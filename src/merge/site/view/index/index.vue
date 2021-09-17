@@ -34,10 +34,9 @@
           <el-row class="main_center">
             <el-col :span="12" class="center_left">
               <span class="item_num"
-                >已选择<b class="item_num_hint">{{
-                  multipleSelection.length
-                }}</b
-                >条，共{{ allUserNum }}条</span
+                >已选择<b class="item_num_hint">
+                  {{ multipleSelection.length }} </b
+                >条，共 {{ allUserNum }} 条</span
               >
               <el-button
                 class="out_btn"
@@ -68,11 +67,6 @@
         <!-- 隐藏的表格 -->
         <div style="display: none">
           <el-table id="out-table" :data="multipleSelection">
-            <!-- <el-table-column
-              type="selection"
-              width="68"
-              align="center"
-            ></el-table-column> -->
             <el-table-column
               prop="user_key"
               label="登录号"
@@ -183,21 +177,6 @@
               show-overflow-tooltip
             >
             </el-table-column>
-            <!-- <el-table-column
-              align="center"
-              prop=""
-              label="操作"
-              class-name="operate_col"
-            >
-              <template slot-scope="scope">
-                <el-button
-                  class="edit_btn"
-                  @click="handleEditUser(scope.row)"
-                  type="text"
-                  >编辑</el-button
-                >
-              </template></el-table-column
-            > -->
           </el-table>
         </div>
         <!-- 表格 -->
@@ -224,7 +203,7 @@
             <el-table-column
               prop="name"
               label="姓名"
-              width="106"
+              width="155"
               align="center"
               show-overflow-tooltip
             >
@@ -234,7 +213,6 @@
               label="人员类型"
               width="155"
               align="center"
-              show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
@@ -242,7 +220,6 @@
               label="身份类型"
               width="155"
               align="center"
-              show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
@@ -250,7 +227,6 @@
               label="领导职务"
               width="155"
               align="center"
-              show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
@@ -258,13 +234,12 @@
               label="身份证号"
               min-width="225"
               align="center"
-              show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
               prop="credentials"
               label="证件号"
-              width="156"
+              width="225"
               align="center"
               show-overflow-tooltip
             >
@@ -274,15 +249,13 @@
               label="性别"
               width="80"
               align="center"
-              show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
               prop="nation_name"
               label="民族"
-              width="155"
+              width="80"
               align="center"
-              show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
@@ -290,39 +263,39 @@
               label="出生日期"
               width="155"
               align="center"
-              show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
               prop="hometown"
               label="籍贯"
-              width="149"
+              width="80"
               align="center"
-              show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
               prop="office_at"
               label="入职时间"
-              width="149"
+              width="200"
               align="center"
-              show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
               prop="out_office_at"
               label="离职时间"
-              width="149"
+              width="200"
               align="center"
-              show-overflow-tooltip
             >
+              <template slot-scope="scope">
+                {{
+                  scope.row.out_office_at == 0 ? "" : scope.row.out_office_at
+                }}
+              </template>
             </el-table-column>
             <el-table-column
               prop="qr_name"
               label="离职原因"
-              width="149"
+              width="155"
               align="center"
-              show-overflow-tooltip
             >
             </el-table-column>
             <el-table-column
@@ -490,6 +463,9 @@ export default {
       this.requestParams.department_id = data.id;
       this.getUserList();
     },
+    showOutOfficeAt(data) {
+      return;
+    },
     // 新增用户
     handleAddUser() {
       this.addOrEdit = "add";
@@ -504,7 +480,6 @@ export default {
     },
     // 新增或编辑用户回调
     handleUserCallBack(type, data) {
-      // alert("type====" + type + "===data===" + JSON.stringify(data));
       this.isLoading = true;
       if (type == "add") {
         var obj = {
@@ -527,6 +502,7 @@ export default {
                 message: res.msg,
                 type: "error",
               });
+              this.isLoading = false;
             }
           }
         );
@@ -552,11 +528,11 @@ export default {
                 message: res.msg,
                 type: "error",
               });
+              this.isLoading = false;
             }
           }
         );
       }
-      this.isLoading = false;
     },
     //  导入回调
     importExcelCallBack() {
@@ -633,7 +609,7 @@ export default {
       if (this.multipleSelection.length == 0) {
         this.$notify({
           title: "删除失败",
-          message: "请先选择用户",
+          message: "请先勾选需要删除的用户",
           type: "error",
         });
       } else {
@@ -659,7 +635,6 @@ export default {
         },
         (res) => {
           if (res.code == 200 && res.result != null) {
-            this.isLoading = false;
             this.dialogDeteteSuccess = true;
             this.getUserList();
           } else {
@@ -722,7 +697,7 @@ export default {
         this.requestParams,
         this.requestSearchParams
       );
-      console.log(paramObj);
+      // console.log(paramObj);
       // 获取用户列表
       this.$appFetch(
         {
@@ -734,6 +709,9 @@ export default {
           if (res.code == 200 && res.result != null) {
             this.tableUserData = res.result.list;
             this.allUserNum = res.result.count;
+          }
+          if (this.isLoading) {
+            this.isLoading = false;
           }
         }
       );

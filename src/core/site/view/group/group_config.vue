@@ -271,12 +271,7 @@ export default {
     },
     // 排序
     onTreeDataChange(lists, from, to, where) {
-      console.log(lists);
-      // console.log(from);
-      // console.log(to);
-      // console.log(where);
       if (lists[0].is_base == 1) {
-        // this.dragTableData.lists = lists;
         this.isLoading = true;
         this.$appFetch(
           {
@@ -306,17 +301,6 @@ export default {
           type: "error",
         });
       }
-      // var rowList = document.getElementsByClassName("tree-row");
-      // var arr = [];
-      // for (let i = 0, len = rowList.length; i < len; i++) {
-      //   var row_id = rowList[i].getAttribute("tree-id");
-      //   var row_pid = rowList[i].getAttribute("tree-p-id");
-      //   arr.push({
-      //     id: row_id,
-      //     pid: row_pid,
-      //   });
-      // }
-      // console.log(JSON.stringify(arr));
     },
     beforeDragOver(e) {
       // console.log(e);

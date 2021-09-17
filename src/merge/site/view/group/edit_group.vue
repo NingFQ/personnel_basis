@@ -153,8 +153,19 @@ export default {
       this.editingData.status = value;
     },
     handleNodeClick(data) {
-      this.parentDepartmentName = data.name;
-      this.editingData.pid = data.id;
+      if (this.editingData.id == data.id) {
+        this.$notify({
+          title: "错误",
+          message: "不能选择自己为上级部门",
+          type: "error",
+        });
+      } else {
+        this.parentDepartmentName = data.name;
+        this.editingData.pid = data.id;
+        if (data._child == null) {
+          this.$refs.selectDepartment.blur();
+        }
+      }
     },
     editComplete() {
       this.$refs["editingData"].validate((valid) => {
@@ -167,7 +178,6 @@ export default {
             depart_desc: this.editingData.depart_desc,
             status: this.editingData.status,
           };
-          console.log(obj);
           this.$parent.$parent.operateCompltet("edit", obj);
         } else {
           return false;
