@@ -113,23 +113,29 @@ export default {
             url: "changePassword",
             method: "POST",
             data: {
-              password_old: this.fromData.nowPassword,
-              password: this.fromData.newPassword,
-              password_confirm: this.fromData.newConfirmPassword,
+              password_old: fromData.nowPassword,
+              password: fromData.newPassword,
+              password_confirm: fromData.newConfirmPassword,
             },
           },
           (res) => {
             if (res.code == 200 && res.result != null) {
-              that.isLoading = false;
               that.$notify({
                 title: "成功",
                 message: "密码修改成功",
                 type: "success",
               });
-              fromData.nowPassword = "";
-              fromData.newPassword = "";
-              fromData.newConfirmPassword = "";
+            } else {
+              that.$notify({
+                title: "失败",
+                message: res.msg,
+                type: "error",
+              });
             }
+            this.ruleForm.nowPassword = "";
+            this.ruleForm.newPassword = "";
+            this.ruleForm.newConfirmPassword = "";
+            that.isLoading = false;
           }
         );
       }
