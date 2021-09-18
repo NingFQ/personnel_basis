@@ -77,9 +77,9 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label-position="right" label="籍贯" prop="originate">
+        <el-form-item :label-position="right" label="籍贯" prop="hometown">
           <el-input
-            v-model="ruleForm.originate"
+            v-model="ruleForm.hometown"
             placeholder="请输入籍贯"
           ></el-input>
         </el-form-item>
@@ -179,7 +179,7 @@ export default {
         credentials: "", // 证件号
         sexy: "", // 性别
         nation_id: [], // 民族
-        originate: "", // 籍贯
+        hometown: "", // 籍贯
         birthday_start: "", // 出生日期开始时间
         birthday_end: "", // 出生日期结束时间
         office_at_start: "", // 入职开始时间
