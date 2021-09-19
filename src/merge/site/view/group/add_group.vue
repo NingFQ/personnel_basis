@@ -161,6 +161,9 @@ export default {
     editComplete() {
       this.$refs["editingData"].validate((valid) => {
         if (valid) {
+          if (this.editingData.pid == "") {
+            this.editingData.pid = this.defaultId;
+          }
           this.$parent.$parent.operateCompltet("add", this.editingData);
         } else {
           return false;

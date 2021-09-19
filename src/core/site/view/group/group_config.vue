@@ -325,11 +325,17 @@ export default {
           },
           (res) => {
             if (res.code == 200 && res.result != null) {
+              this.dialogEditFormVisible = false;
               this.initData();
+            } else {
+              this.$notify({
+                title: "失败",
+                message: res.msg,
+                type: "error",
+              });
             }
           }
         );
-        this.dialogEditFormVisible = false;
         this.isLoading = false;
       }
       if (_type == "add") {
@@ -341,11 +347,18 @@ export default {
           },
           (res) => {
             if (res.code == 200 && res.result != null) {
+              this.dialogAddFormVisible = false;
               this.initData();
+            } else {
+              this.$notify({
+                title: "失败",
+                message: res.msg,
+                type: "error",
+              });
             }
           }
         );
-        this.dialogAddFormVisible = false;
+
         this.isLoading = false;
       }
     },
