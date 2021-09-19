@@ -367,10 +367,7 @@ export default {
     handleUserCallBack(type, data) {
       this.isLoading = true;
       if (type == "add") {
-        var obj = {
-          department_id: this.currentDepartmentId,
-        };
-        var requestObj = Object.assign(obj, data);
+        var requestObj = Object.assign({}, data);
         this.$appFetch(
           {
             url: "userAdd",

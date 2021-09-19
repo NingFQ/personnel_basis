@@ -10,19 +10,36 @@
       </div>
       <div class="dialog_body_content">
         <el-form :model="ruleForm" ref="ruleForm" :rules="rules">
-          <!-- <div v-show="type == 'edit'">
-            <el-form-item
-              :label-position="right"
-              label="登录号"
-              prop="user_key"
+          <el-form-item
+            :label-position="right"
+            label="所属部门"
+            prop="department_id"
+          >
+            <el-select
+              ref="selectTree"
+              v-model="ruleForm.department_id"
+              filterable
+              placeholder="请选择部门"
             >
-              <el-input
-                disabled
-                v-model="ruleForm.user_key"
-                placeholder="请输入登录号"
-              ></el-input>
-            </el-form-item>
-          </div> -->
+              <el-option
+                :key="ruleForm.department_id"
+                :value="ruleForm.department_id"
+                :label="ruleForm.department_name"
+                style="height: auto"
+                hidden
+              />
+              <el-tree
+                node-key="id"
+                accordion
+                :data="departmentListData"
+                :props="{ children: '_child', label: 'name' }"
+                :default-expanded-keys="[ruleForm.department_id]"
+                :highlight-current="true"
+                :expand-on-click-node="true"
+                @node-click="handleNodeClick"
+              />
+            </el-select>
+          </el-form-item>
           <el-form-item :label-position="right" label="姓名" prop="name">
             <el-input
               v-model="ruleForm.name"
@@ -186,7 +203,8 @@ export default {
   data() {
     return {
       ruleForm: {
-        user_key: "", // 登录号
+        department_id: "", // 部门ID
+        department_name: "", // 部门名称
         name: "", // 姓名
         type_id: "", // 人员类型
         identity_id: "", // 身份类型
@@ -202,12 +220,20 @@ export default {
         out_office_reason_id: "", // 离职原因
         is_office: "", // 是否在职
       },
-      selectedOptions: [],
+      departmentListData: [], // 部门ID
+      selectedOptions: [], // 人员类型身份选中结果
       personnelTypeDictionary: [], // 人员类型身份类型字典
       leaderPostDictionary: [], // 领导职务字典
       levelReasonDictionary: [], // 离职原因字典
       nationListDictionary: [], // 民族列表字典
       rules: {
+        department_id: [
+          {
+            required: true,
+            message: "请选择所属部门",
+            trigger: "blur",
+          },
+        ],
         type_id: [
           {
             required: true,
@@ -215,13 +241,13 @@ export default {
             trigger: "blur",
           },
         ],
-        identity_id: [
-          {
-            required: true,
-            message: "请选择身份类型",
-            trigger: "change",
-          },
-        ],
+        // identity_id: [
+        //   {
+        //     required: true,
+        //     message: "请选择身份类型",
+        //     trigger: "change",
+        //   },
+        // ],
         job_id: [
           {
             required: true,
@@ -309,7 +335,12 @@ export default {
         this.ruleForm.identity_id = 0;
       }
     },
+    handleNodeClick(data) {
+      this.ruleForm.department_name = data.name;
+      this.ruleForm.department_id = data.id;
+    },
     submitForm(formName) {
+      console.log(this.ruleForm);
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$parent.$parent.handleUserCallBack(this.type, this.ruleForm);
@@ -320,6 +351,18 @@ export default {
       });
     },
     initData() {
+      // 获取部门列表
+      this.$appFetch(
+        {
+          url: "departmentList",
+          method: "POST",
+        },
+        (res) => {
+          if (res.code == 200 && res.result != null) {
+            this.departmentListData = res.result;
+          }
+        }
+      );
       // 获取民族字典
       this.$appFetch(
         {
@@ -384,6 +427,7 @@ export default {
       if (this.$props.parentData.identity_id != 0) {
         this.selectedOptions.push(this.$props.parentData.identity_id);
       }
+      this.defaultId = this.ruleForm.department_id;
     }
   },
 };
