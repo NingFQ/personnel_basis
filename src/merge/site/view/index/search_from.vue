@@ -13,7 +13,9 @@
         </el-form-item>
         <el-form-item :label-position="right" label="人员身份">
           <el-cascader
+            ref="typeInde"
             placeholder="请选择"
+            clearable
             :options="personnelTypeDictionary"
             :props="{
               multiple: true,
@@ -224,6 +226,7 @@ export default {
     },
     // 搜索
     submitForm() {
+      // console.log(this.ruleForm);
       this.$emit("handleSearch", this.ruleForm);
     },
     // 重置
@@ -237,6 +240,10 @@ export default {
       this.ruleForm.office_at_end = ""; // 入职结束时间
       this.ruleForm.out_office_at_start = ""; // 离职开始时间
       this.ruleForm.out_office_at_end = ""; // 离职结束时间
+      this.ruleForm.type_id = ""; // 清空人员类型选择
+      this.ruleForm.identity_id = []; // 清空身份类型的选择
+      this.$refs.typeInde.$refs.panel.clearCheckedNodes(); // 清空选中的节点
+      this.$refs.typeInde.$refs.panel.activePath = []; // 设置为空可以让节点不高亮显示
       this.$refs["ruleForm"].resetFields();
       this.$emit("handleSearch", this.ruleForm);
     },

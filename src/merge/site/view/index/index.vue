@@ -64,121 +64,6 @@
             </el-col>
           </el-row>
         </div>
-        <!-- 隐藏的表格 -->
-        <div style="display: none">
-          <el-table id="out-table" :data="multipleSelection">
-            <el-table-column
-              prop="user_key"
-              label="登录号"
-              width="155"
-              align="center"
-            ></el-table-column>
-            <el-table-column
-              prop="name"
-              label="姓名"
-              width="106"
-              align="center"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="type_name"
-              label="人员类型"
-              width="155"
-              align="center"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="identity_name"
-              label="身份类型"
-              width="155"
-              align="center"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="job_name"
-              label="领导职务"
-              width="155"
-              align="center"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="card"
-              label="身份证号"
-              min-width="225"
-              align="center"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="credentials"
-              label="证件号"
-              width="156"
-              align="center"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="sexy_text"
-              label="性别"
-              width="80"
-              align="center"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="nation_name"
-              label="民族"
-              width="155"
-              align="center"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="birthday"
-              label="出生日期"
-              width="155"
-              align="center"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="hometown"
-              label="籍贯"
-              width="149"
-              align="center"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="office_at"
-              label="入职时间"
-              width="149"
-              align="center"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="out_office_at"
-              label="离职时间"
-              width="149"
-              align="center"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-            <el-table-column
-              prop="qr_name"
-              label="离职原因"
-              width="149"
-              align="center"
-              show-overflow-tooltip
-            >
-            </el-table-column>
-          </el-table>
-        </div>
         <!-- 表格 -->
         <div class="main_table_wrap">
           <el-table
@@ -551,21 +436,33 @@ export default {
         `${d < 10 ? "0" + d : d}` +
         ".xlsx";
       if (this.multipleSelection.length > 0) {
-        var wb = XLSX.utils.table_to_book(document.querySelector("#out-table"));
-        var wbout = XLSX.write(wb, {
-          bookType: "xlsx",
-          bookSST: true,
-          type: "array",
-        });
-        try {
-          FileSaver.saveAs(
-            new Blob([wbout], { type: "application/octet-stream" }),
-            dateStr
-          );
-        } catch (e) {
-          if (typeof console !== "undefined") console.log(e, wbout);
+        var ids = [];
+        for (var i = 0, len = this.multipleSelection.length; i < len; i++) {
+          ids.push(this.multipleSelection[i].id);
         }
-        return wbout;
+        this.$appFetch(
+          {
+            url: "exportUser",
+            method: "POST",
+            data: {
+              ids: ids,
+            },
+          },
+          (res) => {
+            if (res.code == 200 && res.result != null) {
+              var save_link = document.createElement("a");
+              save_link.href = res.result.url;
+              save_link.download = dateStr;
+              save_link.click();
+            } else {
+              this.$notify({
+                title: "失败",
+                message: res.msg,
+                type: "error",
+              });
+            }
+          }
+        );
       } else {
         this.requestParams.type = 2;
         var paramObj = Object.assign(
@@ -581,24 +478,29 @@ export default {
           (res) => {
             if (res.code == 200 && res.result != null) {
               var queryParams = res.result.query;
-              const xhr = new XMLHttpRequest();
-              xhr.open(
-                "GET",
-                `${apiHelper.getApi("exportUser")}?${queryParams}`,
-                true
+              this.$appFetch(
+                {
+                  url: "exportUser",
+                  method: "POST",
+                  data: {
+                    query: queryParams,
+                  },
+                },
+                (res) => {
+                  if (res.code == 200 && res.result != null) {
+                    var save_link = document.createElement("a");
+                    save_link.href = res.result.url;
+                    save_link.download = dateStr;
+                    save_link.click();
+                  } else {
+                    this.$notify({
+                      title: "失败",
+                      message: res.msg,
+                      type: "error",
+                    });
+                  }
+                }
               );
-              xhr.setRequestHeader(
-                "token",
-                window.localStorage.getItem("token")
-              );
-              xhr.onload = (e) => {
-                var resultObj = JSON.parse(xhr.response);
-                var save_link = document.createElement("a");
-                save_link.href = resultObj.result.url;
-                save_link.download = dateStr;
-                save_link.click();
-              };
-              xhr.send();
             }
           }
         );
@@ -734,6 +636,7 @@ export default {
     },
   },
   mounted() {
+    this.isLoading = true;
     this.getSiteConfig();
     this.getDepartmentLis();
     this.requestParams.page = 1;
