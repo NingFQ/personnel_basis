@@ -232,8 +232,14 @@ export default {
               var arr = [];
               var searchData = res.result;
               for (var i = 0, len = searchData.length; i < len; i++) {
+                var str = "";
+                if (searchData[i]["pname"] == null) {
+                  str += searchData[i]["name"];
+                } else {
+                  str = `${searchData[i]["pname"]} > ${searchData[i]["name"]}`;
+                }
                 arr.push({
-                  name: `${searchData[i]["pname"]} > ${searchData[i]["name"]}`,
+                  name: str,
                   id: searchData[i]["id"],
                 });
               }
@@ -247,6 +253,7 @@ export default {
     },
     // 点击搜索结果的某项
     handleSelect(item) {
+      this.toggleRowHightLight(false);
       this.searchText = "";
       this.currentHightLightId = item.id;
       this.toggleRowExpansion(true);
