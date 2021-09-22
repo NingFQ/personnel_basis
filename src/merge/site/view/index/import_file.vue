@@ -83,8 +83,8 @@
               <span>{{ fileName }}</span>
               <span>{{ fileSize }}kB</span>
             </div>
-            <!-- <i class="el-icon-loading" style="margin-left: 30px"></i> -->
-            <span style="margin-left: 30px">文件上传中...</span>
+            <span style="margin-left: 30px">文件上传中</span>
+            <i class="el-icon-loading" style="margin-left: 10px"></i>
             <!-- <el-progress :percentage="50" :color="'#409EFF'"></el-progress> -->
           </el-row>
         </div>
@@ -206,35 +206,39 @@ export default {
     nextStept() {
       if (this.active == 1) {
         this.active = 2;
-        this.$appFetch(
-          {
-            url: "importResult",
-            method: "POST",
-            data: {
-              key: this.fileKey,
-            },
-          },
-          (res) => {
-            var that = this;
-            if (res.code == 200 && res.result != null) {
-              this.successNum = res.result.success_num;
-              this.errorNum = res.result.error_num;
-              this.downloadUrl = res.result.download_url;
-              setTimeout(function () {
-                that.active = 3;
-              }, 1000);
-            } else {
-              this.$notify({
-                title: "导入失败",
-                message: res.msg,
-                type: "error",
-              });
-            }
-          }
-        );
+        this.getResult();
       } else if (this.active == 3) {
         this.closeAddDialog();
       }
+    },
+    getResult() {
+      var timer;
+      var _this = this;
+      this.$appFetch(
+        {
+          url: "importResult",
+          method: "POST",
+          data: {
+            key: this.fileKey,
+          },
+        },
+        (res) => {
+          var that = this;
+          if (res.code == 200 && res.result != null) {
+            this.successNum = res.result.success_num;
+            this.errorNum = res.result.error_num;
+            this.downloadUrl = res.result.download_url;
+            setTimeout(function () {
+              that.active = 3;
+            }, 500);
+          } else {
+            timer = setTimeout(() => {
+              _this.getResult();
+              clearTimeout(timer);
+            }, 2000);
+          }
+        }
+      );
     },
   },
 };

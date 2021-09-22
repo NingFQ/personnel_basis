@@ -333,6 +333,7 @@ export default {
       );
     },
     handleSelect(item) {
+      this.isLoading = true;
       this.currentDepartmentId = item.id;
       this.searchText = "";
       this.requestParams.department_id = item.id;
@@ -350,12 +351,10 @@ export default {
     },
     // 点击树节点回调
     handleNodeClick(data) {
+      this.isLoading = true;
       this.currentDepartmentId = data.id;
       this.requestParams.department_id = data.id;
       this.getUserList();
-    },
-    showOutOfficeAt(data) {
-      return;
     },
     // 新增用户
     handleAddUser() {
@@ -467,46 +466,55 @@ export default {
           }
         );
       } else {
-        this.requestParams.type = 2;
-        var paramObj = Object.assign(
-          this.requestParams,
-          this.requestSearchParams
-        );
-        this.$appFetch(
-          {
-            url: "userList",
-            method: "POST",
-            data: paramObj,
-          },
-          (res) => {
-            if (res.code == 200 && res.result != null) {
-              var queryParams = res.result.query;
-              this.$appFetch(
-                {
-                  url: "exportUser",
-                  method: "POST",
-                  data: {
-                    query: queryParams,
+        if (this.allUserNum == 0) {
+          this.$notify({
+            title: "失败",
+            message: "没有可导出用户",
+            type: "error",
+          });
+          return;
+        } else {
+          this.requestParams.type = 2;
+          var paramObj = Object.assign(
+            this.requestParams,
+            this.requestSearchParams
+          );
+          this.$appFetch(
+            {
+              url: "userList",
+              method: "POST",
+              data: paramObj,
+            },
+            (res) => {
+              if (res.code == 200 && res.result != null) {
+                var queryParams = res.result.query;
+                this.$appFetch(
+                  {
+                    url: "exportUser",
+                    method: "POST",
+                    data: {
+                      query: queryParams,
+                    },
                   },
-                },
-                (res) => {
-                  if (res.code == 200 && res.result != null) {
-                    var save_link = document.createElement("a");
-                    save_link.href = res.result.url;
-                    save_link.download = dateStr;
-                    save_link.click();
-                  } else {
-                    this.$notify({
-                      title: "失败",
-                      message: res.msg,
-                      type: "error",
-                    });
+                  (res) => {
+                    if (res.code == 200 && res.result != null) {
+                      var save_link = document.createElement("a");
+                      save_link.href = res.result.url;
+                      save_link.download = dateStr;
+                      save_link.click();
+                    } else {
+                      this.$notify({
+                        title: "失败",
+                        message: res.msg,
+                        type: "error",
+                      });
+                    }
                   }
-                }
-              );
+                );
+              }
             }
-          }
-        );
+          );
+        }
       }
     },
     // 删除用户
