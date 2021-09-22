@@ -223,6 +223,12 @@ export default {
               setTimeout(function () {
                 that.active = 3;
               }, 1000);
+            } else {
+              this.$notify({
+                title: "导入失败",
+                message: res.msg,
+                type: "error",
+              });
             }
           }
         );
