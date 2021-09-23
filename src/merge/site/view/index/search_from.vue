@@ -127,8 +127,16 @@
             v-model="ruleForm.is_office"
             placeholder="请选择"
           >
-            <el-option label="在职" value="1"></el-option>
-            <el-option label="离职" value="2"></el-option>
+            <el-option
+              v-for="(item, key) in [
+                { name: '在职', id: 1 },
+                { name: '离职', id: 2 },
+              ]"
+              :key="key"
+              :label="item.name"
+              :value="item.id"
+            >
+            </el-option>
           </el-select>
         </el-form-item>
         <el-form-item
@@ -189,7 +197,7 @@ export default {
         out_office_at_start: "", // 离职开始时间
         out_office_at_end: "", // 离职结束时间
         out_office_reason_id: "", // 离职原因
-        is_office: "", // 是否在职
+        is_office: 1, // 是否在职
       },
       personnelTypeDictionary: [], //人员类型身份类型字典
       leaderPostDictionary: [], // 领导职务字典
@@ -245,6 +253,7 @@ export default {
       this.$refs.typeInde.$refs.panel.clearCheckedNodes(); // 清空选中的节点
       this.$refs.typeInde.$refs.panel.activePath = []; // 设置为空可以让节点不高亮显示
       this.$refs["ruleForm"].resetFields();
+      this.ruleForm.is_office = ""; // 是否在职清空
       this.$emit("handleSearch", this.ruleForm);
     },
     initData() {

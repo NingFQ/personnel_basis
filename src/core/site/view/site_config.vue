@@ -326,6 +326,7 @@ export default {
       width: 460px;
       height: 58px;
       font-size: 18px;
+      margin-bottom: 100px;
     }
   }
 }

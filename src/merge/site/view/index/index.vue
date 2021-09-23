@@ -293,7 +293,9 @@ export default {
       paramData: {}, // 新增或编辑时传递数据
       addOrEdit: "", // 新增还是编辑
       requestParams: {}, // 请求用户列表参数
-      requestSearchParams: {}, // 请求用户列表检索条件参数
+      requestSearchParams: {
+        is_office: 1,
+      }, // 请求用户列表检索条件参数
       defaultExpandNodes: [], // 默认展开的id集合
     };
   },

@@ -108,18 +108,14 @@ export default {
     justify-content: flex-start
     align-items: center
     .site_logo
-      // width: 46px
       height: 52px
       border-radius: 50%
-      // overflow: hidden
       .logo_img
         display: block
-        // width: 46px
         height: 52px
     .site_name
       height: 100%
       font-size: 20px
-      font-family: Source Han Sans CN
       font-weight: 400
       color: #FFFFFF
       line-height: 88px
@@ -128,6 +124,7 @@ export default {
     float: right
     height: 100%
     display: flex
+    flex: 1
     flex-direction: row
     justify-content: flex-end
     align-items: center
@@ -136,7 +133,7 @@ export default {
       display: flex
       justify-content: center
       align-items: center
-      margin-right: 74px
+      margin-right: 3vw
       cursor: pointer
       .navigator_icon
         width: 20px

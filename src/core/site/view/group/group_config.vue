@@ -142,19 +142,19 @@ export default {
             type: "selection",
             title: "部门名称",
             field: "name",
-            width: 300,
+            width: 280,
             align: "left",
           },
           {
             title: "部门编号",
             field: "depart_key",
-            width: 210,
+            width: 200,
             align: "center",
           },
           {
             title: "状态",
             field: "status",
-            width: 210,
+            width: 150,
             align: "center",
             formatter: (item) => {
               if (item.status == 1) {
@@ -168,7 +168,7 @@ export default {
           {
             title: "成员数量",
             field: "user_num",
-            width: 210,
+            width: 110,
             align: "center",
           },
           {
@@ -190,7 +190,7 @@ export default {
           {
             title: "操作",
             type: "action",
-            width: 300,
+            width: 200,
             actions: [
               {
                 text: "编辑",

@@ -162,9 +162,9 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    padding: 70px 70px 0px;
+    padding: 50px 50px 50px 50px;
     width: 660px;
-    height: 660px;
+    // height: 660px;
     border-radius: 20px;
     box-shadow: 0px 20px 30px rgba(0, 15, 64, 0.3);
     background: white;
